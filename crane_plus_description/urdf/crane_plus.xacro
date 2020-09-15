@@ -20,7 +20,6 @@
     <color rgba="0.3 0.3 1.0 1.0"/>
   </material>
 
-  <xacro:property name="M_PI" value="3.14159"/>
   <xacro:property name="SCALE_MM" value="0.001"/>
   <xacro:property name="SCALE_CM" value="0.01"/>
 

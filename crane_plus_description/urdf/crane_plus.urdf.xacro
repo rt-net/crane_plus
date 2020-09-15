@@ -20,18 +20,20 @@
   <!--   <child link="base_link"/>                          -->
   <!-- </joint>                                             -->
 
+  <xacro:property name="M_PI" value="3.14159"/>
+
   <crane_plus parent="base_link"
     joints_vlimit="2.0"
-    joint1_lower_limit="-1.57"
-    joint1_upper_limit="1.57"
-    joint2_lower_limit="-1.57"
-    joint2_upper_limit="1.57"
-    joint3_lower_limit="-1.57"
-    joint3_upper_limit="1.57"
-    joint4_lower_limit="-1.57"
-    joint4_upper_limit="1.57"
-    joint_hand_lower_limit="-1.57"
-    joint_hand_upper_limit="1.57">
+    joint1_lower_limit="-${M_PI*5/6}"
+    joint1_upper_limit="${M_PI*5/6}"
+    joint2_lower_limit="-${M_PI*0.5776}"
+    joint2_upper_limit="${M_PI*0.5612}"
+    joint3_lower_limit="-${M_PI*0.8105}"
+    joint3_upper_limit="${M_PI*0.7770}"
+    joint4_lower_limit="-${M_PI*0.5776}"
+    joint4_upper_limit="${M_PI*0.5564}"
+    joint_hand_lower_limit="-${M_PI*0.2191}"
+    joint_hand_upper_limit="${M_PI*0.2093}">
     <origin xyz="0 0 0"/>
   </crane_plus>
 </robot>
