@@ -111,7 +111,7 @@
 
     <joint name="${NAME_JOINT_2}" type="revolute">
       <origin xyz="0 0 0.026" rpy="0 0 0"/>
-      <axis xyz="0 -1 0"/>
+      <axis xyz="0 1 0"/>
       <limit
         effort="10.0"
         velocity="${joints_vlimit}"
@@ -143,7 +143,7 @@
 
     <joint name="${NAME_JOINT_3}" type="revolute">
       <origin xyz="0 0 0.083" rpy="0 0 0"/>
-      <axis xyz="0 1 0"/>
+      <axis xyz="0 -1 0"/>
       <limit
         effort="10.0"
         velocity="${joints_vlimit}"
@@ -206,8 +206,8 @@
     </link>
 
     <joint name="${NAME_JOINT_HAND}" type="revolute">
-      <origin xyz="0 0 0.045" rpy="0 0 0"/>
-      <axis xyz="1 0 0"/>
+      <origin xyz="0 -0.0145 0.045" rpy="0 0 0"/>
+      <axis xyz="-1 0 0"/>
       <limit
         effort="10.0"
         velocity="${joints_vlimit}"
@@ -221,7 +221,7 @@
 
     <link name="${NAME_LINK_HAND}">
       <visual>
-        <origin xyz="0 -0.0145 0" rpy="0 -${M_PI/2} 0"/>
+        <origin xyz="0 0 0" rpy="0 -${M_PI/2} 0"/>
         <geometry>
           <mesh filename="package://crane_plus_description/meshes/visual/RT-CRANE+_Hand.stl"
               scale="1 1 1"/>
