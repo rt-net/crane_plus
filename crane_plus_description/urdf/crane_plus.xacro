@@ -20,7 +20,6 @@
     <color rgba="0.3 0.3 1.0 1.0"/>
   </material>
 
-  <xacro:property name="M_PI" value="3.14159"/>
   <xacro:property name="SCALE_MM" value="0.001"/>
   <xacro:property name="SCALE_CM" value="0.01"/>
 
@@ -70,9 +69,9 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="-0.0145 0 0.02" rpy="0 0 0"/>
         <geometry>
-          <box size="0.01 0.02 0.04"/>
+          <box size="0.0485 0.0255 0.032"/>
         </geometry>
       </collision>
     </link>
@@ -102,16 +101,16 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0.0035" rpy="0 0 0"/>
         <geometry>
-          <box size="0.01 0.02 0.04"/>
+          <box size="0.0245 0.048 0.003"/>
         </geometry>
       </collision>
     </link>
 
     <joint name="${NAME_JOINT_2}" type="revolute">
       <origin xyz="0 0 0.026" rpy="0 0 0"/>
-      <axis xyz="0 -1 0"/>
+      <axis xyz="0 1 0"/>
       <limit
         effort="10.0"
         velocity="${joints_vlimit}"
@@ -134,16 +133,16 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0.040" rpy="0 0 0"/>
         <geometry>
-          <box size="0.01 0.02 0.04"/>
+          <box size="0.0315 0.038 0.105"/>
         </geometry>
       </collision>
     </link>
 
     <joint name="${NAME_JOINT_3}" type="revolute">
       <origin xyz="0 0 0.083" rpy="0 0 0"/>
-      <axis xyz="0 1 0"/>
+      <axis xyz="0 -1 0"/>
       <limit
         effort="10.0"
         velocity="${joints_vlimit}"
@@ -166,9 +165,9 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0.08" rpy="0 0 0"/>
         <geometry>
-          <box size="0.01 0.02 0.04"/>
+          <box size="0.032 0.035 0.050"/>
         </geometry>
       </collision>
     </link>
@@ -198,16 +197,16 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
+        <origin xyz="0 0.037 0.097" rpy="${M_PI/2} 0 0"/>
         <geometry>
-          <box size="0.01 0.02 0.04"/>
+          <box size="0.034 0.045 0.002"/>
         </geometry>
       </collision>
     </link>
 
     <joint name="${NAME_JOINT_HAND}" type="revolute">
-      <origin xyz="0 0 0.045" rpy="0 0 0"/>
-      <axis xyz="1 0 0"/>
+      <origin xyz="0 -0.0145 0.045" rpy="0 0 0"/>
+      <axis xyz="-1 0 0"/>
       <limit
         effort="10.0"
         velocity="${joints_vlimit}"
@@ -221,7 +220,7 @@
 
     <link name="${NAME_LINK_HAND}">
       <visual>
-        <origin xyz="0 -0.0145 0" rpy="0 -${M_PI/2} 0"/>
+        <origin xyz="0 0 0" rpy="0 -${M_PI/2} 0"/>
         <geometry>
           <mesh filename="package://crane_plus_description/meshes/visual/RT-CRANE+_Hand.stl"
               scale="1 1 1"/>
@@ -230,9 +229,9 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 -0.018 0.075" rpy="${M_PI/3} 0 0"/>
         <geometry>
-          <box size="0.01 0.02 0.04"/>
+          <box size="0.034 0.045 0.002"/>
         </geometry>
       </collision>
     </link>
