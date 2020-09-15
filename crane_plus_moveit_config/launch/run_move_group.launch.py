@@ -85,12 +85,12 @@ def generate_launch_description():
                                            planning_scene_monitor_parameters])
 
     # RViz
-    # rviz_config_file = get_package_share_directory('run_move_group') + "/launch/run_move_group.rviz"
+    rviz_config_file = get_package_share_directory('crane_plus_moveit_config') + "/launch/run_move_group.rviz"
     rviz_node = Node(package='rviz2',
                      executable='rviz2',
                      name='rviz2',
                      output='log',
-                    #  arguments=['-d', rviz_config_file],
+                     arguments=['-d', rviz_config_file],
                      parameters=[robot_description,
                                  robot_description_semantic,
                                  ompl_planning_pipeline_config,
