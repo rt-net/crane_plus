@@ -1,0 +1,13 @@
+fake_joint_driver_node:
+  ros__parameters:
+    start_position:
+      joints:
+        - crane_plus_joint1
+        - crane_plus_joint2
+        - crane_plus_joint3
+        - crane_plus_joint4
+      values:
+        - 0.0
+        - 0.3
+        - 0.5
+        - 0.7
