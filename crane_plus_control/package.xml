@@ -11,6 +11,7 @@
 
   <depend>controller_interface</depend>
   <depend>controller_manager</depend>
+  <depend>dynamixel_sdk</depend>
   <depend>hardware_interface</depend>
   <depend>rclcpp</depend>
 

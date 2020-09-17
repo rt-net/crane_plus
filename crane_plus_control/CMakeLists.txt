@@ -19,6 +19,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(controller_interface REQUIRED)
 find_package(controller_manager REQUIRED)
+find_package(dynamixel_sdk REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(rclcpp REQUIRED)
 
@@ -30,6 +31,7 @@ add_executable(crane_plus_control_node
 ament_target_dependencies(crane_plus_control_node
     controller_interface
     controller_manager
+    dynamixel_sdk
     hardware_interface
     rclcpp
 )
