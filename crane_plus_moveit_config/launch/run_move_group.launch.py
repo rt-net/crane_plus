@@ -118,5 +118,15 @@ def generate_launch_description():
                                               os.path.join(get_package_share_directory("crane_plus_moveit_config"), "config", "start_positions.yaml"),
                                               robot_description]
                                   )
+    crane_plus_control_node = Node(
+        package='crane_plus_control',
+        executable='crane_plus_control_node',
+        output='screen',
+        parameters=[{'controller_name': 'crane_plus_arm_controller'},
+                    os.path.join(get_package_share_directory("crane_plus_moveit_config"), "config", "crane_plus_controllers.yaml"),
+                    os.path.join(get_package_share_directory("crane_plus_moveit_config"), "config", "start_positions.yaml"),
+                    robot_description]
+    )
 
-    return LaunchDescription([ rviz_node, static_tf, robot_state_publisher, run_move_group_node, fake_joint_driver_node ])
+    # return LaunchDescription([ rviz_node, static_tf, robot_state_publisher, run_move_group_node, fake_joint_driver_node ])
+    return LaunchDescription([ rviz_node, static_tf, robot_state_publisher, run_move_group_node, crane_plus_control_node ])
