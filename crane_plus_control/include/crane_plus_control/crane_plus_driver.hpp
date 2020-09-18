@@ -10,6 +10,13 @@
 
 class CranePlusDriver : public hardware_interface::RobotHardware
 {
+public:
+  CranePlusDriver();
+  ~CranePlusDriver();
+  hardware_interface::return_type init();
+  hardware_interface::return_type read();
+  hardware_interface::return_type write();
+
 private:
   std::vector<hardware_interface::JointStateHandle> joint_state_handles_;
   std::vector<hardware_interface::JointCommandHandle> joint_command_handles_;
@@ -26,10 +33,6 @@ private:
   dynamixel::PortHandler *dxl_port_handler_;
   dynamixel::PacketHandler *dxl_packet_handler_;
 
-public:
-  CranePlusDriver();
-  ~CranePlusDriver();
-  hardware_interface::return_type init();
-  hardware_interface::return_type read();
-  hardware_interface::return_type write();
+  bool set_torque(const bool enable);
+
 };

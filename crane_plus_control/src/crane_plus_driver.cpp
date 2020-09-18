@@ -9,6 +9,7 @@ CranePlusDriver::CranePlusDriver()
 
 CranePlusDriver::~CranePlusDriver()
 {
+  set_torque(false);
   dxl_port_handler_->closePort();
 }
 
@@ -67,6 +68,8 @@ hardware_interface::return_type CranePlusDriver::init()
     ++i;
   }
 
+  set_torque(true);
+
   return hardware_interface::return_type::OK;
 }
 
@@ -108,5 +111,63 @@ hardware_interface::return_type CranePlusDriver::read()
 
 hardware_interface::return_type CranePlusDriver::write()
 {
-  return hardware_interface::return_type::OK;
+  const int ADDR_GOAL_POSITION = 30;
+  const double TO_DYNAMIXEL = (180.0 / M_PI) * (1023.0 / 300.0);
+
+  bool result = true;
+
+  for(size_t i=0; i < joint_names_.size(); ++i){
+    int dxl_id = i + 1;  // サーボのIDは1 ~ 5なので
+    uint16_t goal_position = cmd_[i] * TO_DYNAMIXEL + 511;
+    uint8_t dxl_error = 0;     
+    int dxl_comm_result = dxl_packet_handler_->write2ByteTxRx(dxl_port_handler_, 
+      dxl_id, ADDR_GOAL_POSITION, goal_position, &dxl_error);
+
+    if (dxl_comm_result != COMM_SUCCESS)
+    {
+      RCLCPP_ERROR(LOGGER, "TxRxResult: %d", dxl_comm_result);
+      result = false;
+    }
+    else if (dxl_error != 0)
+    {
+      RCLCPP_ERROR(LOGGER, "RxPAcketError: %d", dxl_error);
+      result = false;
+    }
+  }
+
+  if(result == true){
+    return hardware_interface::return_type::OK;
+  }else{
+    return hardware_interface::return_type::ERROR;
+  }
 }
+
+
+bool CranePlusDriver::set_torque(const bool enable)
+{
+  const int ADDR_TORQUE_ENABLE = 24;
+  
+  bool result = true;
+
+  for(size_t i=0; i < joint_names_.size(); ++i){
+    int dxl_id = i + 1;  // サーボのIDは1 ~ 5なので
+    uint8_t dxl_error = 0;     
+    int dxl_comm_result = dxl_packet_handler_->write1ByteTxRx(dxl_port_handler_, 
+      dxl_id, ADDR_TORQUE_ENABLE, enable, &dxl_error);
+
+    if (dxl_comm_result != COMM_SUCCESS)
+    {
+      RCLCPP_ERROR(LOGGER, "TxRxResult: %d", dxl_comm_result);
+      result = false;
+    }
+    else if (dxl_error != 0)
+    {
+      RCLCPP_ERROR(LOGGER, "RxPAcketError: %d", dxl_error);
+      result = false;
+    }
+  }
+
+  return result;
+}
+
+
