@@ -18,7 +18,7 @@ int main(int argc, char * argv[])
   const rclcpp::Logger logger = rclcpp::get_logger("my_robot_logger");
   
   // create my_robot instance
-  auto my_robot = std::make_shared<CranePlusDriver>();
+  auto my_robot = std::make_shared<CranePlusInterface>();
   
   // initialize the robot
   if (my_robot->init() != hardware_interface::return_type::OK) {

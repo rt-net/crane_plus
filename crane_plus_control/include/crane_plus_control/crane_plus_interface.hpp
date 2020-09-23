@@ -8,11 +8,11 @@
 #include <string>
 
 
-class CranePlusDriver : public hardware_interface::RobotHardware
+class CranePlusInterface : public hardware_interface::RobotHardware
 {
 public:
-  CranePlusDriver();
-  ~CranePlusDriver();
+  CranePlusInterface();
+  ~CranePlusInterface();
   hardware_interface::return_type init();
   hardware_interface::return_type read();
   hardware_interface::return_type write();

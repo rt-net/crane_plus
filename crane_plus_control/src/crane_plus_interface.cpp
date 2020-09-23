@@ -1,19 +1,19 @@
 
 #include "crane_plus_control/crane_plus_interface.hpp"
 
-static const rclcpp::Logger LOGGER = rclcpp::get_logger("crane_plus_driver");
+static const rclcpp::Logger LOGGER = rclcpp::get_logger("crane_plus_interface");
 
-CranePlusDriver::CranePlusDriver()
+CranePlusInterface::CranePlusInterface()
 {
 }
 
-CranePlusDriver::~CranePlusDriver()
+CranePlusInterface::~CranePlusInterface()
 {
   set_torque(false);
   dxl_port_handler_->closePort();
 }
 
-hardware_interface::return_type CranePlusDriver::init()
+hardware_interface::return_type CranePlusInterface::init()
 {
   dxl_port_handler_ = dynamixel::PortHandler::getPortHandler("/dev/ttyUSB0");
   dxl_packet_handler_ = dynamixel::PacketHandler::getPacketHandler(1.0);
@@ -73,7 +73,7 @@ hardware_interface::return_type CranePlusDriver::init()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type CranePlusDriver::read()
+hardware_interface::return_type CranePlusInterface::read()
 {
   const int ADDR_MX_PRESENT_POSITION = 36;
   const double TO_RADIANS = (300.0 / 1023.0) * M_PI / 180.0;
@@ -109,7 +109,7 @@ hardware_interface::return_type CranePlusDriver::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type CranePlusDriver::write()
+hardware_interface::return_type CranePlusInterface::write()
 {
   const int ADDR_GOAL_POSITION = 30;
   const double TO_DYNAMIXEL = (180.0 / M_PI) * (1023.0 / 300.0);
@@ -143,7 +143,7 @@ hardware_interface::return_type CranePlusDriver::write()
 }
 
 
-bool CranePlusDriver::set_torque(const bool enable)
+bool CranePlusInterface::set_torque(const bool enable)
 {
   const int ADDR_TORQUE_ENABLE = 24;
   
