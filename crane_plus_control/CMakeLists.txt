@@ -26,7 +26,7 @@ find_package(rclcpp REQUIRED)
 include_directories(include)
 
 add_executable(crane_plus_control_node
-  src/crane_plus_control_node.cpp src/crane_plus_interface.cpp)
+  src/crane_plus_control_node.cpp src/crane_plus_interface.cpp src/crane_plus_driver.cpp)
 
 ament_target_dependencies(crane_plus_control_node
     controller_interface

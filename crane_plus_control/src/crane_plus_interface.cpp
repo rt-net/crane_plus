@@ -9,21 +9,17 @@ CranePlusInterface::CranePlusInterface()
 
 CranePlusInterface::~CranePlusInterface()
 {
-  set_torque(false);
-  dxl_port_handler_->closePort();
+  driver_->torque_enable(false);
+  driver_->close_port();
 }
 
 hardware_interface::return_type CranePlusInterface::init()
 {
-  dxl_port_handler_ = dynamixel::PortHandler::getPortHandler("/dev/ttyUSB0");
-  dxl_packet_handler_ = dynamixel::PacketHandler::getPacketHandler(1.0);
+  std::vector<uint8_t> id_list{1, 2, 3, 4, 5};
+  driver_ = std::make_shared<CranePlusDriver>("/dev/ttyUSB0", 1000000, id_list);
 
-  if(!dxl_port_handler_->openPort()){
-    throw std::runtime_error("unable to open dynamixel port");
-  }
-
-  if(!dxl_port_handler_->setBaudRate(1000000)){
-    throw std::runtime_error("unable to set baudrate");
+  if(!driver_->open_port()){
+    throw std::runtime_error(driver_->get_last_error_log());
   }
 
   joint_names_.push_back("crane_plus_joint1");
@@ -68,42 +64,27 @@ hardware_interface::return_type CranePlusInterface::init()
     ++i;
   }
 
-  set_torque(true);
+  driver_->torque_enable(true);
 
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type CranePlusInterface::read()
 {
-  const int ADDR_MX_PRESENT_POSITION = 36;
-  const double TO_RADIANS = (300.0 / 1023.0) * M_PI / 180.0;
-  static int count=0;
+  std::vector<double> joint_positions;
+  if(!driver_->read_present_joint_positions(&joint_positions)){
+    RCLCPP_ERROR(LOGGER, driver_->get_last_error_log());
+    return hardware_interface::return_type::ERROR;
 
-  for(size_t i=0; i < joint_names_.size(); ++i){
-    int dxl_id = i + 1;  // サーボのIDは1 ~ 5なので
-    uint16_t dxl_present_position = 0;
-    uint8_t dxl_error = 0;     
-    int dxl_comm_result = dxl_packet_handler_->read2ByteTxRx(dxl_port_handler_, 
-      dxl_id, ADDR_MX_PRESENT_POSITION, &dxl_present_position, &dxl_error);
+  }else if(pos_.size() != joint_positions.size()){
+    RCLCPP_ERROR(LOGGER, "vectors size does not match. pos_:%d, joint_positions:%d",
+      pos_.size(), joint_positions.size());
+    return hardware_interface::return_type::ERROR;
 
-    if (dxl_comm_result != COMM_SUCCESS)
-    {
-      RCLCPP_ERROR(LOGGER, "TxRxResult: %d", dxl_comm_result);
+  }else{
+    for(size_t i=0; i < pos_.size(); ++i){
+      pos_[i] = joint_positions[i];
     }
-    else if (dxl_error != 0)
-    {
-      RCLCPP_ERROR(LOGGER, "RxPAcketError: %d", dxl_error);
-    }
-
-    // RCLCPP_INFO(LOGGER, "[ID:%03d] PresPos:%f", dxl_id, dxl_present_position * TO_RADIANS);
-
-    pos_[i] = (dxl_present_position - 511) * TO_RADIANS;
-  }
-
-  count++;
-
-  if(count > 200){
-    count = 0;
   }
 
   return hardware_interface::return_type::OK;
@@ -111,63 +92,9 @@ hardware_interface::return_type CranePlusInterface::read()
 
 hardware_interface::return_type CranePlusInterface::write()
 {
-  const int ADDR_GOAL_POSITION = 30;
-  const double TO_DYNAMIXEL = (180.0 / M_PI) * (1023.0 / 300.0);
-
-  bool result = true;
-
-  for(size_t i=0; i < joint_names_.size(); ++i){
-    int dxl_id = i + 1;  // サーボのIDは1 ~ 5なので
-    uint16_t goal_position = cmd_[i] * TO_DYNAMIXEL + 511;
-    uint8_t dxl_error = 0;     
-    int dxl_comm_result = dxl_packet_handler_->write2ByteTxRx(dxl_port_handler_, 
-      dxl_id, ADDR_GOAL_POSITION, goal_position, &dxl_error);
-
-    if (dxl_comm_result != COMM_SUCCESS)
-    {
-      RCLCPP_ERROR(LOGGER, "TxRxResult: %d", dxl_comm_result);
-      result = false;
-    }
-    else if (dxl_error != 0)
-    {
-      RCLCPP_ERROR(LOGGER, "RxPAcketError: %d", dxl_error);
-      result = false;
-    }
-  }
-
-  if(result == true){
-    return hardware_interface::return_type::OK;
-  }else{
+  if(!driver_->write_goal_joint_positions(cmd_)){
+    RCLCPP_ERROR(LOGGER, driver_->get_last_error_log());
     return hardware_interface::return_type::ERROR;
   }
+  return hardware_interface::return_type::OK;
 }
-
-
-bool CranePlusInterface::set_torque(const bool enable)
-{
-  const int ADDR_TORQUE_ENABLE = 24;
-  
-  bool result = true;
-
-  for(size_t i=0; i < joint_names_.size(); ++i){
-    int dxl_id = i + 1;  // サーボのIDは1 ~ 5なので
-    uint8_t dxl_error = 0;     
-    int dxl_comm_result = dxl_packet_handler_->write1ByteTxRx(dxl_port_handler_, 
-      dxl_id, ADDR_TORQUE_ENABLE, enable, &dxl_error);
-
-    if (dxl_comm_result != COMM_SUCCESS)
-    {
-      RCLCPP_ERROR(LOGGER, "TxRxResult: %d", dxl_comm_result);
-      result = false;
-    }
-    else if (dxl_error != 0)
-    {
-      RCLCPP_ERROR(LOGGER, "RxPAcketError: %d", dxl_error);
-      result = false;
-    }
-  }
-
-  return result;
-}
-
-

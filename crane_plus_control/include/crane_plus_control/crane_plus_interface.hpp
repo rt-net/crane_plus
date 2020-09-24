@@ -1,11 +1,13 @@
 
 #include <controller_interface/controller_interface.hpp>
-#include <dynamixel_sdk/dynamixel_sdk.h>
 #include <hardware_interface/joint_command_handle.hpp>
 #include <hardware_interface/joint_state_handle.hpp>
 #include <hardware_interface/robot_hardware.hpp>
+#include <memory>
 #include <rclcpp/rclcpp.hpp>
 #include <string>
+
+#include "crane_plus_control/crane_plus_driver.hpp"
 
 
 class CranePlusInterface : public hardware_interface::RobotHardware
@@ -30,9 +32,5 @@ private:
   std::vector<double> cmd_;
   std::vector<hardware_interface::OperationMode> op_mode_;
 
-  dynamixel::PortHandler *dxl_port_handler_;
-  dynamixel::PacketHandler *dxl_packet_handler_;
-
-  bool set_torque(const bool enable);
-
+  std::shared_ptr<CranePlusDriver> driver_;
 };
