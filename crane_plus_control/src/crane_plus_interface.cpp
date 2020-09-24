@@ -65,7 +65,11 @@ hardware_interface::return_type CranePlusInterface::init()
   }
 
   driver_->torque_enable(true);
-  driver_->write_moving_speed_rpm_all(5.0);
+
+  read();  // set current joint positions to pos_. 
+  for(size_t i = 0; i < cmd_.size(); i++){
+    cmd_[i] = pos_[i];  // set current joint positions to target positions cmd_.
+  }
 
   return hardware_interface::return_type::OK;
 }
