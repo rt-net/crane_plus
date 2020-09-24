@@ -65,6 +65,7 @@ hardware_interface::return_type CranePlusInterface::init()
   }
 
   driver_->torque_enable(true);
+  driver_->write_moving_speed_rpm_all(5.0);
 
   return hardware_interface::return_type::OK;
 }

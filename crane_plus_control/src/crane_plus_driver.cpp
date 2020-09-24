@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include <cmath>
 
 #include "crane_plus_control/crane_plus_driver.hpp"
@@ -14,6 +15,7 @@ constexpr double TO_DXL_POS = 1.0 / TO_RADIANS;
 // Ref: https://emanual.robotis.com/docs/en/dxl/ax/ax-12a/
 constexpr uint16_t ADDR_TORQUE_ENABLE = 24;
 constexpr uint16_t ADDR_GOAL_POSITION = 30;
+constexpr uint16_t ADDR_MOVING_SPEED = 32;
 constexpr uint16_t ADDR_PRESENT_POSITION = 36;
 
 CranePlusDriver::CranePlusDriver(const std::string port_name, const int baudrate, std::vector<uint8_t> id_list)
@@ -78,32 +80,6 @@ bool CranePlusDriver::torque_enable(const bool enable)
   return retval;
 }
 
-bool CranePlusDriver::read_present_joint_positions(std::vector<double> * joint_positions)
-{
-  bool retval = true;
-  for(auto dxl_id : id_list_){
-    uint8_t dxl_error = 0;
-    uint16_t dxl_present_position = 0;
-    int dxl_comm_result = dxl_packet_handler_->read2ByteTxRx(dxl_port_handler_.get(), 
-      dxl_id, ADDR_PRESENT_POSITION, &dxl_present_position, &dxl_error);
-
-    if (dxl_comm_result != COMM_SUCCESS)
-    {
-      last_error_log_ = std::string(__func__) + ": TxRxResult:" + std::to_string(dxl_comm_result);
-      retval = false;
-    }
-    else if (dxl_error != 0)
-    {
-      last_error_log_ = std::string(__func__) + ": RxPacketError:" + std::to_string(dxl_error);
-      retval = false;
-    }
-
-    joint_positions->push_back(dxl_pos_to_radian(dxl_present_position));
-  }
-
-  return retval;
-}
-
 bool CranePlusDriver::write_goal_joint_positions(const std::vector<double> & goal_positions)
 {
   if(goal_positions.size() != id_list_.size()){
@@ -129,9 +105,87 @@ bool CranePlusDriver::write_goal_joint_positions(const std::vector<double> & goa
     }
     else if (dxl_error != 0)
     {
-      last_error_log_ = std::string(__func__) + ": RxPacketError:" + std::to_string(dxl_error);
+      last_error_log_ = std::string(__func__) + ": PacketError:" + std::to_string(dxl_error);
       retval = false;
     }
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::write_moving_speed_rpm(const uint8_t dxl_id, const double speed_rpm)
+{
+  const int DXL_MAX_MOVING_SPEED = 1023;
+  const double SPEED_UNIT = 0.111;  // rpm
+  if(std::find(id_list_.begin(), id_list_.end(), dxl_id) == id_list_.end()){
+    last_error_log_ = std::string(__func__) + ": dxl_id: " + std::to_string(dxl_id)
+      + "not found.";
+    return false;
+  }
+
+  int dxl_moving_speed = speed_rpm / SPEED_UNIT;
+  if(dxl_moving_speed > DXL_MAX_MOVING_SPEED){
+    dxl_moving_speed = DXL_MAX_MOVING_SPEED;
+  }else if(dxl_moving_speed == 0){
+    // If moving_speed is set to 0, it means the maximum rpm of the motor is used
+    // without controlling the speed.
+    dxl_moving_speed = 1;
+  }
+
+  bool retval = true;
+
+  uint8_t dxl_error = 0;     
+  int dxl_comm_result = dxl_packet_handler_->write2ByteTxRx(dxl_port_handler_.get(), 
+    dxl_id, ADDR_MOVING_SPEED, dxl_moving_speed, &dxl_error);
+  
+  if (dxl_comm_result != COMM_SUCCESS)
+  {
+    last_error_log_ = std::string(__func__) + ": TxRxResult:" + std::to_string(dxl_comm_result);
+    retval = false;
+  }
+  else if (dxl_error != 0)
+  {
+    last_error_log_ = std::string(__func__) + ": PacketError:" + std::to_string(dxl_error);
+    retval = false;
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::write_moving_speed_rpm_all(const double speed_rpm)
+{
+  bool retval = true;
+
+  for(auto dxl_id : id_list_){
+    if(!write_moving_speed_rpm(dxl_id, speed_rpm)){
+      retval = false;
+    }
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::read_present_joint_positions(std::vector<double> * joint_positions)
+{
+  bool retval = true;
+  for(auto dxl_id : id_list_){
+    uint8_t dxl_error = 0;
+    uint16_t dxl_present_position = 0;
+    int dxl_comm_result = dxl_packet_handler_->read2ByteTxRx(dxl_port_handler_.get(), 
+      dxl_id, ADDR_PRESENT_POSITION, &dxl_present_position, &dxl_error);
+
+    if (dxl_comm_result != COMM_SUCCESS)
+    {
+      last_error_log_ = std::string(__func__) + ": TxRxResult:" + std::to_string(dxl_comm_result);
+      retval = false;
+    }
+    else if (dxl_error != 0)
+    {
+      last_error_log_ = std::string(__func__) + ": PacketError:" + std::to_string(dxl_error);
+      retval = false;
+    }
+
+    joint_positions->push_back(dxl_pos_to_radian(dxl_present_position));
   }
 
   return retval;

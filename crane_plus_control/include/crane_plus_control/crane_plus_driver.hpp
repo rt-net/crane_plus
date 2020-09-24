@@ -13,9 +13,12 @@ public:
   bool open_port(void);
   void close_port(void);
   std::string get_last_error_log(void);
+
   bool torque_enable(const bool enable);
-  bool read_present_joint_positions(std::vector<double> * joint_positions);
   bool write_goal_joint_positions(const std::vector<double> & goal_positions);
+  bool write_moving_speed_rpm(const uint8_t dxl_id, const double speed_rpm);
+  bool write_moving_speed_rpm_all(const double speed_rpm);
+  bool read_present_joint_positions(std::vector<double> * joint_positions);
 
 private:
   std::shared_ptr<dynamixel::PortHandler> dxl_port_handler_;
