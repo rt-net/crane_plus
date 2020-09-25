@@ -32,7 +32,6 @@ hardware_interface::return_type CranePlusInterface::init()
     throw std::runtime_error(driver_->get_last_error_log());
   }
 
-  const std::vector<std::string> interface_names = {"position", "velocity", "effort"};
   for (size_t i = 0; i < joint_names_.size(); i++) {
     if (register_joint(joint_names_[i], "position") != hardware_interface::return_type::OK)
       throw std::runtime_error("unable to register position " + joint_names_[i]);
