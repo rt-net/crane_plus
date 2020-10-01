@@ -10,19 +10,19 @@
   <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.xacro"/>
 
   <!-- Link to provide the location reference for the arm -->
-  <!-- <link name="base_link"/> -->
+  <link name="base_link"/>
 
   <!-- Used for fixing robot to Gazebo 'base_link' -->
-  <!-- <link name="world"/>                                 -->
+  <link name="world"/>                                
 
-  <!-- <joint name="base_link_to_world_joint" type="fixed"> -->
-  <!--   <parent link="world"/>                             -->
-  <!--   <child link="base_link"/>                          -->
-  <!-- </joint>                                             -->
+  <joint name="base_link_to_world_joint" type="fixed">
+    <parent link="world"/>                            
+    <child link="base_link"/>                         
+  </joint>                                            
 
   <xacro:property name="M_PI" value="3.14159"/>
 
-  <crane_plus parent="base_link"
+  <xacro:crane_plus parent="base_link"
     joints_vlimit="2.0"
     joint1_lower_limit="-${M_PI*5/6}"
     joint1_upper_limit="${M_PI*5/6}"
@@ -35,5 +35,5 @@
     joint_hand_lower_limit="-${M_PI*0.2191}"
     joint_hand_upper_limit="${M_PI*0.2093}">
     <origin xyz="0 0 0"/>
-  </crane_plus>
+  </xacro:crane_plus>
 </robot>
