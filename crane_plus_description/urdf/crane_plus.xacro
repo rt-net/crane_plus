@@ -271,6 +271,74 @@
         <inertia ixx="5.76E-06" ixy="-4.66E-07" ixz="0.0" iyy="2.76E-05" iyz="0.0" izz="2.52E-05"/>
       </inertial>
     </link>
+
+    <!-- <gazebo>
+      <plugin
+      filename="libignition-gazebo-diff-drive-system.so"
+      name="ignition::gazebo::systems::DiffDrive">
+        <left_joint>${NAME_JOINT_1}</left_joint>
+        <right_joint>${NAME_JOINT_HAND}</right_joint>
+        <wheel_separation>1.2</wheel_separation>
+        <wheel_radius>0.4</wheel_radius>
+        <odom_publish_frequency>1</odom_publish_frequency>
+        <topic>cmd_vel</topic>
+      </plugin>
+    </gazebo> -->
+
+    <gazebo>
+      <plugin
+      filename="libignition-gazebo-joint-position-controller-system.so"
+      name="ignition::gazebo::systems::JointPositionController">
+        <joint_name>${NAME_JOINT_1}</joint_name>
+        <p_gain>0.5</p_gain>
+        <i_gain>0.0</i_gain>
+        <d_gain>0.0</d_gain>
+        <cmd_max>5</cmd_max>
+        <cmd_min>-5</cmd_min>
+      </plugin>
+
+      <plugin
+      filename="libignition-gazebo-joint-position-controller-system.so"
+      name="ignition::gazebo::systems::JointPositionController">
+        <joint_name>${NAME_JOINT_2}</joint_name>
+      </plugin>
+
+      <plugin
+      filename="libignition-gazebo-joint-position-controller-system.so"
+      name="ignition::gazebo::systems::JointPositionController">
+        <joint_name>${NAME_JOINT_3}</joint_name>
+      </plugin>
+
+      <plugin
+      filename="libignition-gazebo-joint-position-controller-system.so"
+      name="ignition::gazebo::systems::JointPositionController">
+        <joint_name>${NAME_JOINT_4}</joint_name>
+      </plugin>
+
+      <plugin
+      filename="libignition-gazebo-joint-state-publisher-system.so"
+      name="ignition::gazebo::systems::JointStatePublisher">
+        <joint_name>${NAME_JOINT_1}</joint_name>
+      </plugin>
+      <plugin
+      filename="libignition-gazebo-joint-state-publisher-system.so"
+      name="ignition::gazebo::systems::JointStatePublisher">
+        <joint_name>${NAME_JOINT_2}</joint_name>
+      </plugin>
+      <plugin
+      filename="libignition-gazebo-joint-state-publisher-system.so"
+      name="ignition::gazebo::systems::JointStatePublisher">
+        <joint_name>${NAME_JOINT_3}</joint_name>
+      </plugin>
+      <plugin
+      filename="libignition-gazebo-joint-state-publisher-system.so"
+      name="ignition::gazebo::systems::JointStatePublisher">
+        <joint_name>${NAME_JOINT_4}</joint_name>
+      </plugin>
+
+
+    </gazebo>
+
   </xacro:macro>
 </robot>
 
