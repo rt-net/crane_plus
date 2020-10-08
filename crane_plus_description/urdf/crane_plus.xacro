@@ -319,23 +319,11 @@
       filename="libignition-gazebo-joint-state-publisher-system.so"
       name="ignition::gazebo::systems::JointStatePublisher">
         <joint_name>${NAME_JOINT_1}</joint_name>
-      </plugin>
-      <plugin
-      filename="libignition-gazebo-joint-state-publisher-system.so"
-      name="ignition::gazebo::systems::JointStatePublisher">
         <joint_name>${NAME_JOINT_2}</joint_name>
-      </plugin>
-      <plugin
-      filename="libignition-gazebo-joint-state-publisher-system.so"
-      name="ignition::gazebo::systems::JointStatePublisher">
         <joint_name>${NAME_JOINT_3}</joint_name>
-      </plugin>
-      <plugin
-      filename="libignition-gazebo-joint-state-publisher-system.so"
-      name="ignition::gazebo::systems::JointStatePublisher">
         <joint_name>${NAME_JOINT_4}</joint_name>
+        <joint_name>${NAME_JOINT_HAND}</joint_name>
       </plugin>
-
 
     </gazebo>
 
