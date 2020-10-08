@@ -27,7 +27,14 @@ def generate_launch_description():
                         arguments=['-string', urdf_text, '-z', '1.02'],
                         output='screen')
 
+    ign_joint_state_name = "/world/default/model/crane_plus/joint_state"
+    msg_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
+                        arguments=[ign_joint_state_name + '@sensor_msgs/msg/JointState[ignition.msgs.Model'],
+                        remappings=[(ign_joint_state_name, '/joint_states')],
+                        output='screen')
+
     return LaunchDescription([
         ign_gazebo,
-        spawn_entity
+        spawn_entity,
+        msg_bridge
     ])
