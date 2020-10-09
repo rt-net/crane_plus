@@ -3,6 +3,8 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess
 from launch_ros.actions import Node
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 import os
 import xacro
 
@@ -33,8 +35,37 @@ def generate_launch_description():
                         remappings=[(ign_joint_state_name, '/joint_states')],
                         output='screen')
 
+    container = ComposableNodeContainer(
+            name='container',
+            namespace='',
+            package='crane_plus_ign',
+            executable='component_container',
+            composable_node_descriptions=[
+                ComposableNode(
+                    package='composition',
+                    plugin='composition::Listener',
+                    name='listener')
+            ],
+            output='screen',
+    )
+
+    container = ComposableNodeContainer(
+            name='joint_trajectory_converter_container',
+            namespace='',
+            package='rclcpp_components',
+            executable='component_container_mt',
+            composable_node_descriptions=[
+                ComposableNode(
+                    package='crane_plus_ign',
+                    plugin='crane_plus_ign::JTrajectoryConverter',
+                    name='converter'),
+            ],
+            output='screen',
+    )
+
     return LaunchDescription([
         ign_gazebo,
         spawn_entity,
-        msg_bridge
+        msg_bridge,
+        container
     ])
