@@ -76,7 +76,9 @@ def generate_launch_description():
     run_move_group_node = Node(package='moveit_ros_move_group',
                                executable='move_group',
                                output='screen',
-                               parameters=[robot_description,
+                               parameters=[
+                                           {'use_sim_time': True},
+                                           robot_description,
                                            robot_description_semantic,
                                            kinematics_yaml,
                                            ompl_planning_pipeline_config,
@@ -129,4 +131,5 @@ def generate_launch_description():
     )
 
     # return LaunchDescription([ rviz_node, static_tf, robot_state_publisher, run_move_group_node, fake_joint_driver_node ])
-    return LaunchDescription([ rviz_node, static_tf, robot_state_publisher, run_move_group_node, crane_plus_control_node ])
+    # return LaunchDescription([ rviz_node, static_tf, robot_state_publisher, run_move_group_node, crane_plus_control_node ])
+    return LaunchDescription([ rviz_node, static_tf, robot_state_publisher, run_move_group_node])

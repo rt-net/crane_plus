@@ -31,8 +31,10 @@ def generate_launch_description():
 
     ign_joint_state_name = "/world/default/model/crane_plus/joint_state"
     msg_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
-                        arguments=[ign_joint_state_name + '@sensor_msgs/msg/JointState[ignition.msgs.Model'],
+                        arguments=[ign_joint_state_name + '@sensor_msgs/msg/JointState[ignition.msgs.Model',
+                                   '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
                         remappings=[(ign_joint_state_name, '/joint_states')],
+                        # parameters=[{'use_sim_time': True}],
                         output='screen')
 
     container = ComposableNodeContainer(
@@ -44,7 +46,9 @@ def generate_launch_description():
                 ComposableNode(
                     package='crane_plus_ign',
                     plugin='crane_plus_ign::JTrajectoryConverter',
-                    name='converter'),
+                    name='converter',
+                    # parameters=[{'use_sim_time': True}]
+                    ),
             ],
             output='screen',
     )
