@@ -36,20 +36,6 @@ def generate_launch_description():
                         output='screen')
 
     container = ComposableNodeContainer(
-            name='container',
-            namespace='',
-            package='crane_plus_ign',
-            executable='component_container',
-            composable_node_descriptions=[
-                ComposableNode(
-                    package='composition',
-                    plugin='composition::Listener',
-                    name='listener')
-            ],
-            output='screen',
-    )
-
-    container = ComposableNodeContainer(
             name='joint_trajectory_converter_container',
             namespace='',
             package='rclcpp_components',
