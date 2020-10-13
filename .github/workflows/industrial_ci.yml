@@ -20,8 +20,8 @@ jobs:
           - { ROS_DISTRO: foxy, ROS_REPO: main }
 
     env:
-      - DOCKER_IMAGE: moveit/moveit2:foxy-source
-      - ROSDEP_SKIP_KEYS: [ hardware_interface ]
+      - { DOCKER_IMAGE: moveit/moveit2:foxy-source,
+          ROSDEP_SKIP_KEYS: hardware_interface }
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
