@@ -19,8 +19,8 @@ jobs:
         env:
           - { ROS_DISTRO: foxy, ROS_REPO: ros }
 
-    # env:
-    #   UPSTREAM_WORKSPACE: .ci.rosinstall
+    env:
+        DOCKER_IMAGE: moveit/moveit2:foxy-source
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
