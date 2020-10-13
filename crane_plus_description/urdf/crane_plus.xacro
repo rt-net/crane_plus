@@ -37,6 +37,20 @@
   <xacro:property name="NAME_LINK_4" value="crane_plus_link4"/>
   <xacro:property name="NAME_LINK_HAND" value="crane_plus_link_hand"/>
 
+  <xacro:property name="MESH_LINK_BASE" value="crane_plus_description/meshes/visual/body_20201013.stl"/>
+  <xacro:property name="MESH_LINK_1" value="crane_plus_description/meshes/visual/Link1_20201013.stl"/>
+  <xacro:property name="MESH_LINK_2" value="crane_plus_description/meshes/visual/Link2_20201013.stl"/>
+  <xacro:property name="MESH_LINK_3" value="crane_plus_description/meshes/visual/Link3_20201013.stl"/>
+  <xacro:property name="MESH_LINK_4" value="crane_plus_description/meshes/visual/Link4_20201013.stl"/>
+  <xacro:property name="MESH_LINK_HAND" value="crane_plus_description/meshes/visual/Hand_20201013.stl"/>
+
+  <xacro:property name="MESH_COLLISION_LINK_BASE" value="crane_plus_description/meshes/collision/body_collision_20201013.stl"/>
+  <xacro:property name="MESH_COLLISION_LINK_1" value="crane_plus_description/meshes/collision/Link1_collision_20201013.stl"/>
+  <xacro:property name="MESH_COLLISION_LINK_2" value="crane_plus_description/meshes/collision/Link2_collision_20201013.stl"/>
+  <xacro:property name="MESH_COLLISION_LINK_3" value="crane_plus_description/meshes/collision/Link3_collision_20201013.stl"/>
+  <xacro:property name="MESH_COLLISION_LINK_4" value="crane_plus_description/meshes/collision/Link4_collision_20201013.stl"/>
+  <xacro:property name="MESH_COLLISION_LINK_HAND" value="crane_plus_description/meshes/collision/Hand_collision_20201013.stl"/>
+
   <xacro:macro name="crane_plus"
       params="parent
               joints_vlimit
@@ -62,17 +76,19 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/RT-CRANE+_body.stl"
+          <mesh filename="package://${MESH_LINK_BASE}"
               scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </visual>
 
       <collision>
-        <origin xyz="-0.0145 0 0.02" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <box size="0.0485 0.0255 0.032"/>
+          <mesh filename="package://${MESH_COLLISION_LINK_BASE}"
+              scale="1 1 1"/>
         </geometry>
+        <material name="black"/>
       </collision>
 
       <inertial>
@@ -100,17 +116,19 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 ${M_PI}"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/RT-CRANE+_Link1.stl"
+          <mesh filename="package://${MESH_LINK_1}"
               scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </visual>
 
       <collision>
-        <origin xyz="0 0 0.0035" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 ${M_PI}"/>
         <geometry>
-          <box size="0.0245 0.048 0.003"/>
+          <mesh filename="package://${MESH_COLLISION_LINK_1}"
+              scale="1 1 1"/>
         </geometry>
+        <material name="white"/>
       </collision>
 
       <inertial>
@@ -138,17 +156,19 @@
       <visual>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/RT-CRANE+_Link2.stl"
+          <mesh filename="package://${MESH_LINK_2}"
               scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </visual>
 
       <collision>
-        <origin xyz="0 0 0.040" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
-          <box size="0.0315 0.038 0.105"/>
+          <mesh filename="package://${MESH_COLLISION_LINK_2}"
+              scale="1 1 1"/>
         </geometry>
+        <material name="black"/>
       </collision>
 
       <inertial>
@@ -176,17 +196,19 @@
       <visual>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/RT-CRANE+_Link3.stl"
+          <mesh filename="package://${MESH_LINK_3}"
               scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </visual>
 
       <collision>
-        <origin xyz="0 0 0.08" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
-          <box size="0.032 0.035 0.050"/>
+          <mesh filename="package://${MESH_COLLISION_LINK_3}"
+              scale="1 1 1"/>
         </geometry>
+        <material name="white"/>
       </collision>
 
       <inertial>
@@ -214,17 +236,19 @@
       <visual>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/RT-CRANE+_Link4.stl"
+          <mesh filename="package://${MESH_LINK_4}"
               scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </visual>
 
       <collision>
-        <origin xyz="0 0.037 0.097" rpy="${M_PI/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
-          <box size="0.034 0.045 0.002"/>
+          <mesh filename="package://${MESH_COLLISION_LINK_4}"
+              scale="1 1 1"/>
         </geometry>
+        <material name="black"/>
       </collision>
 
       <inertial>
@@ -252,17 +276,19 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 -${M_PI/2} 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/RT-CRANE+_Hand.stl"
+          <mesh filename="package://${MESH_LINK_HAND}"
               scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </visual>
 
       <collision>
-        <origin xyz="0 -0.018 0.075" rpy="${M_PI/3} 0 0"/>
+        <origin xyz="0 0 0" rpy="0 -${M_PI/2} 0"/>
         <geometry>
-          <box size="0.034 0.045 0.002"/>
+          <mesh filename="package://${MESH_COLLISION_LINK_HAND}"
+              scale="1 1 1"/>
         </geometry>
+        <material name="white"/>
       </collision>
 
       <inertial>
