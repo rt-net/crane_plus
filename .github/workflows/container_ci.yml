@@ -15,6 +15,7 @@ on:
 jobs:
   container_ci:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     container:
       image: moveit/moveit2:foxy-source
     steps:
