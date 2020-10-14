@@ -30,7 +30,7 @@ jobs:
           path: ros2_ws/src/crane_plus
       - name: Buil crane_plus 
         run: |
-          . /opt/ros/foxy/setup.bash
+          . /opt/ros/foxy/setup.sh
           . /root/ws_moveit/src/install/setup.sh
           cd $GITHUB_WORKSPACE/ros2_ws
           colcon build
