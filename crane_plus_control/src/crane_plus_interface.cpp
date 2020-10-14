@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <memory>
+#include <vector>
+
 #include "crane_plus_control/crane_plus_interface.hpp"
 
 static const rclcpp::Logger LOGGER = rclcpp::get_logger("crane_plus_interface");
@@ -31,7 +34,7 @@ hardware_interface::return_type CranePlusInterface::init()
   std::vector<uint8_t> id_list{1, 2, 3, 4, 5};
   driver_ = std::make_shared<CranePlusDriver>("/dev/ttyUSB0", 1000000, id_list);
 
-  if(!driver_->open_port()){
+  if (!driver_->open_port()) {
     throw std::runtime_error(driver_->get_last_error_log());
   }
 
@@ -53,11 +56,12 @@ hardware_interface::return_type CranePlusInterface::init()
 
   size_t i = 0;
   for (auto & joint_name : joint_names_) {
-
     hardware_interface::JointStateHandle state_handle(joint_name, &pos_[i], &vel_[i], &eff_[i]);
     joint_state_handles_[i] = state_handle;
 
-    if (register_joint_state_handle(&joint_state_handles_[i]) != hardware_interface::return_type::OK) {
+    if (register_joint_state_handle(&joint_state_handles_[i]) !=
+      hardware_interface::return_type::OK)
+    {
       throw std::runtime_error("unable to register " + joint_state_handles_[i].get_name());
     }
 
@@ -70,7 +74,8 @@ hardware_interface::return_type CranePlusInterface::init()
     }
 
     joint_mode_handles_[i] = hardware_interface::OperationModeHandle(joint_name, &op_mode_[i]);
-    if (register_operation_mode_handle(&joint_mode_handles_[i]) != hardware_interface::return_type::OK)
+    if (register_operation_mode_handle(&joint_mode_handles_[i]) !=
+      hardware_interface::return_type::OK)
     {
       throw std::runtime_error("unable to register " + joint_mode_handles_[i].get_name());
     }
@@ -79,8 +84,8 @@ hardware_interface::return_type CranePlusInterface::init()
 
   driver_->torque_enable(true);
 
-  read();  // set current joint positions to pos_. 
-  for(size_t i = 0; i < cmd_.size(); i++){
+  read();  // set current joint positions to pos_.
+  for (size_t i = 0; i < cmd_.size(); i++) {
     cmd_[i] = pos_[i];  // set current joint positions to target positions cmd_.
   }
 
@@ -90,17 +95,18 @@ hardware_interface::return_type CranePlusInterface::init()
 hardware_interface::return_type CranePlusInterface::read()
 {
   std::vector<double> joint_positions;
-  if(!driver_->read_present_joint_positions(&joint_positions)){
+  if (!driver_->read_present_joint_positions(&joint_positions)) {
     RCLCPP_ERROR(LOGGER, driver_->get_last_error_log());
     return hardware_interface::return_type::ERROR;
 
-  }else if(pos_.size() != joint_positions.size()){
-    RCLCPP_ERROR(LOGGER, "vectors size does not match. pos_:%d, joint_positions:%d",
+  } else if (pos_.size() != joint_positions.size()) {
+    RCLCPP_ERROR(
+      LOGGER, "vectors size does not match. pos_:%d, joint_positions:%d",
       pos_.size(), joint_positions.size());
     return hardware_interface::return_type::ERROR;
 
-  }else{
-    for(size_t i=0; i < pos_.size(); ++i){
+  } else {
+    for (size_t i = 0; i < pos_.size(); ++i) {
       pos_[i] = joint_positions[i];
     }
   }
@@ -110,7 +116,7 @@ hardware_interface::return_type CranePlusInterface::read()
 
 hardware_interface::return_type CranePlusInterface::write()
 {
-  if(!driver_->write_goal_joint_positions(cmd_)){
+  if (!driver_->write_goal_joint_positions(cmd_)) {
     RCLCPP_ERROR(LOGGER, driver_->get_last_error_log());
     return hardware_interface::return_type::ERROR;
   }

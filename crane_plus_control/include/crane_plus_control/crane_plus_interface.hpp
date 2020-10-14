@@ -12,16 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <controller_interface/controller_interface.hpp>
-#include <hardware_interface/joint_command_handle.hpp>
-#include <hardware_interface/joint_state_handle.hpp>
-#include <hardware_interface/robot_hardware.hpp>
+#ifndef CRANE_PLUS_CONTROL__CRANE_PLUS_INTERFACE_HPP_
+#define CRANE_PLUS_CONTROL__CRANE_PLUS_INTERFACE_HPP_
+
 #include <memory>
-#include <rclcpp/rclcpp.hpp>
 #include <string>
+#include <vector>
 
+#include "controller_interface/controller_interface.hpp"
 #include "crane_plus_control/crane_plus_driver.hpp"
-
+#include "hardware_interface/joint_command_handle.hpp"
+#include "hardware_interface/joint_state_handle.hpp"
+#include "hardware_interface/robot_hardware.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 class CranePlusInterface : public hardware_interface::RobotHardware
 {
@@ -47,3 +50,5 @@ private:
 
   std::shared_ptr<CranePlusDriver> driver_;
 };
+
+#endif  // CRANE_PLUS_CONTROL__CRANE_PLUS_INTERFACE_HPP_

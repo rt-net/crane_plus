@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifndef CRANE_PLUS_CONTROL__CRANE_PLUS_DRIVER_HPP_
+#define CRANE_PLUS_CONTROL__CRANE_PLUS_DRIVER_HPP_
+
 #include <dynamixel_sdk/dynamixel_sdk.h>
 #include <memory>
 #include <string>
@@ -40,9 +43,11 @@ private:
   std::vector<uint8_t> id_list_;
   std::string last_error_log_;
 
-  bool parse_dxl_error(const std::string func_name, const uint8_t dxl_id,
+  bool parse_dxl_error(
+    const std::string func_name, const uint8_t dxl_id,
     const int dxl_comm_result, const uint8_t dxl_packet_error);
   double dxl_pos_to_radian(const uint16_t position);
   uint16_t radian_to_dxl_pos(const double position);
-
 };
+
+#endif  // CRANE_PLUS_CONTROL__CRANE_PLUS_DRIVER_HPP_
