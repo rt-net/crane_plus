@@ -1,4 +1,4 @@
-name: industrial_ci
+name: container_ci
 
 on:
   push:
@@ -13,18 +13,28 @@ on:
     - cron: "0 2 * * 0" # Weekly on Sundays at 02:00
 
 jobs:
-  industrial_ci:
-    strategy:
-      matrix:
-        env:
-          - { ROS_DISTRO: foxy, ROS_REPO: main }
-
-    env:
-      DOCKER_IMAGE: moveit/moveit2:foxy-source
-      AFTER_SETUP_TARGET_WORKSPACE: source /opt/ros/$ROS_DISTRO/setup.bash && source ~/ws_moveit/src/install/setup.bassh
-      # ROSDEP_SKIP_KEYS: hardware_interface
+  container_ci:
     runs-on: ubuntu-latest
+    container:
+      image: moveit/moveit2:foxy-source
     steps:
       - uses: actions/checkout@v2
-      - uses: "ros-industrial/industrial_ci@master"
-        env: ${{ matrix.env }}
+      - name: Test Workspace
+        source ~/ws_moveit/src/install/setup.bash
+        pwd
+        ls -la
+  # industrial_ci:
+  #   strategy:
+  #     matrix:
+  #       env:
+  #         - { ROS_DISTRO: foxy, ROS_REPO: main }
+
+  #   env:
+  #     DOCKER_IMAGE: moveit/moveit2:foxy-source
+  #     AFTER_SETUP_TARGET_WORKSPACE: source /opt/ros/$ROS_DISTRO/setup.bash && source ~/ws_moveit/src/install/setup.bassh
+  #     # ROSDEP_SKIP_KEYS: hardware_interface
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: "ros-industrial/industrial_ci@master"
+  #       env: ${{ matrix.env }}
