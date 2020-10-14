@@ -39,3 +39,11 @@ jobs:
           rosdep install -r -y -i --from-paths .
           cd ..
           colcon build
+      - name: Test
+        run: |
+          . /opt/ros/foxy/setup.sh
+          . /root/ws_moveit/src/install/setup.sh
+          . $GITHUB_WORKSPACE/ros2_ws/install/setup.sh
+          cd $GITHUB_WORKSPACE/ros2_ws
+          colcon test
+          colcon test-result --verbose
