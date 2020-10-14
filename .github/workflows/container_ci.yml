@@ -38,23 +38,3 @@ jobs:
           rosdep install -r -y -i --from-paths .
           cd ..
           colcon build
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v1
-
-
-# jobs:
-#   industrial_ci:
-#     strategy:
-#       matrix:
-#         env:
-#           - { ROS_DISTRO: foxy, ROS_REPO: main }
-
-#     env:
-#       DOCKER_IMAGE: moveit/moveit2:foxy-source
-#       AFTER_SETUP_TARGET_WORKSPACE: . /root/ws_moveit/src/install/setup.sh
-#       # ROSDEP_SKIP_KEYS: hardware_interface
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: "ros-industrial/industrial_ci@master"
-#         env: ${{ matrix.env }}
