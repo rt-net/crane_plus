@@ -12,41 +12,45 @@ on:
   schedule:
     - cron: "0 2 * * 0" # Weekly on Sundays at 02:00
 
-# jobs:
-#   container_ci:
-#     runs-on: ubuntu-latest
-#     container:
-#       image: moveit/moveit2:foxy-source
-#     steps:
-#       - name: Build Workspace
-#         run: |
-#           . /opt/ros/foxy/setup.sh
-#           mkdir -p $GITHUB_WORKSPACE/ros2_ws/src
-#           cd $GITHUB_WORKSPACE/ros2_ws
-#           colcon build
-#       - name: Checkout clane_plus
-#         uses: actions/checkout@v2
-#         with:
-#           path: ros2_ws/src/crane_plus
-#       - name: Setup tmate session
-#         uses: mxschmitt/action-tmate@v1
-      # - name: mkdir Workspace
-      #   run: |
-      #     source /opt/ros/foxy/setup.bash
-      #     source /root/ws_moveit/src/install/setup.sh
 jobs:
-  industrial_ci:
-    strategy:
-      matrix:
-        env:
-          - { ROS_DISTRO: foxy, ROS_REPO: main }
-
-    env:
-      DOCKER_IMAGE: moveit/moveit2:foxy-source
-      AFTER_SETUP_TARGET_WORKSPACE: . /root/ws_moveit/src/install/setup.sh
-      # ROSDEP_SKIP_KEYS: hardware_interface
+  container_ci:
     runs-on: ubuntu-latest
+    container:
+      image: moveit/moveit2:foxy-source
     steps:
-      - uses: actions/checkout@v2
-      - uses: "ros-industrial/industrial_ci@master"
-        env: ${{ matrix.env }}
+      - name: Build Workspace
+        run: |
+          . /opt/ros/foxy/setup.sh
+          mkdir -p $GITHUB_WORKSPACE/ros2_ws/src
+          cd $GITHUB_WORKSPACE/ros2_ws
+          colcon build
+      - name: Checkout clane_plus
+        uses: actions/checkout@v2
+        with:
+          path: ros2_ws/src/crane_plus
+      - name: Buil crane_plus 
+        run: |
+          . /opt/ros/foxy/setup.bash
+          . /root/ws_moveit/src/install/setup.sh
+          cd $GITHUB_WORKSPACE/ros2_ws
+          colcon build
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v1
+
+
+# jobs:
+#   industrial_ci:
+#     strategy:
+#       matrix:
+#         env:
+#           - { ROS_DISTRO: foxy, ROS_REPO: main }
+
+#     env:
+#       DOCKER_IMAGE: moveit/moveit2:foxy-source
+#       AFTER_SETUP_TARGET_WORKSPACE: . /root/ws_moveit/src/install/setup.sh
+#       # ROSDEP_SKIP_KEYS: hardware_interface
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: "ros-industrial/industrial_ci@master"
+#         env: ${{ matrix.env }}
