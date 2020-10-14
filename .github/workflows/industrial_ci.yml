@@ -20,9 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Test Workspace
-        source ~/ws_moveit/src/install/setup.bash
-        pwd
-        ls -la
+        run: |
+          source ~/ws_moveit/src/install/setup.bash
+          pwd
+          ls -la
   # industrial_ci:
   #   strategy:
   #     matrix:
