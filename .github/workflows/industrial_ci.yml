@@ -21,7 +21,7 @@ jobs:
 
     env:
       DOCKER_IMAGE: moveit/moveit2:foxy-source
-      AFTER_SETUP_TARGET_WORKSPACE: source ~/ws_moveit/src/install/setup.bash
+      AFTER_SETUP_TARGET_WORKSPACE: . ~/ws_moveit/src/install/setup.sh
       # ROSDEP_SKIP_KEYS: hardware_interface
     runs-on: ubuntu-latest
     steps:
