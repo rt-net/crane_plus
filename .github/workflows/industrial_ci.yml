@@ -19,6 +19,8 @@ jobs:
       image: moveit/moveit2:foxy-source
     steps:
       - uses: actions/checkout@v2
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v1
       - name: Test Workspace
         run: |
           # . ~/ws_moveit/src/install/setup.sh
