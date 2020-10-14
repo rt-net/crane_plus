@@ -28,11 +28,13 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: ros2_ws/src/crane_plus
-      - name: Buil crane_plus 
+      - name: Build crane_plus 
         run: |
           . /opt/ros/foxy/setup.sh
           . /root/ws_moveit/src/install/setup.sh
-          cd $GITHUB_WORKSPACE/ros2_ws
+          cd $GITHUB_WORKSPACE/ros2_ws/src
+          rosdep install -r -y -i --from-paths .
+          cd ..
           colcon build
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v1
