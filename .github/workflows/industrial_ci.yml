@@ -33,6 +33,7 @@ jobs:
           . /opt/ros/foxy/setup.sh
           . /root/ws_moveit/src/install/setup.sh
           cd $GITHUB_WORKSPACE/ros2_ws/src
+          rosdep update
           rosdep install -r -y -i --from-paths .
           cd ..
           colcon build
