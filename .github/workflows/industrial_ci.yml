@@ -18,14 +18,22 @@ jobs:
     container:
       image: moveit/moveit2:foxy-source
     steps:
-      - uses: actions/checkout@v2
+      - name: Build Workspace
+        run: |
+          source /opt/ros/foxy/setup.bash
+          mkdir -p $GITHUB_WORKSPACE/ros2_ws/src
+          cd $GITHUB_WORKSPACE/ros2_ws
+          colcon build
+      - name: Checkout clane_plus
+        uses: actions/checkout@v2
+        with:
+          path: ros2_ws/src
+      # - name: mkdir Workspace
+      #   run: |
+      #     source /opt/ros/foxy/setup.bash
+      #     source /root/ws_moveit/src/install/setup.sh
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v1
-      - name: Test Workspace
-        run: |
-          # . ~/ws_moveit/src/install/setup.sh
-          pwd
-          ls -la
   # industrial_ci:
   #   strategy:
   #     matrix:
