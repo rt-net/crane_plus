@@ -18,6 +18,8 @@ jobs:
     container:
       image: moveit/moveit2:foxy-source
     steps:
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v1
       - name: Build Workspace
         run: |
           source /opt/ros/foxy/setup.bash
@@ -32,8 +34,6 @@ jobs:
       #   run: |
       #     source /opt/ros/foxy/setup.bash
       #     source /root/ws_moveit/src/install/setup.sh
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v1
   # industrial_ci:
   #   strategy:
   #     matrix:
