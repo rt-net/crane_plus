@@ -14,8 +14,8 @@
 
 import os
 
-import launch
-import launch_ros.actions
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -29,15 +29,23 @@ def generate_launch_description():
     doc = xacro.process_file(xacro_file)
     robot_desc = doc.toprettyxml(indent='  ')
     params = {'robot_description': robot_desc}
-    rsp = launch_ros.actions.Node(package='robot_state_publisher',
-                                  executable='robot_state_publisher',
-                                  output='both',
-                                  parameters=[params])
+
+    rsp = Node(package='robot_state_publisher',
+               executable='robot_state_publisher',
+               output='both',
+               parameters=[params])
     jsp = Node(
-        # node_name='line_follower',
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         output='screen',
     )
 
-    return launch.LaunchDescription([rsp, jsp])
+    rviz_config_file = get_package_share_directory(
+        'crane_plus_description') + '/launch/display.rviz'
+    rviz_node = Node(package='rviz2',
+                     executable='rviz2',
+                     name='rviz2',
+                     output='log',
+                     arguments=['-d', rviz_config_file])
+
+    return LaunchDescription([rsp, jsp, rviz_node])
