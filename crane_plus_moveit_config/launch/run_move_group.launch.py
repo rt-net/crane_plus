@@ -16,8 +16,12 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription
+from launch.conditions import IfCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
 import xacro
 import yaml
 
@@ -49,9 +53,8 @@ def load_yaml(package_name, file_path):
 
 def generate_launch_description():
     # planning_context
-    pkg_share = FindPackageShare('crane_plus_description').find('crane_plus_description')
-    urdf_dir = os.path.join(pkg_share, 'urdf')
-    xacro_file = os.path.join(urdf_dir, 'crane_plus.urdf.xacro')
+    xacro_file = os.path.join(get_package_share_directory('crane_plus_description'),
+                              'urdf', 'crane_plus.urdf.xacro')
     doc = xacro.process_file(xacro_file)
     robot_description_config = doc.toprettyxml(indent='  ')
     robot_description = {'robot_description': robot_description_config}
@@ -92,6 +95,12 @@ def generate_launch_description():
                                          'publish_state_updates': True,
                                          'publish_transforms_updates': True}
 
+    # Declare launch arguments
+    declare_arg_controller = DeclareLaunchArgument(
+        'controller',
+        default_value='true',
+        description='Set to "true" to launch crane_plus_controller.')
+
     # Start the actual move_group node/action server
     run_move_group_node = Node(package='moveit_ros_move_group',
                                executable='move_group',
@@ -131,20 +140,17 @@ def generate_launch_description():
                                  output='both',
                                  parameters=[robot_description])
 
-    # Controller for real robot
-    crane_plus_control_node = Node(
-        package='crane_plus_control',
-        executable='crane_plus_control_node',
-        output='screen',
-        parameters=[{'controller_name': 'crane_plus_arm_controller'},
-                    os.path.join(get_package_share_directory('crane_plus_moveit_config'),
-                                 'config', 'crane_plus_controllers.yaml'),
-                    os.path.join(get_package_share_directory('crane_plus_moveit_config'),
-                                 'config', 'start_positions.yaml'),
-                    robot_description])
+    control_node = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                get_package_share_directory('crane_plus_control'),
+                                            '/launch/crane_plus_control.launch.py']),
+            condition=IfCondition(LaunchConfiguration('controller'))
+        )
 
-    return LaunchDescription([rviz_node,
+    return LaunchDescription([declare_arg_controller,
+                              run_move_group_node,
+                              rviz_node,
                               static_tf,
                               robot_state_publisher,
-                              run_move_group_node,
-                              crane_plus_control_node])
+                              control_node
+                              ])
