@@ -10,3 +10,10 @@ crane_plus_arm_controller:
       - crane_plus_joint2 
       - crane_plus_joint3 
       - crane_plus_joint4 
+
+crane_plus_gripper_controller:
+  ros__parameters:
+    joints:
+      - crane_plus_joint_hand
+    write_op_modes:
+      - crane_plus_joint_hand
