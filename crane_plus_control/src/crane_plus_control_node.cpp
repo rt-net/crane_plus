@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Ref: https://github.com/ros-controls/ros2_control#writing-a-demo-for-your-own-robot
+
 #include <memory>
 
 #include "controller_manager/controller_manager.hpp"
@@ -55,6 +57,9 @@ int main(int argc, char * argv[])
   // load the trajectory controller
   cm.load_controller(
     "crane_plus_arm_controller",
+    "joint_trajectory_controller/JointTrajectoryController");
+  cm.load_controller(
+    "crane_plus_gripper_controller",
     "joint_trajectory_controller/JointTrajectoryController");
 
   // there is no async spinner in ROS 2, so we have to put the spin() in its own thread
