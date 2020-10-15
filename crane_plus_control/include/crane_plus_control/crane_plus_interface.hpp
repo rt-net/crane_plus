@@ -1,14 +1,30 @@
+// Copyright 2020 RT Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-#include <controller_interface/controller_interface.hpp>
-#include <hardware_interface/joint_command_handle.hpp>
-#include <hardware_interface/joint_state_handle.hpp>
-#include <hardware_interface/robot_hardware.hpp>
+#ifndef CRANE_PLUS_CONTROL__CRANE_PLUS_INTERFACE_HPP_
+#define CRANE_PLUS_CONTROL__CRANE_PLUS_INTERFACE_HPP_
+
 #include <memory>
-#include <rclcpp/rclcpp.hpp>
 #include <string>
+#include <vector>
 
+#include "controller_interface/controller_interface.hpp"
 #include "crane_plus_control/crane_plus_driver.hpp"
-
+#include "hardware_interface/joint_command_handle.hpp"
+#include "hardware_interface/joint_state_handle.hpp"
+#include "hardware_interface/robot_hardware.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 class CranePlusInterface : public hardware_interface::RobotHardware
 {
@@ -34,3 +50,5 @@ private:
 
   std::shared_ptr<CranePlusDriver> driver_;
 };
+
+#endif  // CRANE_PLUS_CONTROL__CRANE_PLUS_INTERFACE_HPP_

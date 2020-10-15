@@ -1,8 +1,22 @@
+// Copyright 2020 RT Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-#include <controller_manager/controller_manager.hpp>
-#include <crane_plus_control/crane_plus_interface.hpp>
-#include <rclcpp/rclcpp.hpp>
+#include <memory>
 
+#include "controller_manager/controller_manager.hpp"
+#include "crane_plus_control/crane_plus_interface.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 static constexpr double SPIN_RATE = 200;  // Hz
 
@@ -16,19 +30,19 @@ int main(int argc, char * argv[])
   rclcpp::init(argc, argv);
   // Logger
   const rclcpp::Logger logger = rclcpp::get_logger("my_robot_logger");
-  
+
   // create my_robot instance
   auto my_robot = std::make_shared<CranePlusInterface>();
-  
+
   // initialize the robot
   if (my_robot->init() != hardware_interface::return_type::OK) {
     RCLCPP_ERROR(logger, "failed to initialized crane_plus hardware");
     return -1;
   }
-  
+
   auto executor =
     std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
-  
+
   // start the controller manager with the robot hardware
   controller_manager::ControllerManager cm(my_robot, executor);
   // load the joint state controller.
@@ -39,7 +53,7 @@ int main(int argc, char * argv[])
     "crane_plus_joint_state_controller",
     "joint_state_controller/JointStateController");
   // load the trajectory controller
-  cm.load_controller( 
+  cm.load_controller(
     "crane_plus_arm_controller",
     "joint_trajectory_controller/JointTrajectoryController");
 
