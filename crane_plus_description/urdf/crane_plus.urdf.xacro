@@ -21,19 +21,21 @@
   </joint>                                            
 
   <xacro:property name="M_PI" value="3.14159"/>
+  <xacro:property name="TO_RADIAN" value="${M_PI / 180.0}"/>
+  <xacro:property name="SERVO_HOME" value="${TO_RADIAN * 150.0}"/>
 
   <xacro:crane_plus parent="base_link"
     joints_vlimit="2.0"
-    joint1_lower_limit="-${M_PI*5/6}"
-    joint1_upper_limit="${M_PI*5/6}"
-    joint2_lower_limit="-${M_PI*0.5776}"
-    joint2_upper_limit="${M_PI*0.5612}"
-    joint3_lower_limit="-${M_PI*0.8105}"
-    joint3_upper_limit="${M_PI*0.7770}"
-    joint4_lower_limit="-${M_PI*0.5776}"
-    joint4_upper_limit="${M_PI*0.5564}"
-    joint_hand_lower_limit="-${M_PI*0.2191}"
-    joint_hand_upper_limit="${M_PI*0.2093}">
+    joint1_lower_limit="${0.0 * TO_RADIAN - SERVO_HOME}"
+    joint1_upper_limit="${300.0 * TO_RADIAN - SERVO_HOME}"
+    joint2_lower_limit="${45.45 * TO_RADIAN - SERVO_HOME}"
+    joint2_upper_limit="${252.20 * TO_RADIAN - SERVO_HOME}"
+    joint3_lower_limit="${3.52 * TO_RADIAN - SERVO_HOME}"
+    joint3_upper_limit="${290.62 * TO_RADIAN - SERVO_HOME}"
+    joint4_lower_limit="${44.57 * TO_RADIAN - SERVO_HOME}"
+    joint4_upper_limit="${251.32 * TO_RADIAN - SERVO_HOME}"
+    joint_hand_lower_limit="${109.38 * TO_RADIAN - SERVO_HOME}"
+    joint_hand_upper_limit="${188.27 * TO_RADIAN - SERVO_HOME}">
     <origin xyz="0 0 0"/>
   </xacro:crane_plus>
 </robot>
