@@ -17,10 +17,6 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription
-from launch.conditions import IfCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 import xacro
 import yaml
@@ -140,17 +136,9 @@ def generate_launch_description():
                                  output='both',
                                  parameters=[robot_description])
 
-    control_node = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
-                get_package_share_directory('crane_plus_control'),
-                '/launch/crane_plus_control.launch.py']),
-            condition=IfCondition(LaunchConfiguration('controller'))
-        )
-
     return LaunchDescription([declare_arg_controller,
                               run_move_group_node,
                               rviz_node,
                               static_tf,
                               robot_state_publisher,
-                              control_node
                               ])
