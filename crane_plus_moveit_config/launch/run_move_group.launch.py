@@ -143,7 +143,7 @@ def generate_launch_description():
     control_node = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_control'),
-                                            '/launch/crane_plus_control.launch.py']),
+                '/launch/crane_plus_control.launch.py']),
             condition=IfCondition(LaunchConfiguration('controller'))
         )
 
