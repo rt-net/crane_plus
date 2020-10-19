@@ -32,9 +32,9 @@ def generate_launch_description():
         executable='crane_plus_control_node',
         output='screen',
         parameters=[{'controller_name': 'crane_plus_arm_controller'},
-                    os.path.join(get_package_share_directory('crane_plus_moveit_config'),
+                    os.path.join(get_package_share_directory('crane_plus_control'),
                                  'config', 'crane_plus_controllers.yaml'),
-                    os.path.join(get_package_share_directory('crane_plus_moveit_config'),
+                    os.path.join(get_package_share_directory('crane_plus_control'),
                                  'config', 'start_positions.yaml'),
                     robot_description])
 
