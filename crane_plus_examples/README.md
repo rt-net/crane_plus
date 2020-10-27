@@ -51,6 +51,7 @@ $ ros2 launch crane_plus_examples example.launch.py name:='gripper_control'
 `demo.launch.py`を実行している状態で各サンプルを実行できます。
 
 - [gripper_control](#gripper_control)
+- [pose_groupstate](#pose_groupstate)
 
 ---
 
@@ -73,3 +74,21 @@ $ ros2 launch crane_plus_examples example.launch.py name:='gripper_control'
 
 ---
 
+### pose_groupstate
+
+group_stateを使うコード例です。
+
+SRDFファイル[crane_plus_moveit_config/config/crane_plus.srdf](../crane_plus_moveit_config/config/crane_plus.srdf)
+に記載されている`home`と`vertical`の姿勢に移行します。
+
+次のコマンドを実行します。
+
+```sh
+$ ros2 launch crane_plus_examples example.launch.py name:='pose_groupstate'
+```
+
+<img src=https://rt-net.github.io/images/crane-plus/pose_groupstate.gif width=500px />
+
+[back to example list](#examples)
+
+---
