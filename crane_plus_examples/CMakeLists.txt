@@ -21,7 +21,11 @@ find_package(rclcpp REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 
 # Build and install node executables
-set(executable_list gripper_control pose_groupstate)
+set(executable_list
+  gripper_control
+  pose_groupstate
+  joint_values
+)
 foreach(loop_var IN LISTS executable_list)
   add_executable(${loop_var} src/${loop_var}.cpp)
   ament_target_dependencies(${loop_var}
