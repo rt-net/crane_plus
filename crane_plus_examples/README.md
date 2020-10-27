@@ -43,7 +43,7 @@ $ ros2 launch crane_plus_examples demo.launch.py
 
 ```sh
 # Example
-$ ros2 launch crane_plus_examples gripper_control.launch.py 
+$ ros2 launch crane_plus_examples example.launch.py name:='gripper_control'
 ```
 
 ## Examples
@@ -64,7 +64,7 @@ $ ros2 launch crane_plus_examples gripper_control.launch.py
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples gripper_control.launch.py 
+$ ros2 launch crane_plus_examples example.launch.py name:='gripper_control'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/gripper_control.gif width=500px />
