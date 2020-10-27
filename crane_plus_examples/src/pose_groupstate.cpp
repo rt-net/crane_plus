@@ -16,9 +16,7 @@
 // https://github.com/ros-planning/moveit2/blob/main/moveit_demo_nodes
 // /run_move_group/src/run_move_group.cpp
 
-#include <cmath>
 #include <string>
-#include <vector>
 
 #include "moveit/move_group_interface/move_group_interface.h"
 #include "rclcpp/rclcpp.hpp"

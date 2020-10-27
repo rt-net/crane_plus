@@ -17,7 +17,6 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import LogInfo
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 import xacro
@@ -67,11 +66,11 @@ def generate_launch_description():
     )
 
     example_node = Node(name=[LaunchConfiguration('example'), '_node'],
-                                package='crane_plus_examples',
-                                executable=LaunchConfiguration('example'),
-                                output='screen',
-                                parameters=[robot_description,
-                                            robot_description_semantic,
-                                            kinematics_yaml])
+                        package='crane_plus_examples',
+                        executable=LaunchConfiguration('example'),
+                        output='screen',
+                        parameters=[robot_description,
+                                    robot_description_semantic,
+                                    kinematics_yaml])
 
     return LaunchDescription([declare_example_name, example_node])
