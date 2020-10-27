@@ -52,10 +52,7 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 - [gripper_control](#gripper_control)
 - [pose_groupstate](#pose_groupstate)
-<<<<<<< HEAD
 - [joint_values](#joint_values)
-=======
->>>>>>> master
 
 ---
 

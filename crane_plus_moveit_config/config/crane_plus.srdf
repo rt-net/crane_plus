@@ -34,4 +34,10 @@
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="table" type="fixed" parent_frame="world" child_link="base_link" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="crane_plus_link_base" link2="crane_plus_link1" reason="Adjacent" />
+    <disable_collisions link1="crane_plus_link1" link2="crane_plus_link2" reason="Adjacent" />
+    <disable_collisions link1="crane_plus_link2" link2="crane_plus_link3" reason="Adjacent" />
+    <disable_collisions link1="crane_plus_link3" link2="crane_plus_link4" reason="Adjacent" />
+    <disable_collisions link1="crane_plus_link4" link2="crane_plus_link_hand" reason="Adjacent" />
+
 </robot>
