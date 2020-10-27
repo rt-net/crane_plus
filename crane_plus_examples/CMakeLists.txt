@@ -20,15 +20,21 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 
-add_executable(gripper_control src/gripper_control.cpp)
-ament_target_dependencies(gripper_control
-  rclcpp
-  moveit_ros_planning_interface
-)
+# Build and install node executables
+set(executable_list gripper_control pose_groupstate)
+foreach(loop_var IN LISTS executable_list)
+  add_executable(${loop_var} src/${loop_var}.cpp)
+  ament_target_dependencies(${loop_var}
+    rclcpp
+    moveit_ros_planning_interface
+  )
 
-install(TARGETS
-  gripper_control
-  DESTINATION lib/${PROJECT_NAME})
+  install(TARGETS
+    ${loop_var}
+    DESTINATION lib/${PROJECT_NAME}
+  )
+endforeach()
+
 
 install(DIRECTORY
   launch
