@@ -62,13 +62,13 @@ def generate_launch_description():
     kinematics_yaml = load_yaml('crane_plus_moveit_config', 'config/kinematics.yaml')
 
     declare_example_name = DeclareLaunchArgument(
-        'name', default_value='gripper_control',
-        description='Set example node name.' 
+        'example', default_value='gripper_control',
+        description='Set an example executable name.'
     )
 
-    example_node = Node(name=[LaunchConfiguration('name'), '_node'],
+    example_node = Node(name=[LaunchConfiguration('example'), '_node'],
                                 package='crane_plus_examples',
-                                executable=LaunchConfiguration('name'),
+                                executable=LaunchConfiguration('example'),
                                 output='screen',
                                 parameters=[robot_description,
                                             robot_description_semantic,

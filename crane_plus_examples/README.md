@@ -43,7 +43,7 @@ $ ros2 launch crane_plus_examples demo.launch.py
 
 ```sh
 # Example
-$ ros2 launch crane_plus_examples example.launch.py name:='gripper_control'
+$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
 ## Examples
@@ -65,7 +65,7 @@ $ ros2 launch crane_plus_examples example.launch.py name:='gripper_control'
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples example.launch.py name:='gripper_control'
+$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/gripper_control.gif width=500px />
@@ -84,7 +84,7 @@ SRDFファイル[crane_plus_moveit_config/config/crane_plus.srdf](../crane_plus_
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples example.launch.py name:='pose_groupstate'
+$ ros2 launch crane_plus_examples example.launch.py example:='pose_groupstate'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/pose_groupstate.gif width=500px />
