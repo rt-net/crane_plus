@@ -52,6 +52,8 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 - [gripper_control](#gripper_control)
 - [pose_groupstate](#pose_groupstate)
+- [joint_values](#joint_values)
+- [pick_and_place](#pick_and_place)
 
 ---
 
@@ -88,6 +90,38 @@ $ ros2 launch crane_plus_examples example.launch.py example:='pose_groupstate'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/pose_groupstate.gif width=500px />
+
+[back to example list](#examples)
+
+---
+
+### joint_values 
+
+アームのジョイント角度を１つずつ変更するコード例です。
+
+次のコマンドを実行します。
+
+```sh
+$ ros2 launch crane_plus_examples example.launch.py example:='joint_values'
+```
+
+<img src=https://rt-net.github.io/images/crane-plus/joint_values.gif width=500px />
+
+[back to example list](#examples)
+
+---
+
+### pick_and_place
+
+モノを掴む・持ち上げる・運ぶ・置くコード例です。
+
+次のコマンドを実行します。
+
+```sh
+$ ros2 launch crane_plus_examples example.launch.py example:='pick_and_place'
+```
+
+<img src=https://rt-net.github.io/images/crane-plus/pick_and_place.gif width=500px />
 
 [back to example list](#examples)
 
