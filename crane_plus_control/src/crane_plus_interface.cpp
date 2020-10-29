@@ -82,7 +82,9 @@ hardware_interface::return_type CranePlusInterface::init()
     ++i;
   }
 
-  driver_->torque_enable(true);
+  if(!driver_->torque_enable(true)){
+    return hardware_interface::return_type::ERROR;
+  }
 
   read();  // set current joint positions to pos_.
   for (size_t i = 0; i < cmd_.size(); i++) {
