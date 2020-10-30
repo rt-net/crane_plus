@@ -62,7 +62,8 @@ def generate_launch_description():
 
     declare_example_name = DeclareLaunchArgument(
         'example', default_value='gripper_control',
-        description='Set an example executable name.'
+        description=('Set an example executable name: '
+                     '[gripper_control, pose_groupstate, joint_values, pick_and_place]')
     )
 
     example_node = Node(name=[LaunchConfiguration('example'), '_node'],

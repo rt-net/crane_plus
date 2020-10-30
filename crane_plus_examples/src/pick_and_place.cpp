@@ -17,7 +17,6 @@
 // /run_move_group/src/run_move_group.cpp
 
 #include <cmath>
-#include <vector>
 
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/quaternion.hpp"
@@ -25,7 +24,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
-using MoveItErrorCode = moveit::planning_interface::MoveItErrorCode;
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
 static const rclcpp::Logger LOGGER = rclcpp::get_logger("pick_and_place");
@@ -40,18 +38,22 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-  auto move_group_node = rclcpp::Node::make_shared("pick_and_place", node_options);
+  auto move_group_arm_node = rclcpp::Node::make_shared("move_group_arm_node", node_options);
+  auto move_group_gripper_node = rclcpp::Node::make_shared("move_group_gripper_node", node_options);
   // For current state monitor
   rclcpp::executors::SingleThreadedExecutor executor;
-  executor.add_node(move_group_node);
+  executor.add_node(move_group_arm_node);
+  executor.add_node(move_group_gripper_node);
   std::thread([&executor]() {executor.spin();}).detach();
 
-  MoveGroupInterface move_group_arm(move_group_node, "arm");
+  MoveGroupInterface move_group_arm(move_group_arm_node, "arm");
   move_group_arm.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
   move_group_arm.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 
   // TODO(ShotaAk): Switch to gripper_action_controller if it is implemented in ros2_controllers.
-  MoveGroupInterface move_group_gripper(move_group_node, "gripper");
+  MoveGroupInterface move_group_gripper(move_group_gripper_node, "gripper");
+  move_group_gripper.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  move_group_gripper.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
   auto gripper_joint_values = move_group_gripper.getCurrentJointValues();
   double GRIPPER_DEFAULT = 0.0;
   double GRIPPER_OPEN = to_radians(-30);

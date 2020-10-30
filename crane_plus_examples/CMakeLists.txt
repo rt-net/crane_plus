@@ -17,10 +17,10 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(moveit_ros_planning_interface REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 # Build and install node executables
 set(executable_list
@@ -32,10 +32,10 @@ set(executable_list
 foreach(loop_var IN LISTS executable_list)
   add_executable(${loop_var} src/${loop_var}.cpp)
   ament_target_dependencies(${loop_var}
-    rclcpp
-    moveit_ros_planning_interface
-    tf2_geometry_msgs
     geometry_msgs
+    moveit_ros_planning_interface
+    rclcpp
+    tf2_geometry_msgs
   )
 
   install(TARGETS
