@@ -4,8 +4,7 @@
 
 ROS 2 package suite of CRANE+V2.
 
-<img src=https://www.rt-shop.jp/images/RT/CRANEplusV2.png width=400px/>
-<img src=https://rt-net.github.io/images/crane-plus/pick_and_place.gif width=400px />
+<img src=https://www.rt-shop.jp/images/RT/CRANEplusV2.png width=400px/><img src=https://rt-net.github.io/images/crane-plus/pick_and_place.gif width=400px />
 
 ## Table of Contents
 
@@ -32,7 +31,7 @@ ROS 2 package suite of CRANE+V2.
 このパッケージで使用している[moveit2](https://github.com/ros-planning/moveit2)
 パッケージはROS 2 Foxy向けにリリースされていません。
 そのため、[moveit2 website](https://moveit.ros.org/install-moveit2/source/)
-の手順に従ってmoveit2及び依存パッケージをインストールした後に
+の手順に従って`moveit2`及び依存パッケージをインストールした後に
 `crane_plus`パケージをインストールします。
 
 ### MoveIt 2 Source Build
@@ -92,6 +91,7 @@ $ mkdir -p ~/moveit_ws/src
 
 ```sh
 $ cd ~/moveit_ws/src
+$ git clone https://github.com/ros-planning/moveit2.git -b main
 $ vcs import < moveit2/moveit2.repos
 $ rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y
 ```
@@ -156,7 +156,7 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 <img src=https://rt-net.github.io/images/crane-plus/gripper_control.gif width=500px />
 
-詳細は[crane_plus_examples](./crnae_plus_examples/README.md)
+詳細は[crane_plus_examples](./crane_plus_examples/README.md)
 を参照してください。
 
 ## Packages
