@@ -17,16 +17,11 @@
 // /run_move_group/src/run_move_group.cpp
 
 #include <cmath>
-#include <string>
-#include <vector>
 
 #include "moveit/move_group_interface/move_group_interface.h"
 #include "rclcpp/rclcpp.hpp"
 
-using MoveItErrorCode = moveit::planning_interface::MoveItErrorCode;
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
-using RobotStatePtr = moveit::core::RobotStatePtr;
-using JointModelGroup = const moveit::core::JointModelGroup;
 
 static const rclcpp::Logger LOGGER = rclcpp::get_logger("joint_values");
 
@@ -46,24 +41,23 @@ int main(int argc, char ** argv)
   executor.add_node(move_group_node);
   std::thread([&executor]() {executor.spin();}).detach();
 
-  static const std::string PLANNING_GROUP = "arm";
-  MoveGroupInterface move_group(move_group_node, PLANNING_GROUP);
-  move_group.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
-  move_group.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  MoveGroupInterface move_group_arm(move_group_node, "arm");
+  move_group_arm.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  move_group_arm.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 
-  move_group.setNamedTarget("vertical");
-  move_group.move();
+  move_group_arm.setNamedTarget("vertical");
+  move_group_arm.move();
 
-  auto joint_values = move_group.getCurrentJointValues();
+  auto joint_values = move_group_arm.getCurrentJointValues();
   double target_joint_value = to_radians(45.0);
   for (size_t i = 0; i < joint_values.size(); i++) {
     joint_values[i] = target_joint_value;
-    move_group.setJointValueTarget(joint_values);
-    move_group.move();
+    move_group_arm.setJointValueTarget(joint_values);
+    move_group_arm.move();
   }
 
-  move_group.setNamedTarget("vertical");
-  move_group.move();
+  move_group_arm.setNamedTarget("vertical");
+  move_group_arm.move();
 
   rclcpp::shutdown();
   return 0;
