@@ -15,6 +15,7 @@
 // Ref: https://github.com/ros-controls/ros2_control#writing-a-demo-for-your-own-robot
 
 #include <memory>
+#include <vector>
 
 #include "controller_manager/controller_manager.hpp"
 #include "crane_plus_control/crane_plus_interface.hpp"
@@ -33,11 +34,32 @@ int main(int argc, char * argv[])
   // Logger
   const rclcpp::Logger logger = rclcpp::get_logger("my_robot_logger");
 
+  // create node to receive parameters
+  auto control_param_node = rclcpp::Node::make_shared("control_param_node");
+  control_param_node->declare_parameter("port_name", "/dev/ttyUSB0");
+  control_param_node->declare_parameter("baudrate", 1000000);
+  control_param_node->declare_parameter("joint_name_list");
+  control_param_node->declare_parameter("dxl_id_list");
+
+  auto port_name = control_param_node->get_parameter("port_name").as_string();
+  auto baudrate = control_param_node->get_parameter("baudrate").as_int();
+  auto joint_name_list = control_param_node->get_parameter("joint_name_list").as_string_array();
+
+  // TODO(ShotaAk): Use byte_array for dxl_id_list
+  auto id_list = control_param_node->get_parameter("dxl_id_list").as_integer_array();
+  std::vector<uint8_t> dxl_id_list;
+  for (auto dxl_id : id_list) {
+    dxl_id_list.push_back(dxl_id);
+  }
+
   // create my_robot instance
   auto my_robot = std::make_shared<CranePlusInterface>();
 
   // initialize the robot
-  if (my_robot->init() != hardware_interface::return_type::OK) {
+  if (my_robot->init(
+      port_name, baudrate, dxl_id_list,
+      joint_name_list) != hardware_interface::return_type::OK)
+  {
     RCLCPP_ERROR(logger, "failed to initialized crane_plus hardware");
     return -1;
   }

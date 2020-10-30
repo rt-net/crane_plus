@@ -85,6 +85,6 @@ $ ros2 launch crane_plus_control crane_plus_control.launch.py
 次のコマンドでジョイント角度情報（`joint_state`）を表示できます
 
 ```sh
-$ ros2 topic echo /joint_state
+$ ros2 topic echo /joint_states
 ```
 

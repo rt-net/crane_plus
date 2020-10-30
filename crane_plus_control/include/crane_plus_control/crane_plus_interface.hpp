@@ -32,6 +32,10 @@ public:
   CranePlusInterface();
   ~CranePlusInterface();
   hardware_interface::return_type init();
+  hardware_interface::return_type init(
+    const std::string & port_name,
+    const int baudrate, const std::vector<uint8_t> & dxl_id_list,
+    const std::vector<std::string> & joint_name_list);
   hardware_interface::return_type read();
   hardware_interface::return_type write();
 

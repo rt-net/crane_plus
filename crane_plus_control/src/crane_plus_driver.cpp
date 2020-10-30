@@ -53,12 +53,14 @@ CranePlusDriver::~CranePlusDriver()
 bool CranePlusDriver::open_port(void)
 {
   if (!dxl_port_handler_->openPort()) {
-    last_error_log_ = std::string(__func__) + ": unable to open dynamixel port";
+    last_error_log_ = std::string(__func__) + ": unable to open dynamixel port: " +
+      dxl_port_handler_->getPortName();
     return false;
   }
 
   if (!dxl_port_handler_->setBaudRate(baudrate_)) {
-    last_error_log_ = std::string(__func__) + ": unable to set baudrate";
+    last_error_log_ = std::string(__func__) + ": unable to set baudrate" +
+      std::to_string(dxl_port_handler_->getBaudRate());
     return false;
   }
 
@@ -80,15 +82,11 @@ bool CranePlusDriver::torque_enable(const bool enable)
   bool retval = true;
   for (auto dxl_id : id_list_) {
     uint8_t dxl_error = 0;
-    int dxl_comm_result = dxl_packet_handler_->write1ByteTxRx(
+    int dxl_result = dxl_packet_handler_->write1ByteTxRx(
       dxl_port_handler_.get(),
       dxl_id, ADDR_TORQUE_ENABLE, enable, &dxl_error);
 
-    if (dxl_comm_result != COMM_SUCCESS) {
-      last_error_log_ = std::string(__func__) + ": TxRxResult:" + std::to_string(dxl_comm_result);
-      retval = false;
-    } else if (dxl_error != 0) {
-      last_error_log_ = std::string(__func__) + ": RxPacketError:" + std::to_string(dxl_error);
+    if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
       retval = false;
     }
   }

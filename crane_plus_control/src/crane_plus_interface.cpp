@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "crane_plus_control/crane_plus_interface.hpp"
@@ -31,18 +32,23 @@ CranePlusInterface::~CranePlusInterface()
 
 hardware_interface::return_type CranePlusInterface::init()
 {
-  std::vector<uint8_t> id_list{1, 2, 3, 4, 5};
-  driver_ = std::make_shared<CranePlusDriver>("/dev/ttyUSB0", 1000000, id_list);
+  return hardware_interface::return_type::OK;
+}
+
+hardware_interface::return_type CranePlusInterface::init(
+  const std::string & port_name,
+  const int baudrate, const std::vector<uint8_t> & dxl_id_list,
+  const std::vector<std::string> & joint_name_list)
+{
+  driver_ = std::make_shared<CranePlusDriver>(port_name, baudrate, dxl_id_list);
 
   if (!driver_->open_port()) {
     throw std::runtime_error(driver_->get_last_error_log());
   }
 
-  joint_names_.push_back("crane_plus_joint1");
-  joint_names_.push_back("crane_plus_joint2");
-  joint_names_.push_back("crane_plus_joint3");
-  joint_names_.push_back("crane_plus_joint4");
-  joint_names_.push_back("crane_plus_joint_hand");
+  for (auto joint_name : joint_name_list) {
+    joint_names_.push_back(joint_name);
+  }
 
   // Resize members
   pos_.resize(joint_names_.size());
@@ -82,7 +88,8 @@ hardware_interface::return_type CranePlusInterface::init()
     ++i;
   }
 
-  if(!driver_->torque_enable(true)){
+  if (!driver_->torque_enable(true)) {
+    RCLCPP_ERROR(LOGGER, driver_->get_last_error_log());
     return hardware_interface::return_type::ERROR;
   }
 
