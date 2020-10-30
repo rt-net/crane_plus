@@ -2,12 +2,17 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>crane_plus_examples</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="macakasit@gmail.com">shotaak</maintainer>
-  <license>TODO: License declaration</license>
+  <version>0.1.0</version>
+  <description>CRANE+V2 examples package</description>
+  <maintainer email="s.aoki@rt-net.jp">ShotaAk</maintainer>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>geometry_msgs</depend>
+  <depend>moveit_ros_planning_interface</depend>
+  <depend>rclcpp</depend>
+  <depend>tf2_geometry_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
