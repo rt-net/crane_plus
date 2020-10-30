@@ -4,8 +4,8 @@
 
 ## 実機のセットアップ
 
-`crane_plus_control`はCRANE+V2実機と通信するノードのため、
-PCとCRANE+V2の設定が必要です。
+`crane_plus_control`はCRANE+V2実機と通信するパッケージのため、
+事前にPCとCRANE+V2の設定が必要です。
 
 ### USB通信ポートの設定
 
@@ -20,7 +20,7 @@ $ sudo chmod 666 /dev/ttyUSB0
 
 ### USB通信ポートの変更
 
-`/dev/ttyUBS0`以外を使用する場合は
+`/dev/ttyUBS0`以外の通信ポートを使用する場合は
 [crane_plus_control/config/crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
 の`port_name`を変更します。
 
@@ -59,7 +59,7 @@ CRANE+V2に搭載されているサーボモータ[Dynamixel AX-12A](https://ema
 には`Return Delay Time`というパラメータがあります。
 
 デフォルトは250がセットされており、
-DynamixelがInstruction Packetを受信してからStatus Packetを送信するまでに`500 usec`の遅れがあります。
+サーボモータが`Instruction Packet`を受信してから`Status Packet`を送信するまでに`500 usec`の遅れがあります。
 
 [Dynamixel Wizard 2](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/)
 を使用して`Retrun Delay Time`を小さくすると、制御周期が早くなります。
@@ -68,7 +68,7 @@ DynamixelがInstruction Packetを受信してからStatus Packetを送信する�
 
 ## ノードの起動
 
-下記のコマンドで`crane_plus_control_node`が起動します。
+下記のコマンドで`crane_plus_control`のノードが起動します。
 
 ```sh
 $ ros2 launch crane_plus_control crane_plus_control.launch.py 
@@ -82,9 +82,27 @@ $ ros2 launch crane_plus_control crane_plus_control.launch.py
   - **`gripper_action_controller`が`ros2_controllers`に移植されたら変更します**
 
 ノードが起動した後、
-次のコマンドでジョイント角度情報（`joint_state`）を表示できます
+次のコマンドでジョイント角度情報（`joint_states`）を表示できます
 
 ```sh
 $ ros2 topic echo /joint_states
 ```
 
+### 通信タイムアウト機能
+
+ノードは一定時間通信しない場合にシャットダウンします。
+
+タイムアウト時間はデフォルトで5.0秒です。
+タイムアウト時間を変更する場合は
+[crane_plus_control/config/crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
+の`timeout_seconds`を変更します。
+
+```yaml
+control_param_node:
+  ros__parameters:
+    timeout_seconds: 5.0
+```
+
+---
+
+[back to top](#crane_plus_control)
