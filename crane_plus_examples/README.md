@@ -42,7 +42,6 @@ $ ros2 launch crane_plus_examples demo.launch.py
 例えばグリッパを開閉するサンプルは次のコマンドで実行できます。
 
 ```sh
-# Example
 $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
@@ -54,6 +53,17 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 - [pose_groupstate](#pose_groupstate)
 - [joint_values](#joint_values)
 - [pick_and_place](#pick_and_place)
+
+実行できるサンプルの一覧は、`examples.launch.py`にオプション`-s`を付けて実行することで表示できます。
+
+```sh
+$ ros2 launch crane_plus_examples example.launch.py -s
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'example':
+        Set an example executable name: [gripper_control, pose_groupstate, joint_values, pick_and_place]
+        (default: 'gripper_control')
+```
 
 ---
 
