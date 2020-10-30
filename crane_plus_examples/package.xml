@@ -9,6 +9,9 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>crane_plus_control</depend>
+  <depend>crane_plus_description</depend>
+  <depend>crane_plus_moveit_config</depend>
   <depend>geometry_msgs</depend>
   <depend>moveit_ros_planning_interface</depend>
   <depend>rclcpp</depend>
