@@ -15,6 +15,7 @@
 // Ref: https://github.com/ros-controls/ros2_control#writing-a-demo-for-your-own-robot
 
 #include <memory>
+#include <vector>
 
 #include "controller_manager/controller_manager.hpp"
 #include "crane_plus_control/crane_plus_interface.hpp"
@@ -33,11 +34,34 @@ int main(int argc, char * argv[])
   // Logger
   const rclcpp::Logger logger = rclcpp::get_logger("my_robot_logger");
 
+  // create node to receive parameters
+  auto control_param_node = rclcpp::Node::make_shared("control_param_node");
+  control_param_node->declare_parameter("port_name", "/dev/ttyUSB0");
+  control_param_node->declare_parameter("baudrate", 1000000);
+  control_param_node->declare_parameter("joint_name_list");
+  control_param_node->declare_parameter("dxl_id_list");
+  control_param_node->declare_parameter("timeout_seconds", 5.0);
+
+  auto PORT_NAME = control_param_node->get_parameter("port_name").as_string();
+  auto BAUDRATE = control_param_node->get_parameter("baudrate").as_int();
+  auto JOINT_NAME_LIST = control_param_node->get_parameter("joint_name_list").as_string_array();
+  auto TIMEOUT_SECONDS = control_param_node->get_parameter("timeout_seconds").as_double();
+
+  // TODO(ShotaAk): Use byte_array for dxl_id_list
+  auto ID_LIST = control_param_node->get_parameter("dxl_id_list").as_integer_array();
+  std::vector<uint8_t> dxl_id_list;
+  for (auto dxl_id : ID_LIST) {
+    dxl_id_list.push_back(dxl_id);
+  }
+
   // create my_robot instance
   auto my_robot = std::make_shared<CranePlusInterface>();
 
   // initialize the robot
-  if (my_robot->init() != hardware_interface::return_type::OK) {
+  if (my_robot->init(
+      PORT_NAME, BAUDRATE, dxl_id_list,
+      JOINT_NAME_LIST) != hardware_interface::return_type::OK)
+  {
     RCLCPP_ERROR(logger, "failed to initialized crane_plus hardware");
     return -1;
   }
@@ -78,19 +102,23 @@ int main(int argc, char * argv[])
   }
 
   // main loop
-  hardware_interface::return_type ret;
   rclcpp::Rate rate(SPIN_RATE);
+  rclcpp::Time last_successful_time;
   while (rclcpp::ok()) {
-    ret = my_robot->read();
-    if (ret != hardware_interface::return_type::OK) {
-      fprintf(stderr, "read failed!\n");
+    if (my_robot->read() == hardware_interface::return_type::OK) {
+      last_successful_time = rclcpp::Clock().now();
     }
 
     cm.update();
 
-    ret = my_robot->write();
-    if (ret != hardware_interface::return_type::OK) {
-      fprintf(stderr, "write failed!\n");
+    if (my_robot->write() == hardware_interface::return_type::OK) {
+      last_successful_time = rclcpp::Clock().now();
+    }
+
+    // check communication timeout
+    if (rclcpp::Clock().now().seconds() - last_successful_time.seconds() >= TIMEOUT_SECONDS) {
+      RCLCPP_ERROR(logger, "Communication timeout in %f seconds.", TIMEOUT_SECONDS);
+      break;
     }
 
     rate.sleep();
