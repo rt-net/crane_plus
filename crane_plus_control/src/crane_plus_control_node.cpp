@@ -42,15 +42,15 @@ int main(int argc, char * argv[])
   control_param_node->declare_parameter("dxl_id_list");
   control_param_node->declare_parameter("timeout_seconds", 5.0);
 
-  auto port_name = control_param_node->get_parameter("port_name").as_string();
-  auto baudrate = control_param_node->get_parameter("baudrate").as_int();
-  auto joint_name_list = control_param_node->get_parameter("joint_name_list").as_string_array();
+  auto PORT_NAME = control_param_node->get_parameter("port_name").as_string();
+  auto BAUDRATE = control_param_node->get_parameter("baudrate").as_int();
+  auto JOINT_NAME_LIST = control_param_node->get_parameter("joint_name_list").as_string_array();
   auto TIMEOUT_SECONDS = control_param_node->get_parameter("timeout_seconds").as_double();
 
   // TODO(ShotaAk): Use byte_array for dxl_id_list
-  auto id_list = control_param_node->get_parameter("dxl_id_list").as_integer_array();
+  auto ID_LIST = control_param_node->get_parameter("dxl_id_list").as_integer_array();
   std::vector<uint8_t> dxl_id_list;
-  for (auto dxl_id : id_list) {
+  for (auto dxl_id : ID_LIST) {
     dxl_id_list.push_back(dxl_id);
   }
 
@@ -59,8 +59,8 @@ int main(int argc, char * argv[])
 
   // initialize the robot
   if (my_robot->init(
-      port_name, baudrate, dxl_id_list,
-      joint_name_list) != hardware_interface::return_type::OK)
+      PORT_NAME, BAUDRATE, dxl_id_list,
+      JOINT_NAME_LIST) != hardware_interface::return_type::OK)
   {
     RCLCPP_ERROR(logger, "failed to initialized crane_plus hardware");
     return -1;
