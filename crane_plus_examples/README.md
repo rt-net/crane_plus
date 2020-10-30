@@ -9,21 +9,23 @@
 CRANE+V2本体をPCに接続します。
 接続方法は製品マニュアルを参照してください。
 
-### 2. USBポートの接続を確認する
+### 2. USB通信ポートの接続を確認する
 
-USBポートの接続確認や設定については`crane_plus_control`のREADMEを参照してください。
+USB通信ポートの設定については`crane_plus_control`のREADMEを参照してください。
 
 特に`latency_timer`が変更されていない場合は、
-CRANE+V2の制御周期が小さくなるので注意してください。
+`crane_plus_control`の制御周期が遅くなるので注意してください。
 
 ```sh
-# latency_timerの変更方法
+# /dev/ttyUSB0を使用する場合
 
 # rootに切り替える
-$ sudo sh
+$ sudo su
 
-# --- 以下 rootで実行するコマンド ---
+--- 以下rootで実行 ---
 # echo 1 > /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
+# cat /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
+1
 # exit
 ```
 
