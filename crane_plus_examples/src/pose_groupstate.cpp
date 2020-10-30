@@ -16,15 +16,10 @@
 // https://github.com/ros-planning/moveit2/blob/main/moveit_demo_nodes
 // /run_move_group/src/run_move_group.cpp
 
-#include <string>
-
 #include "moveit/move_group_interface/move_group_interface.h"
 #include "rclcpp/rclcpp.hpp"
 
-using MoveItErrorCode = moveit::planning_interface::MoveItErrorCode;
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
-using RobotStatePtr = moveit::core::RobotStatePtr;
-using JointModelGroup = const moveit::core::JointModelGroup;
 
 static const rclcpp::Logger LOGGER = rclcpp::get_logger("pose_groupstate");
 
@@ -33,25 +28,24 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-  auto move_group_node = rclcpp::Node::make_shared("pose_groupstate", node_options);
+  auto move_group_arm_node = rclcpp::Node::make_shared("move_group_arm_node", node_options);
   // For current state monitor
   rclcpp::executors::SingleThreadedExecutor executor;
-  executor.add_node(move_group_node);
+  executor.add_node(move_group_arm_node);
   std::thread([&executor]() {executor.spin();}).detach();
 
-  static const std::string PLANNING_GROUP = "arm";
-  MoveGroupInterface move_group(move_group_node, PLANNING_GROUP);
-  move_group.setMaxVelocityScalingFactor(0.5);  // Set 0.0 ~ 1.0
-  move_group.setMaxAccelerationScalingFactor(0.5);  // Set 0.0 ~ 1.0
+  MoveGroupInterface move_group_arm(move_group_arm_node, "arm");
+  move_group_arm.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  move_group_arm.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 
-  move_group.setNamedTarget("home");
-  move_group.move();
+  move_group_arm.setNamedTarget("home");
+  move_group_arm.move();
 
-  move_group.setNamedTarget("vertical");
-  move_group.move();
+  move_group_arm.setNamedTarget("vertical");
+  move_group_arm.move();
 
-  move_group.setNamedTarget("home");
-  move_group.move();
+  move_group_arm.setNamedTarget("home");
+  move_group_arm.move();
 
   rclcpp::shutdown();
   return 0;

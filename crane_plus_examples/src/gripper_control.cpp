@@ -35,14 +35,14 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-  auto move_group_node = rclcpp::Node::make_shared("gripper_control", node_options);
+  auto move_group_gripper_node = rclcpp::Node::make_shared("move_group_gripper_node", node_options);
   // For current state monitor
   rclcpp::executors::SingleThreadedExecutor executor;
-  executor.add_node(move_group_node);
+  executor.add_node(move_group_gripper_node);
   std::thread([&executor]() {executor.spin();}).detach();
 
   // TODO(ShotaAk): Switch to gripper_action_controller if it is implemented in ros2_controllers.
-  MoveGroupInterface move_group_gripper(move_group_node, "gripper");
+  MoveGroupInterface move_group_gripper(move_group_gripper_node, "gripper");
   move_group_gripper.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
   move_group_gripper.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 
