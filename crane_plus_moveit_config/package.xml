@@ -2,12 +2,18 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>crane_plus_moveit_config</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="macakasit@gmail.com">shotaak</maintainer>
-  <license>TODO: License declaration</license>
+  <version>0.1.0</version>
+  <description>CRANE+V2 move_group config package</description>
+  <maintainer email="s.aoki@rt-net.jp">ShotaAk</maintainer>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>moveit_ros_move_group</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>rviz2</depend>
+  <depend>tf2_ros</depend>
+  <depend>xacro</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
