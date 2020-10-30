@@ -40,10 +40,12 @@ int main(int argc, char * argv[])
   control_param_node->declare_parameter("baudrate", 1000000);
   control_param_node->declare_parameter("joint_name_list");
   control_param_node->declare_parameter("dxl_id_list");
+  control_param_node->declare_parameter("timeout_seconds", 5.0);
 
   auto port_name = control_param_node->get_parameter("port_name").as_string();
   auto baudrate = control_param_node->get_parameter("baudrate").as_int();
   auto joint_name_list = control_param_node->get_parameter("joint_name_list").as_string_array();
+  auto TIMEOUT_SECONDS = control_param_node->get_parameter("timeout_seconds").as_double();
 
   // TODO(ShotaAk): Use byte_array for dxl_id_list
   auto id_list = control_param_node->get_parameter("dxl_id_list").as_integer_array();
@@ -100,19 +102,23 @@ int main(int argc, char * argv[])
   }
 
   // main loop
-  hardware_interface::return_type ret;
   rclcpp::Rate rate(SPIN_RATE);
+  rclcpp::Time last_successful_time;
   while (rclcpp::ok()) {
-    ret = my_robot->read();
-    if (ret != hardware_interface::return_type::OK) {
-      fprintf(stderr, "read failed!\n");
+    if (my_robot->read() == hardware_interface::return_type::OK) {
+      last_successful_time = rclcpp::Clock().now();
     }
 
     cm.update();
 
-    ret = my_robot->write();
-    if (ret != hardware_interface::return_type::OK) {
-      fprintf(stderr, "write failed!\n");
+    if (my_robot->write() == hardware_interface::return_type::OK) {
+      last_successful_time = rclcpp::Clock().now();
+    }
+
+    // check communication timeout
+    if (rclcpp::Clock().now().seconds() - last_successful_time.seconds() >= TIMEOUT_SECONDS) {
+      RCLCPP_ERROR(logger, "Communication timeout in %f seconds.", TIMEOUT_SECONDS);
+      break;
     }
 
     rate.sleep();
