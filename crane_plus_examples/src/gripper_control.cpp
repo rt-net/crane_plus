@@ -17,44 +17,17 @@
 // /run_move_group/src/run_move_group.cpp
 
 #include <cmath>
-#include <string>
-#include <vector>
 
 #include "moveit/move_group_interface/move_group_interface.h"
 #include "rclcpp/rclcpp.hpp"
 
-using MoveItErrorCode = moveit::planning_interface::MoveItErrorCode;
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
-using RobotStatePtr = moveit::core::RobotStatePtr;
-using JointModelGroup = const moveit::core::JointModelGroup;
 
 static const rclcpp::Logger LOGGER = rclcpp::get_logger("gripper_control");
 
 double to_radians(const double deg_angle)
 {
   return deg_angle * M_PI / 180.0;
-}
-
-bool gripper_control(
-  const double joint_angle,
-  std::vector<double> & joint_group_positions, MoveGroupInterface & move_group)
-{
-  MoveGroupInterface::Plan my_plan;
-
-  joint_group_positions[0] = joint_angle;  // radians
-  move_group.setJointValueTarget(joint_group_positions);
-
-  if (move_group.plan(my_plan) != MoveItErrorCode::SUCCESS) {
-    RCLCPP_WARN(LOGGER, "Plan failed.");
-    return false;
-  }
-
-  if (move_group.move() != MoveItErrorCode::SUCCESS) {
-    RCLCPP_WARN(LOGGER, "Move failed.");
-    return true;
-  }
-
-  return true;
 }
 
 int main(int argc, char ** argv)
@@ -68,22 +41,24 @@ int main(int argc, char ** argv)
   executor.add_node(move_group_node);
   std::thread([&executor]() {executor.spin();}).detach();
 
-  static const std::string PLANNING_GROUP = "gripper";
-  MoveGroupInterface move_group(move_group_node, PLANNING_GROUP);
-  move_group.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
-  move_group.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  // TODO(ShotaAk): Switch to gripper_action_controller if it is implemented in ros2_controllers.
+  MoveGroupInterface move_group_gripper(move_group_node, "gripper");
+  move_group_gripper.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  move_group_gripper.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 
-  const JointModelGroup * joint_model_group =
-    move_group.getRobotModel()->getJointModelGroup(PLANNING_GROUP);
+  auto gripper_joint_values = move_group_gripper.getCurrentJointValues();
 
-  double wait_seconds = 10.0;
-  RobotStatePtr current_state = move_group.getCurrentState(wait_seconds);
-  std::vector<double> joint_group_positions;
-  current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
+  gripper_joint_values[0] = to_radians(30);
+  move_group_gripper.setJointValueTarget(gripper_joint_values);
+  move_group_gripper.move();
 
-  gripper_control(to_radians(30), joint_group_positions, move_group);
-  gripper_control(to_radians(-30), joint_group_positions, move_group);
-  gripper_control(to_radians(0), joint_group_positions, move_group);
+  gripper_joint_values[0] = to_radians(-30);
+  move_group_gripper.setJointValueTarget(gripper_joint_values);
+  move_group_gripper.move();
+
+  gripper_joint_values[0] = to_radians(0);
+  move_group_gripper.setJointValueTarget(gripper_joint_values);
+  move_group_gripper.move();
 
   rclcpp::shutdown();
   return 0;
