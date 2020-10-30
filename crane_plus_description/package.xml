@@ -3,13 +3,15 @@
 <package format="3">
   <name>crane_plus_description</name>
   <version>0.1.0</version>
-  <description>CRANE+V2 URDF</description>
-  <maintainer email="macakasit@gmail.com">shotaak</maintainer>
-  <license>TODO: License declaration</license>
+  <description>CRANE+V2 description package</description>
+  <maintainer email="s.aoki@rt-net.jp">ShotaAk</maintainer>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>joint_state_publisher_gui</depend>
   <depend>robot_state_publisher</depend>
+  <depend>rviz2</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
