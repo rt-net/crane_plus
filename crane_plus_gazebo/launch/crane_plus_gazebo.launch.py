@@ -22,15 +22,11 @@ from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-import xacro
 
 
 def generate_launch_description():
     world_file = os.path.join(get_package_share_directory(
         'crane_plus_gazebo'), 'worlds', 'table.world')
-    xacro_file = os.path.join(get_package_share_directory(
-        'crane_plus_description'), 'urdf', 'crane_plus.urdf.xacro')
-    robot_desc = xacro.process_file(xacro_file).toprettyxml(indent='  ')
 
     declare_arg_gui = DeclareLaunchArgument(
         'gui',
@@ -44,21 +40,24 @@ def generate_launch_description():
 
     gzserver = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
-                get_package_share_directory('gazebo_ros'), '/launch/gzserver.launch.py']),
+                get_package_share_directory('gazebo_ros'),
+                '/launch/gzserver.launch.py']),
             condition=IfCondition(LaunchConfiguration('server')),
             launch_arguments={'world': world_file}.items(),
         )
 
     gzclient = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
-                get_package_share_directory('gazebo_ros'), '/launch/gzclient.launch.py']),
+                get_package_share_directory('gazebo_ros'),
+                '/launch/gzclient.launch.py']),
             condition=IfCondition(LaunchConfiguration('gui'))
         )
 
-    rsp = Node(package='robot_state_publisher',
-               executable='robot_state_publisher',
-               output='both',
-               parameters=[{'robot_description': robot_desc}])
+    move_group = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                get_package_share_directory('crane_plus_moveit_config'),
+                '/launch/run_move_group.launch.py']),
+        )
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-entity', 'crane_plus', '-x', '0', '-y', '0',
@@ -70,6 +69,6 @@ def generate_launch_description():
         declare_arg_server,
         gzserver,
         gzclient,
-        rsp,
+        move_group,
         spawn_entity,
     ])
