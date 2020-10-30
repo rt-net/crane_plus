@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>crane_plus</name>
+  <version>0.1.0</version>
+  <description>ROS 2 package suite of CRANE+V2</description>
+  <maintainer email="s.aoki@rt-net.jp">ShotaAk</maintainer>
+  <license>Apache License 2.0</license>
+
+  <url type="website">https://rt-net.jp/products/cranev2/</url>
+  <url type="bugtracker">https://github.com/rt-net/crane_plus/issues</url>
+  <url type="repository">https://github.com/rt-net/crane_plus</url>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>crane_plus_control</exec_depend>
+  <exec_depend>crane_plus_description</exec_depend>
+  <exec_depend>crane_plus_examples</exec_depend>
+  <exec_depend>crane_plus_gazebo</exec_depend>
+  <exec_depend>crane_plus_moveit_config</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
