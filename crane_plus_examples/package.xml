@@ -4,7 +4,8 @@
   <name>crane_plus_examples</name>
   <version>0.1.0</version>
   <description>CRANE+V2 examples package</description>
-  <maintainer email="s.aoki@rt-net.jp">ShotaAk</maintainer>
+  <maintainer email="shop@rt-net.jp">RT Corporation</maintainer>
+  <author email="s.aoki@rt-net.jp">ShotaAk</author>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
