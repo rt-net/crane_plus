@@ -31,6 +31,7 @@ def generate_launch_description():
         package='crane_plus_control',
         executable='crane_plus_control_node',
         output='screen',
+        emulate_tty=True,  # This results error logs are colorized in a terminal.
         parameters=[{'controller_name': 'crane_plus_arm_controller'},
                     os.path.join(get_package_share_directory('crane_plus_control'),
                                  'config', 'crane_plus_controllers.yaml'),
