@@ -43,7 +43,8 @@ hardware_interface::return_type CranePlusInterface::init(
   driver_ = std::make_shared<CranePlusDriver>(port_name, baudrate, dxl_id_list);
 
   if (!driver_->open_port()) {
-    throw std::runtime_error(driver_->get_last_error_log());
+    RCLCPP_ERROR(LOGGER, driver_->get_last_error_log());
+    return hardware_interface::return_type::ERROR;
   }
 
   for (auto joint_name : joint_name_list) {
@@ -68,7 +69,8 @@ hardware_interface::return_type CranePlusInterface::init(
     if (register_joint_state_handle(&joint_state_handles_[i]) !=
       hardware_interface::return_type::OK)
     {
-      throw std::runtime_error("unable to register " + joint_state_handles_[i].get_name());
+      RCLCPP_ERROR(LOGGER, "Unable to register %s.", joint_state_handles_[i].get_name());
+      return hardware_interface::return_type::ERROR;
     }
 
     hardware_interface::JointCommandHandle command_handle(joint_name, &cmd_[i]);
@@ -76,14 +78,16 @@ hardware_interface::return_type CranePlusInterface::init(
     if (register_joint_command_handle(&joint_command_handles_[i]) !=
       hardware_interface::return_type::OK)
     {
-      throw std::runtime_error("unable to register " + joint_command_handles_[i].get_name());
+      RCLCPP_ERROR(LOGGER, "Unable to register %s.", joint_command_handles_[i].get_name());
+      return hardware_interface::return_type::ERROR;
     }
 
     joint_mode_handles_[i] = hardware_interface::OperationModeHandle(joint_name, &op_mode_[i]);
     if (register_operation_mode_handle(&joint_mode_handles_[i]) !=
       hardware_interface::return_type::OK)
     {
-      throw std::runtime_error("unable to register " + joint_mode_handles_[i].get_name());
+      RCLCPP_ERROR(LOGGER, "Unable to register %s.", joint_mode_handles_[i].get_name());
+      return hardware_interface::return_type::ERROR;
     }
     ++i;
   }
