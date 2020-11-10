@@ -4,8 +4,10 @@
   <name>crane_plus</name>
   <version>0.1.0</version>
   <description>ROS 2 package suite of CRANE+V2</description>
-  <maintainer email="s.aoki@rt-net.jp">ShotaAk</maintainer>
+  <maintainer email="shop@rt-net.jp">RT Corporation</maintainer>
   <license>Apache License 2.0</license>
+
+  <author email="s.aoki@rt-net.jp">ShotaAk</author>
 
   <url type="website">https://rt-net.jp/products/cranev2/</url>
   <url type="bugtracker">https://github.com/rt-net/crane_plus/issues</url>
