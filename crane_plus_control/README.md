@@ -45,8 +45,9 @@ USB通信ポートとサーボモータの設定を変更しなければ100 Hz�
 
 # rootに切り替える
 $ sudo su
+```
 
---- 以下rootで実行 ---
+```txt
 # echo 1 > /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
 # cat /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
 1
