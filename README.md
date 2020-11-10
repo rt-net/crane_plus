@@ -104,6 +104,11 @@ $ cd ~/moveit_ws
 $ colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
+ビルドが完了したら次のコマンドを実行してパッケージを読み込みます。
+
+```sh
+$ source ~/moveit_ws/install/setup.bash
+
 ### Crane_plus Source Build
 
 `moveit2`とは別のワークスペースを作成します。
