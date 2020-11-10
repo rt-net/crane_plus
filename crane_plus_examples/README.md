@@ -54,7 +54,7 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 ### 5. サンプルプログラムを終了する
 
-`Ctrl+C`を入力してサンプルプログラムを終了します。
+`Ctrl+c`を入力してサンプルプログラムを終了します。
 
 ## Examples
 
