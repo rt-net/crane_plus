@@ -9,25 +9,15 @@
 CRANE+V2本体をPCに接続します。
 接続方法は製品マニュアルを参照してください。
 
+**※CRANE+V2本体が接触しないように、十分なスペースを確保してください。**
+
 ### 2. USB通信ポートの接続を確認する
 
-USB通信ポートの設定については`crane_plus_control`のREADMEを参照してください。
+USB通信ポートの設定については`crane_plus_control`の
+[README](../crane_plus_control/README.md)
+を参照してください。
 
-特に`latency_timer`が変更されていない場合は、
-`crane_plus_control`の制御周期が遅くなるので注意してください。
-
-```sh
-# /dev/ttyUSB0を使用する場合
-
-# rootに切り替える
-$ sudo su
-
---- 以下rootで実行 ---
-# echo 1 > /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
-# cat /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
-1
-# exit
-```
+**正しく設定できていない場合、CRANE+V2が動作しない、振動する、などの不安定な動きになるので注意してください**
 
 ### 3. move_groupとcontrollerを起動する
 
@@ -46,6 +36,10 @@ $ ros2 launch crane_plus_examples demo.launch.py
 ```sh
 $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
+
+### 5. サンプルプログラムを終了する
+
+`Ctrl+c`を入力してサンプルプログラムを終了します。
 
 ## Examples
 

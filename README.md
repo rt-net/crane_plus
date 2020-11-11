@@ -105,11 +105,9 @@ $ colcon build --event-handlers desktop_notification- status- --cmake-args -DCMA
 ```
 
 ビルドが完了したら次のコマンドを実行してパッケージを読み込みます。
-このコマンドは`moveit2`及び`crane_plus`を使用する際に毎回実行します。
 
 ```sh
 $ source ~/moveit_ws/install/setup.bash
-```
 
 ### Crane_plus Source Build
 
@@ -152,6 +150,8 @@ $ ros2 launch crane_plus_examples demo.launch.py
 
 # Terminal 2
 $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
+
+# Press [Ctrl-c] to terminate.
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/gripper_control.gif width=500px />
