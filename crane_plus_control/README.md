@@ -7,6 +7,8 @@
 `crane_plus_control`はCRANE+V2実機と通信するパッケージのため、
 事前にPCとCRANE+V2の設定が必要です。
 
+**正しく設定できていない場合、CRANE+V2が動作しない、振動する、などの不安定な動きになるので注意して下さい**
+
 ### USB通信ポートの設定
 
 `crane_plus_control`はUSB通信ポート（`/dev/ttyUSB*`）を経由してCRANE+V2と通信します。
