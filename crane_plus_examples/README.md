@@ -17,22 +17,7 @@ USB通信ポートの設定については`crane_plus_control`の
 [README](../crane_plus_control/README.md)
 を参照してください。
 
-特に`latency_timer`が変更されていない場合は、
-`crane_plus_control`の制御周期が遅くなるので注意してください。
-
-```sh
-# /dev/ttyUSB0を使用する場合
-
-# rootに切り替える
-$ sudo su
-```
-
-```txt
-# echo 1 > /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
-# cat /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
-1
-# exit
-```
+**正しく設定できていない場合、CRANE+V2が動作しない、振動する、などの不安定な動きになるので注意してください**
 
 ### 3. move_groupとcontrollerを起動する
 
