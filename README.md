@@ -108,6 +108,7 @@ $ colcon build --event-handlers desktop_notification- status- --cmake-args -DCMA
 
 ```sh
 $ source ~/moveit_ws/install/setup.bash
+```
 
 ### Crane_plus Source Build
 
