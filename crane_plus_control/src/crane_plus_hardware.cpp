@@ -34,12 +34,12 @@ CranePlusHardware::~CranePlusHardware()
 return_type CranePlusHardware::configure(
   const hardware_interface::HardwareInfo & info)
 {
-  // とりあえずデフォルトのものを実行する
   if (configure_default(info) != return_type::OK) {
     return return_type::ERROR;
   }
 
-  // URDFからパラメータを取得する
+  // Get parameters from URDF
+  // Initialize member variables
   std::string port_name = info_.hardware_parameters["port_name"];
   int baudrate = std::stoi(info_.hardware_parameters["baudrate"]);
   std::vector<uint8_t> dxl_id_list;
@@ -48,27 +48,26 @@ return_type CranePlusHardware::configure(
   dxl_id_list.push_back(std::stoi(info_.hardware_parameters["joint_3_dxl_id"]));
   dxl_id_list.push_back(std::stoi(info_.hardware_parameters["joint_4_dxl_id"]));
   dxl_id_list.push_back(std::stoi(info_.hardware_parameters["joint_hand_dxl_id"]));
-
   timeout_seconds_ = std::stod(info_.hardware_parameters["timeout_seconds"]);
 
   hw_position_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_velocity_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
+  // Open a crane_plus_driver
   driver_ = std::make_shared<CranePlusDriver>(port_name, baudrate, dxl_id_list);
-
   if (!driver_->open_port()) {
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"), driver_->get_last_error_log());
     return return_type::ERROR;
   }
-
   if (!driver_->torque_enable(false)) {
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"), driver_->get_last_error_log());
     return return_type::ERROR;
   }
 
+  // Verify that the interface required by CranePlusHardware is set in the URDF.
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
     if (joint.command_interfaces.size() != 1) {
       RCLCPP_ERROR(
@@ -144,26 +143,23 @@ return_type CranePlusHardware::start()
       driver_->get_last_error_log());
     return return_type::ERROR;
   }
-  // Set current timestamp to disable communication timeout.
+  // Set current timestamp to disable the communication timeout.
   prev_comm_timestamp_ = rclcpp::Clock().now();
 
-  read();  // Set current joints position to hw_position_states_
-
+  // Set current joint positions to hw_position_commands.
+  read();
   for (uint i = 0; i < hw_position_commands_.size(); i++) {
     hw_position_commands_[i] = hw_position_states_[i];
   }
 
   status_ = hardware_interface::status::STARTED;
-
   return return_type::OK;
 }
 
 return_type CranePlusHardware::stop()
 {
   driver_->torque_enable(false);
-
   status_ = hardware_interface::status::STOPPED;
-
   return return_type::OK;
 }
 
