@@ -22,8 +22,8 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 
-set(LIBRARY_NAME "crane_plus_hardware")
 ## COMPILE
+set(LIBRARY_NAME "crane_plus_hardware")
 add_library(
   ${LIBRARY_NAME}
   SHARED
@@ -59,33 +59,6 @@ install(DIRECTORY
   config
   DESTINATION share/${PROJECT_NAME}/
 )
-
-# include_directories(include)
-
-# add_executable(crane_plus_control_node
-#   src/crane_plus_control_node.cpp src/crane_plus_interface.cpp src/crane_plus_driver.cpp)
-
-# ament_target_dependencies(crane_plus_control_node
-#     controller_interface
-#     controller_manager
-#     dynamixel_sdk
-#     hardware_interface
-#     rclcpp
-# )
-
-# install(TARGETS crane_plus_control_node
-#   RUNTIME DESTINATION lib/${PROJECT_NAME}
-# )
-
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION include)
-
-# install(DIRECTORY
-#   launch
-#   config
-#   DESTINATION share/${PROJECT_NAME}/
-# )
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
