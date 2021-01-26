@@ -1,27 +1,6 @@
-# crane_plus_arm_controller:
-#   ros__parameters:
-#     joints:
-#       - crane_plus_joint1 
-#       - crane_plus_joint2 
-#       - crane_plus_joint3 
-#       - crane_plus_joint4 
-#     write_op_modes:
-#       - crane_plus_joint1 
-#       - crane_plus_joint2 
-#       - crane_plus_joint3 
-#       - crane_plus_joint4 
-
-# crane_plus_gripper_controller:
-#   ros__parameters:
-#     joints:
-#       - crane_plus_joint_hand
-#     write_op_modes:
-#       - crane_plus_joint_hand
-
-# 新規追加
 controller_manager:
   ros__parameters:
-    update_rate: 60  # Hz
+    update_rate: 100  # Hz
 
     crane_plus_arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
@@ -42,16 +21,3 @@ crane_plus_gripper_controller:
   ros__parameters:
     joints:
       - crane_plus_joint_hand
-
-# control_param_node:
-#   ros__parameters:
-#     port_name: /dev/ttyUSB0
-#     baudrate: 1000000
-#     joint_name_list:
-#       - crane_plus_joint1
-#       - crane_plus_joint2
-#       - crane_plus_joint3
-#       - crane_plus_joint4
-#       - crane_plus_joint_hand
-#     dxl_id_list: [0x01, 0x02, 0x03, 0x04, 0x05]
-#     timeout_seconds: 5.0
