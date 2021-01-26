@@ -35,6 +35,7 @@ public:
   bool write_moving_speed_rpm(const uint8_t dxl_id, const double speed_rpm);
   bool write_moving_speed_rpm_all(const double speed_rpm);
   bool read_present_joint_positions(std::vector<double> * joint_positions);
+  bool read_present_joint_speeds(std::vector<double> * joint_speeds);
 
 private:
   std::shared_ptr<dynamixel::PortHandler> dxl_port_handler_;
@@ -48,6 +49,7 @@ private:
     const int dxl_comm_result, const uint8_t dxl_packet_error);
   double dxl_pos_to_radian(const uint16_t position);
   uint16_t radian_to_dxl_pos(const double position);
+  double dxl_speed_to_rps(const uint16_t speed);
 };
 
 #endif  // CRANE_PLUS_CONTROL__CRANE_PLUS_DRIVER_HPP_
