@@ -183,12 +183,13 @@ return_type CranePlusHardware::read()
     }
   }
 
-  std::vector<double> joint_speeds;
-  if (driver_->read_present_joint_speeds(&joint_speeds)) {
-    for (uint i = 0; i < hw_velocity_states_.size(); ++i) {
-      hw_velocity_states_[i] = joint_speeds[i];
-    }
-  }
+  // Disable read joint speeds to avoid a decrease of the communication rate.
+  // std::vector<double> joint_speeds;
+  // if (driver_->read_present_joint_speeds(&joint_speeds)) {
+  //   for (uint i = 0; i < hw_velocity_states_.size(); ++i) {
+  //     hw_velocity_states_[i] = joint_speeds[i];
+  //   }
+  // }
 
   prev_comm_timestamp_ = rclcpp::Clock().now();
   return return_type::OK;
