@@ -16,25 +16,57 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
+from launch.actions import ExecuteProcess
 from launch_ros.actions import Node
 import xacro
 
 
 def generate_launch_description():
-    xacro_file = os.path.join(get_package_share_directory('crane_plus_description'),
-                              'urdf', 'crane_plus.urdf.xacro')
-    doc = xacro.process_file(xacro_file)
-    robot_description_config = doc.toprettyxml(indent='  ')
-    robot_description = {'robot_description': robot_description_config}
+    # Get URDF via xacro
+    robot_description_path = os.path.join(
+        get_package_share_directory('crane_plus_description'),
+        'urdf',
+        'crane_plus.urdf.xacro')
+    robot_description_config = xacro.process_file(robot_description_path)
+    robot_description = {'robot_description': robot_description_config.toxml()}
 
-    crane_plus_control_node = Node(
-        package='crane_plus_control',
-        executable='crane_plus_control_node',
-        output='screen',
-        emulate_tty=True,  # This results error logs are colorized in a terminal.
-        parameters=[{'controller_name': 'crane_plus_arm_controller'},
-                    os.path.join(get_package_share_directory('crane_plus_control'),
-                                 'config', 'crane_plus_controllers.yaml'),
-                    robot_description])
+    crane_plus_controllers = os.path.join(
+        get_package_share_directory('crane_plus_control'),
+        'config',
+        'crane_plus_controllers.yaml'
+        )
 
-    return LaunchDescription([crane_plus_control_node])
+    controller_manager = Node(
+        package='controller_manager',
+        executable='ros2_control_node',
+        parameters=[robot_description, crane_plus_controllers],
+        output={
+          'stdout': 'screen',
+          'stderr': 'screen',
+          },
+        )
+
+    joint_state_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'joint_state_controller'],
+      output='screen',
+      shell=True
+    )
+
+    crane_plus_arm_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'crane_plus_arm_controller'],
+      output='screen',
+      shell=True
+    )
+
+    crane_plus_gripper_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'crane_plus_gripper_controller'],
+      output='screen',
+      shell=True
+    )
+
+    return LaunchDescription([
+      controller_manager,
+      joint_state_controller,
+      crane_plus_arm_controller,
+      crane_plus_gripper_controller
+    ])

@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.ros2_control.xacro"/>
+
   <material name="black">
     <color rgba="0.2 0.2 0.2 1.0"/>
   </material>
@@ -297,6 +300,25 @@
         <inertia ixx="5.76E-06" ixy="-4.66E-07" ixz="0.0" iyy="2.76E-05" iyz="0.0" izz="2.52E-05"/>
       </inertial>
     </link>
+
+    <xacro:crane_plus_ros2_control_settings 
+      name="crane_plus"
+      name_joint_1="${NAME_JOINT_1}"
+      name_joint_2="${NAME_JOINT_2}"
+      name_joint_3="${NAME_JOINT_3}"
+      name_joint_4="${NAME_JOINT_4}"
+      name_joint_hand="${NAME_JOINT_HAND}"
+      joint_1_lower_limit="${joint1_lower_limit}"
+      joint_1_upper_limit="${joint1_upper_limit}"
+      joint_2_lower_limit="${joint2_lower_limit}"
+      joint_2_upper_limit="${joint2_upper_limit}"
+      joint_3_lower_limit="${joint3_lower_limit}"
+      joint_3_upper_limit="${joint3_upper_limit}"
+      joint_4_lower_limit="${joint4_lower_limit}"
+      joint_4_upper_limit="${joint4_upper_limit}"
+      joint_hand_lower_limit="${joint_hand_lower_limit}"
+      joint_hand_upper_limit="${joint_hand_upper_limit}" />
+
   </xacro:macro>
 </robot>
 
