@@ -42,13 +42,20 @@ return_type CranePlusHardware::configure(
   // Initialize member variables
   std::string port_name = info_.hardware_parameters["port_name"];
   int baudrate = std::stoi(info_.hardware_parameters["baudrate"]);
-  std::vector<uint8_t> dxl_id_list;
-  dxl_id_list.push_back(std::stoi(info_.hardware_parameters["joint_1_dxl_id"]));
-  dxl_id_list.push_back(std::stoi(info_.hardware_parameters["joint_2_dxl_id"]));
-  dxl_id_list.push_back(std::stoi(info_.hardware_parameters["joint_3_dxl_id"]));
-  dxl_id_list.push_back(std::stoi(info_.hardware_parameters["joint_4_dxl_id"]));
-  dxl_id_list.push_back(std::stoi(info_.hardware_parameters["joint_hand_dxl_id"]));
   timeout_seconds_ = std::stod(info_.hardware_parameters["timeout_seconds"]);
+
+  std::vector<uint8_t> dxl_id_list;
+  for (auto joint : info_.joints) {
+    if(joint.parameters["dxl_id"] != ""){
+      dxl_id_list.push_back(std::stoi(joint.parameters["dxl_id"]));
+    }else{
+      RCLCPP_ERROR(
+        rclcpp::get_logger("CranePlusHardware"),
+        "Joint '%s' does not have 'dxl_id' parameter.",
+        joint.name.c_str());
+      return return_type::ERROR;
+    }
+  }
 
   hw_position_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());

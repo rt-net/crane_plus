@@ -24,11 +24,6 @@
         <plugin>crane_plus_hardware/CranePlusHardware</plugin>
         <param name="port_name">/dev/ttyUSB0</param>
         <param name="baudrate">1000000</param>
-        <param name="joint_1_dxl_id">1</param>
-        <param name="joint_2_dxl_id">2</param>
-        <param name="joint_3_dxl_id">3</param>
-        <param name="joint_4_dxl_id">4</param>
-        <param name="joint_hand_dxl_id">5</param>
         <param name="timeout_seconds">5.0</param>
       </hardware>
 
@@ -42,6 +37,7 @@
         <state_interface name="load"/>
         <state_interface name="voltage"/>
         <state_interface name="temperature"/>
+        <param name="dxl_id">1</param>
       </joint>
 
       <joint name="${name_joint_2}">
@@ -54,6 +50,7 @@
         <state_interface name="load"/>
         <state_interface name="voltage"/>
         <state_interface name="temperature"/>
+        <param name="dxl_id">2</param>
       </joint>
 
       <joint name="${name_joint_3}">
@@ -66,6 +63,7 @@
         <state_interface name="load"/>
         <state_interface name="voltage"/>
         <state_interface name="temperature"/>
+        <param name="dxl_id">3</param>
       </joint>
 
       <joint name="${name_joint_4}">
@@ -78,6 +76,7 @@
         <state_interface name="load"/>
         <state_interface name="voltage"/>
         <state_interface name="temperature"/>
+        <param name="dxl_id">4</param>
       </joint>
 
       <joint name="${name_joint_hand}">
@@ -90,6 +89,7 @@
         <state_interface name="load"/>
         <state_interface name="voltage"/>
         <state_interface name="temperature"/>
+        <param name="dxl_id">5</param>
       </joint>
 
     </ros2_control>
