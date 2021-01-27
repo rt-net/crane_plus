@@ -11,8 +11,8 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>crane_plus_description</depend>
   <depend>controller_manager</depend>
+  <depend>crane_plus_description</depend>
   <depend>dynamixel_sdk</depend>
   <depend>hardware_interface</depend>
   <depend>pluginlib</depend>
