@@ -39,6 +39,9 @@
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
+        <state_interface name="load"/>
+        <state_interface name="voltage"/>
+        <state_interface name="temperature"/>
       </joint>
 
       <joint name="${name_joint_2}">
@@ -48,6 +51,9 @@
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
+        <state_interface name="load"/>
+        <state_interface name="voltage"/>
+        <state_interface name="temperature"/>
       </joint>
 
       <joint name="${name_joint_3}">
@@ -57,6 +63,9 @@
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
+        <state_interface name="load"/>
+        <state_interface name="voltage"/>
+        <state_interface name="temperature"/>
       </joint>
 
       <joint name="${name_joint_4}">
@@ -66,6 +75,9 @@
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
+        <state_interface name="load"/>
+        <state_interface name="voltage"/>
+        <state_interface name="temperature"/>
       </joint>
 
       <joint name="${name_joint_hand}">
@@ -75,6 +87,9 @@
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
+        <state_interface name="load"/>
+        <state_interface name="voltage"/>
+        <state_interface name="temperature"/>
       </joint>
 
     </ros2_control>

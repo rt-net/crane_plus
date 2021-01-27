@@ -74,6 +74,9 @@ private:
   std::vector<double> hw_position_commands_;
   std::vector<double> hw_position_states_;
   std::vector<double> hw_velocity_states_;
+  std::vector<double> hw_load_states_;
+  std::vector<double> hw_voltage_states_;
+  std::vector<double> hw_temperature_states_;
 
   rclcpp::Time prev_comm_timestamp_;
 };

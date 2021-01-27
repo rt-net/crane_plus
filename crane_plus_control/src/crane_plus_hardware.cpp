@@ -53,6 +53,9 @@ return_type CranePlusHardware::configure(
   hw_position_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_velocity_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_load_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_voltage_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_temperature_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   // Open a crane_plus_driver
   driver_ = std::make_shared<CranePlusDriver>(port_name, baudrate, dxl_id_list);
@@ -85,14 +88,6 @@ return_type CranePlusHardware::configure(
         hardware_interface::HW_IF_POSITION);
       return return_type::ERROR;
     }
-
-    if (joint.state_interfaces.size() != 2) {
-      RCLCPP_ERROR(
-        rclcpp::get_logger("CranePlusHardware"),
-        "Joint '%s' has %d state interface. 2 expected.",
-        joint.name.c_str(), joint.state_interfaces.size());
-      return return_type::ERROR;
-    }
   }
 
   status_ = hardware_interface::status::CONFIGURED;
@@ -114,6 +109,22 @@ CranePlusHardware::export_state_interfaces()
       hardware_interface::StateInterface(
         info_.joints[i].name, hardware_interface::HW_IF_VELOCITY,
         &hw_velocity_states_[i])
+    );
+
+    state_interfaces.emplace_back(
+      hardware_interface::StateInterface(
+        info_.joints[i].name, "load",
+        &hw_load_states_[i])
+    );
+    state_interfaces.emplace_back(
+      hardware_interface::StateInterface(
+        info_.joints[i].name, "voltage",
+        &hw_voltage_states_[i])
+    );
+    state_interfaces.emplace_back(
+      hardware_interface::StateInterface(
+        info_.joints[i].name, "temperature",
+        &hw_temperature_states_[i])
     );
   }
 
@@ -183,11 +194,34 @@ return_type CranePlusHardware::read()
     }
   }
 
-  // Disable read joint speeds to avoid a decrease of the communication rate.
+  // Disable read joint speeds, loads, voltages and temperatures
+  // to avoid a decrease of the communication rate.
+
   // std::vector<double> joint_speeds;
   // if (driver_->read_present_joint_speeds(&joint_speeds)) {
   //   for (uint i = 0; i < hw_velocity_states_.size(); ++i) {
   //     hw_velocity_states_[i] = joint_speeds[i];
+  //   }
+  // }
+
+  // std::vector<double> joint_loads;
+  // if (driver_->read_present_joint_loads(&joint_loads)) {
+  //   for (uint i = 0; i < hw_load_states_.size(); ++i) {
+  //     hw_load_states_[i] = joint_loads[i];
+  //   }
+  // }
+
+  // std::vector<double> joint_voltages;
+  // if (driver_->read_present_joint_voltages(&joint_voltages)) {
+  //   for (uint i = 0; i < hw_voltage_states_.size(); ++i) {
+  //     hw_voltage_states_[i] = joint_voltages[i];
+  //   }
+  // }
+
+  // std::vector<double> joint_temperatures;
+  // if (driver_->read_present_joint_temperatures(&joint_temperatures)) {
+  //   for (uint i = 0; i < hw_temperature_states_.size(); ++i) {
+  //     hw_temperature_states_[i] = joint_temperatures[i];
   //   }
   // }
 
