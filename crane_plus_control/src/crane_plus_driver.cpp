@@ -171,19 +171,11 @@ bool CranePlusDriver::write_moving_speed_rpm_all(const double speed_rpm)
 
 bool CranePlusDriver::read_present_joint_positions(std::vector<double> * joint_positions)
 {
-  bool retval = true;
-  for (auto dxl_id : id_list_) {
-    uint8_t dxl_error = 0;
-    uint16_t dxl_present_position = 0;
-    int dxl_result = dxl_packet_handler_->read2ByteTxRx(
-      dxl_port_handler_.get(),
-      dxl_id, ADDR_PRESENT_POSITION, &dxl_present_position, &dxl_error);
+  std::vector<uint16_t> buffer;
+  bool retval = read_2byte_list(ADDR_PRESENT_POSITION, &buffer);
 
-    if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
-      retval = false;
-    }
-
-    joint_positions->push_back(dxl_pos_to_radian(dxl_present_position));
+  for (auto data : buffer) {
+    joint_positions->push_back(dxl_pos_to_radian(data));
   }
 
   return retval;
@@ -191,19 +183,31 @@ bool CranePlusDriver::read_present_joint_positions(std::vector<double> * joint_p
 
 bool CranePlusDriver::read_present_joint_speeds(std::vector<double> * joint_speeds)
 {
+  std::vector<uint16_t> buffer;
+  bool retval = read_2byte_list(ADDR_PRESENT_SPEED, &buffer);
+
+  for (auto data : buffer) {
+    joint_speeds->push_back(dxl_speed_to_rps(data));
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::read_2byte_list(const uint16_t address, std::vector<uint16_t> * buffer)
+{
   bool retval = true;
   for (auto dxl_id : id_list_) {
     uint8_t dxl_error = 0;
-    uint16_t dxl_present_speed = 0;
+    uint16_t data = 0;
     int dxl_result = dxl_packet_handler_->read2ByteTxRx(
       dxl_port_handler_.get(),
-      dxl_id, ADDR_PRESENT_SPEED, &dxl_present_speed, &dxl_error);
+      dxl_id, address, &data, &dxl_error);
 
     if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
       retval = false;
     }
 
-    joint_speeds->push_back(dxl_speed_to_rps(dxl_present_speed));
+    buffer->push_back(data);
   }
 
   return retval;
