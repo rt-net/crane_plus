@@ -46,9 +46,9 @@ return_type CranePlusHardware::configure(
 
   std::vector<uint8_t> dxl_id_list;
   for (auto joint : info_.joints) {
-    if(joint.parameters["dxl_id"] != ""){
+    if (joint.parameters["dxl_id"] != "") {
       dxl_id_list.push_back(std::stoi(joint.parameters["dxl_id"]));
-    }else{
+    } else {
       RCLCPP_ERROR(
         rclcpp::get_logger("CranePlusHardware"),
         "Joint '%s' does not have 'dxl_id' parameter.",
