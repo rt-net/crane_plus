@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="gazebo_robot_settings"
+    params="name_link_base
+            name_link_1
+            name_link_2
+            name_link_3
+            name_link_4
+            name_link_hand">
+
+    <gazebo>
+      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+        <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
+        <parameters>$(find crane_plus_gazebo)/config/gazebo_controllers.yaml</parameters>
+      </plugin>
+    </gazebo>
+
+    <gazebo reference="${name_link_base}">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="${name_link_1}">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/White</material>
+    </gazebo>
+
+    <gazebo reference="${name_link_2}">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="${name_link_3}">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/White</material>
+    </gazebo>
+
+    <gazebo reference="${name_link_4}">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="${name_link_hand}">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/White</material>
+    </gazebo>
+
+  </xacro:macro>
+</robot>

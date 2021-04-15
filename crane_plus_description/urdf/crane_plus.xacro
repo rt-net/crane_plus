@@ -3,6 +3,8 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.ros2_control.xacro"/>
+  <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.gazebo_ros2_control.xacro"/>
+  <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.gazebo"/>
 
   <material name="black">
     <color rgba="0.2 0.2 0.2 1.0"/>
@@ -301,7 +303,7 @@
       </inertial>
     </link>
 
-    <xacro:crane_plus_ros2_control_settings 
+    <!-- <xacro:crane_plus_ros2_control_settings 
       name="crane_plus"
       name_joint_1="${NAME_JOINT_1}"
       name_joint_2="${NAME_JOINT_2}"
@@ -317,7 +319,33 @@
       joint_4_lower_limit="${joint4_lower_limit}"
       joint_4_upper_limit="${joint4_upper_limit}"
       joint_hand_lower_limit="${joint_hand_lower_limit}"
+      joint_hand_upper_limit="${joint_hand_upper_limit}" /> -->
+
+    <xacro:crane_plus_gazebo_ros2_control_settings 
+      name="GazeboSystem"
+      name_joint_1="${NAME_JOINT_1}"
+      name_joint_2="${NAME_JOINT_2}"
+      name_joint_3="${NAME_JOINT_3}"
+      name_joint_4="${NAME_JOINT_4}"
+      name_joint_hand="${NAME_JOINT_HAND}"
+      joint_1_lower_limit="${joint1_lower_limit}"
+      joint_1_upper_limit="${joint1_upper_limit}"
+      joint_2_lower_limit="${joint2_lower_limit}"
+      joint_2_upper_limit="${joint2_upper_limit}"
+      joint_3_lower_limit="${joint3_lower_limit}"
+      joint_3_upper_limit="${joint3_upper_limit}"
+      joint_4_lower_limit="${joint4_lower_limit}"
+      joint_4_upper_limit="${joint4_upper_limit}"
+      joint_hand_lower_limit="${joint_hand_lower_limit}"
       joint_hand_upper_limit="${joint_hand_upper_limit}" />
+
+    <xacro:gazebo_robot_settings
+      name_link_base="${NAME_LINK_BASE}"
+      name_link_1="${NAME_LINK_1}"
+      name_link_2="${NAME_LINK_2}"
+      name_link_3="${NAME_LINK_3}"
+      name_link_4="${NAME_LINK_4}"
+      name_link_hand="${NAME_LINK_HAND}" />
 
   </xacro:macro>
 </robot>

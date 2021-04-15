@@ -17,8 +17,11 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.actions import RegisterEventHandler
+from launch.actions import ExecuteProcess
 from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition
+from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -64,11 +67,45 @@ def generate_launch_description():
                                    '-z', '1.02', '-topic', '/robot_description'],
                         output='screen')
 
+    joint_state_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'joint_state_controller'],
+      output='screen'
+    )
+
+    crane_plus_arm_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'crane_plus_arm_controller'],
+      output='screen'
+    )
+
+    crane_plus_gripper_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'crane_plus_gripper_controller'],
+      output='screen'
+    )
+
     return LaunchDescription([
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=spawn_entity,
+                on_exit=[joint_state_controller],
+            )
+        ),
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=joint_state_controller,
+                on_exit=[crane_plus_arm_controller],
+            )
+        ),
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=crane_plus_arm_controller,
+                on_exit=[crane_plus_gripper_controller],
+            )
+        ),
+
         declare_arg_gui,
         declare_arg_server,
         gzserver,
         gzclient,
-        move_group,
         spawn_entity,
+        move_group,
     ])
