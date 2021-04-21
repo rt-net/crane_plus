@@ -28,6 +28,7 @@ set(executable_list
   pose_groupstate
   joint_values
   pick_and_place
+  control_two_arms
 )
 foreach(loop_var IN LISTS executable_list)
   add_executable(${loop_var} src/${loop_var}.cpp)

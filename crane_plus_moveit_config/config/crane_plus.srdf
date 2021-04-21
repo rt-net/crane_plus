@@ -25,7 +25,7 @@
       <joint name="left_crane_plus_joint_hand" />
     </group>
 
-    <group name="both_arm">
+    <group name="both_arms">
         <group name="right_arm" />
         <group name="left_arm" />
     </group>
@@ -54,7 +54,7 @@
         <joint name="left_crane_plus_joint3" value="-2.01" />
         <joint name="left_crane_plus_joint4" value="-0.73" />
     </group_state>
-    <group_state name="vertical" group="both_arm">
+    <group_state name="vertical" group="both_arms">
         <joint name="right_crane_plus_joint1" value="0" />
         <joint name="right_crane_plus_joint2" value="0" />
         <joint name="right_crane_plus_joint3" value="0" />
@@ -64,7 +64,7 @@
         <joint name="left_crane_plus_joint3" value="0" />
         <joint name="left_crane_plus_joint4" value="0" />
     </group_state>
-    <group_state name="home" group="both_arm">
+    <group_state name="home" group="both_arms">
         <joint name="right_crane_plus_joint1" value="0.0" />
         <joint name="right_crane_plus_joint2" value="-1.16" />
         <joint name="right_crane_plus_joint3" value="-2.01" />
