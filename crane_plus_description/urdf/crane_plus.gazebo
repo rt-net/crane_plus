@@ -9,12 +9,6 @@
             name_link_4
             name_link_hand">
 
-    <gazebo>
-      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-        <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
-        <parameters>$(find crane_plus_gazebo)/config/gazebo_controllers.yaml</parameters>
-      </plugin>
-    </gazebo>
 
     <gazebo reference="${name_link_base}">
       <mu1>0.2</mu1>

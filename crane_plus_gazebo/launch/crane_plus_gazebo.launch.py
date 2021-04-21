@@ -72,13 +72,23 @@ def generate_launch_description():
       output='screen'
     )
 
-    crane_plus_arm_controller = ExecuteProcess(
-      cmd=['ros2', 'control', 'load_start_controller', 'crane_plus_arm_controller'],
+    right_crane_plus_arm_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'right_crane_plus_arm_controller'],
       output='screen'
     )
 
-    crane_plus_gripper_controller = ExecuteProcess(
-      cmd=['ros2', 'control', 'load_start_controller', 'crane_plus_gripper_controller'],
+    right_crane_plus_gripper_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'right_crane_plus_gripper_controller'],
+      output='screen'
+    )
+
+    left_crane_plus_arm_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'left_crane_plus_arm_controller'],
+      output='screen'
+    )
+
+    left_crane_plus_gripper_controller = ExecuteProcess(
+      cmd=['ros2', 'control', 'load_start_controller', 'left_crane_plus_gripper_controller'],
       output='screen'
     )
 
@@ -92,13 +102,27 @@ def generate_launch_description():
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=joint_state_controller,
-                on_exit=[crane_plus_arm_controller],
+                on_exit=[right_crane_plus_arm_controller],
             )
         ),
         RegisterEventHandler(
             event_handler=OnProcessExit(
-                target_action=crane_plus_arm_controller,
-                on_exit=[crane_plus_gripper_controller],
+                target_action=right_crane_plus_arm_controller,
+                on_exit=[right_crane_plus_gripper_controller],
+            )
+        ),
+
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=right_crane_plus_gripper_controller,
+                on_exit=[left_crane_plus_arm_controller],
+            )
+        ),
+
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=left_crane_plus_arm_controller,
+                on_exit=[left_crane_plus_gripper_controller],
             )
         ),
 

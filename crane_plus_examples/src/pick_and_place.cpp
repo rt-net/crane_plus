@@ -87,7 +87,7 @@ int main(int argc, char ** argv)
   q.setRPY(to_radians(0), to_radians(180), to_radians(-90));
   target_pose.orientation = tf2::toMsg(q);
   move_group_arm.setPoseTarget(target_pose);
-  move_group_arm.move();
+  move_group_arm.asyncMove();
 
   // Grasp
   gripper_joint_values[0] = GRIPPER_CLOSE;
