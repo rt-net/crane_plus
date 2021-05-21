@@ -32,7 +32,7 @@ jobs:
       - name: Build crane_plus 
         run: |
           . /opt/ros/foxy/setup.sh
-          . /root/ws_moveit/src/install/setup.sh
+          . /root/ws_moveit/install/setup.sh
           cd $GITHUB_WORKSPACE/ros2_ws/src
           apt update
           rosdep update
@@ -42,7 +42,7 @@ jobs:
       - name: Test
         run: |
           . /opt/ros/foxy/setup.sh
-          . /root/ws_moveit/src/install/setup.sh
+          . /root/ws_moveit/install/setup.sh
           . $GITHUB_WORKSPACE/ros2_ws/install/setup.sh
           cd $GITHUB_WORKSPACE/ros2_ws
           colcon test
