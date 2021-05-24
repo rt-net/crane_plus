@@ -45,7 +45,13 @@ ROS 2 package suite of CRANE+V2.
 次のコマンドを実行します。
 
 ```sh
-sudo apt update && sudo apt install -y \
+# インストール済みパッケージの更新
+$ sudo apt update
+$ sudo apt dist-upgrade
+$ rosdep update
+
+# ビルドツールのインストール
+$ sudo apt install -y \
   build-essential \
   cmake \
   git \
@@ -57,9 +63,10 @@ sudo apt update && sudo apt install -y \
   python3-rosdep \
   python3-setuptools \
   python3-vcstool \
-  wget
-# install some pip packages needed for testing
-python3 -m pip install -U \
+  wget \
+  clang-format-10
+
+$ python3 -m pip install -U \
   argcomplete \
   flake8-blind-except \
   flake8-builtins \
@@ -72,13 +79,6 @@ python3 -m pip install -U \
   pytest-repeat \
   pytest-rerunfailures \
   pytest
-# install Fast-RTPS dependencies
-sudo apt install --no-install-recommends -y \
-  libasio-dev \
-  libtinyxml2-dev
-# install Cyclone DDS dependencies
-sudo apt install --no-install-recommends -y \
-  libcunit1-dev
 ```
 
 `moveit2`用のワークスペースを作成します。
@@ -90,9 +90,9 @@ $ mkdir -p ~/moveit_ws/src
 `moveit2`と依存パッケージをダウンロードします。
 
 ```sh
-$ cd ~/moveit_ws/src
-$ git clone https://github.com/ros-planning/moveit2.git -b main
-$ vcs import < moveit2/moveit2.repos
+$ wget https://raw.githubusercontent.com/ros-planning/moveit2/main/moveit2.repos
+$ vcs import < moveit2.repos
+$ git clone https://github.com/ros-planning/moveit2.git
 $ rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y
 ```
 
@@ -101,7 +101,7 @@ $ rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y
 
 ```sh
 $ cd ~/moveit_ws
-$ colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
+$ colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
 ```
 
 ビルドが完了したら次のコマンドを実行してパッケージを読み込みます。
