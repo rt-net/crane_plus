@@ -17,7 +17,19 @@ crane_plus_arm_controller:
       - crane_plus_joint3
       - crane_plus_joint4
 
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+
 crane_plus_gripper_controller:
   ros__parameters:
     joints:
       - crane_plus_joint_hand
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
