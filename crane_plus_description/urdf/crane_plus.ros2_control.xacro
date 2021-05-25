@@ -25,6 +25,10 @@
         <param name="port_name">/dev/ttyUSB0</param>
         <param name="baudrate">1000000</param>
         <param name="timeout_seconds">5.0</param>
+        <param name="read_velocities">0</param>
+        <param name="read_loads">0</param>
+        <param name="read_voltages">0</param>
+        <param name="read_temperatures">0</param>
       </hardware>
 
       <joint name="${name_joint_1}">

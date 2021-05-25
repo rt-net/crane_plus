@@ -43,6 +43,10 @@ return_type CranePlusHardware::configure(
   std::string port_name = info_.hardware_parameters["port_name"];
   int baudrate = std::stoi(info_.hardware_parameters["baudrate"]);
   timeout_seconds_ = std::stod(info_.hardware_parameters["timeout_seconds"]);
+  read_velocities_ = std::stoi(info_.hardware_parameters["read_velocities"]);
+  read_loads_ = std::stoi(info_.hardware_parameters["read_loads"]);
+  read_voltages_ = std::stoi(info_.hardware_parameters["read_voltages"]);
+  read_temperatures_ = std::stoi(info_.hardware_parameters["read_temperatures"]);
 
   std::vector<uint8_t> dxl_id_list;
   for (auto joint : info_.joints) {
@@ -201,36 +205,44 @@ return_type CranePlusHardware::read()
     }
   }
 
-  // Disable read joint speeds, loads, voltages and temperatures
-  // to avoid a decrease of the communication rate.
+  // Reading joint speeds, loads, voltages or temperatures 
+  // causes a decrease of the communication rate.
+  if(read_velocities_){
+    std::vector<double> joint_speeds;
+    if (driver_->read_present_joint_speeds(&joint_speeds)) {
+      for (uint i = 0; i < hw_velocity_states_.size(); ++i) {
+        hw_velocity_states_[i] = joint_speeds[i];
+      }
+    }
+  }
 
-  // std::vector<double> joint_speeds;
-  // if (driver_->read_present_joint_speeds(&joint_speeds)) {
-  //   for (uint i = 0; i < hw_velocity_states_.size(); ++i) {
-  //     hw_velocity_states_[i] = joint_speeds[i];
-  //   }
-  // }
+  if(read_loads_){
+    std::vector<double> joint_loads;
+    if (driver_->read_present_joint_loads(&joint_loads)) {
+      for (uint i = 0; i < hw_load_states_.size(); ++i) {
+        hw_load_states_[i] = joint_loads[i];
+      }
+    }
+  }
 
-  // std::vector<double> joint_loads;
-  // if (driver_->read_present_joint_loads(&joint_loads)) {
-  //   for (uint i = 0; i < hw_load_states_.size(); ++i) {
-  //     hw_load_states_[i] = joint_loads[i];
-  //   }
-  // }
+  if(read_voltages_){
+    std::vector<double> joint_voltages;
+    if (driver_->read_present_joint_voltages(&joint_voltages)) {
+      for (uint i = 0; i < hw_voltage_states_.size(); ++i) {
+        hw_voltage_states_[i] = joint_voltages[i];
+      }
+    }
+  }
 
-  // std::vector<double> joint_voltages;
-  // if (driver_->read_present_joint_voltages(&joint_voltages)) {
-  //   for (uint i = 0; i < hw_voltage_states_.size(); ++i) {
-  //     hw_voltage_states_[i] = joint_voltages[i];
-  //   }
-  // }
 
-  // std::vector<double> joint_temperatures;
-  // if (driver_->read_present_joint_temperatures(&joint_temperatures)) {
-  //   for (uint i = 0; i < hw_temperature_states_.size(); ++i) {
-  //     hw_temperature_states_[i] = joint_temperatures[i];
-  //   }
-  // }
+  if(read_temperatures_){
+    std::vector<double> joint_temperatures;
+    if (driver_->read_present_joint_temperatures(&joint_temperatures)) {
+      for (uint i = 0; i < hw_temperature_states_.size(); ++i) {
+        hw_temperature_states_[i] = joint_temperatures[i];
+      }
+    }
+  }
 
   prev_comm_timestamp_ = rclcpp::Clock().now();
   return return_type::OK;

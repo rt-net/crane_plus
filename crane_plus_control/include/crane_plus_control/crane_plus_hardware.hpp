@@ -70,6 +70,10 @@ private:
 
   std::shared_ptr<CranePlusDriver> driver_;
   double timeout_seconds_;
+  bool read_velocities_;
+  bool read_loads_;
+  bool read_voltages_;
+  bool read_temperatures_;
 
   std::vector<double> hw_position_commands_;
   std::vector<double> hw_position_states_;
