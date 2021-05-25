@@ -167,6 +167,7 @@ return_type CranePlusHardware::start()
   }
   // Set current timestamp to disable the communication timeout.
   prev_comm_timestamp_ = rclcpp::Clock().now();
+  timeout_has_printed_ = false;
 
   // Set current joint positions to hw_position_commands.
   read();
@@ -188,8 +189,11 @@ return_type CranePlusHardware::stop()
 return_type CranePlusHardware::read()
 {
   if (communication_timeout()) {
-    RCLCPP_ERROR(
-      rclcpp::get_logger("CranePlusHardware"), "Communication timeout!");
+    if(!timeout_has_printed_){
+      RCLCPP_ERROR(
+        rclcpp::get_logger("CranePlusHardware"), "Communication timeout!");
+      timeout_has_printed_ = true;
+    }
     return return_type::ERROR;
   }
 
@@ -251,8 +255,11 @@ return_type CranePlusHardware::read()
 return_type CranePlusHardware::write()
 {
   if (communication_timeout()) {
-    RCLCPP_ERROR(
-      rclcpp::get_logger("CranePlusHardware"), "Communication timeout!");
+    if(!timeout_has_printed_){
+      RCLCPP_ERROR(
+        rclcpp::get_logger("CranePlusHardware"), "Communication timeout!");
+      timeout_has_printed_ = true;
+    }
     return return_type::ERROR;
   }
 

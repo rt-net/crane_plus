@@ -83,6 +83,7 @@ private:
   std::vector<double> hw_temperature_states_;
 
   rclcpp::Time prev_comm_timestamp_;
+  bool timeout_has_printed_;
 };
 }  // namespace crane_plus_control
 
