@@ -101,6 +101,8 @@ return_type CranePlusHardware::configure(
     }
   }
 
+  steady_clock_ = rclcpp::Clock(RCL_STEADY_TIME);
+
   status_ = hardware_interface::status::CONFIGURED;
   return return_type::OK;
 }
@@ -166,7 +168,7 @@ return_type CranePlusHardware::start()
     return return_type::ERROR;
   }
   // Set current timestamp to disable the communication timeout.
-  prev_comm_timestamp_ = rclcpp::Clock().now();
+  prev_comm_timestamp_ = steady_clock_.now();
   timeout_has_printed_ = false;
 
   // Set current joint positions to hw_position_commands.
@@ -248,7 +250,7 @@ return_type CranePlusHardware::read()
     }
   }
 
-  prev_comm_timestamp_ = rclcpp::Clock().now();
+  prev_comm_timestamp_ = steady_clock_.now();
   return return_type::OK;
 }
 
@@ -270,13 +272,13 @@ return_type CranePlusHardware::write()
     return return_type::ERROR;
   }
 
-  prev_comm_timestamp_ = rclcpp::Clock().now();
+  prev_comm_timestamp_ = steady_clock_.now();
   return return_type::OK;
 }
 
 bool CranePlusHardware::communication_timeout()
 {
-  if (rclcpp::Clock().now().seconds() - prev_comm_timestamp_.seconds() >= timeout_seconds_) {
+  if (steady_clock_.now().seconds() - prev_comm_timestamp_.seconds() >= timeout_seconds_) {
     return true;
   } else {
     return false;

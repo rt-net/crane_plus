@@ -82,6 +82,7 @@ private:
   std::vector<double> hw_voltage_states_;
   std::vector<double> hw_temperature_states_;
 
+  rclcpp::Clock steady_clock_;
   rclcpp::Time prev_comm_timestamp_;
   bool timeout_has_printed_;
 };
