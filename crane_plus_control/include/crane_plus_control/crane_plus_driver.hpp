@@ -47,8 +47,8 @@ private:
   std::vector<uint8_t> id_list_;
   std::string last_error_log_;
 
-  bool read_1byte_data_from_each_joints(const uint16_t address, std::vector<uint8_t> & buffer);
-  bool read_2byte_data_from_each_joints(const uint16_t address, std::vector<uint16_t> & buffer);
+  bool read_byte_data_from_each_joints(const uint16_t address, std::vector<uint8_t> & buffer);
+  bool read_word_data_from_each_joints(const uint16_t address, std::vector<uint16_t> & buffer);
   bool parse_dxl_error(
     const std::string func_name, const uint8_t dxl_id,
     const int dxl_comm_result, const uint8_t dxl_packet_error);
