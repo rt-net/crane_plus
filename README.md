@@ -90,6 +90,7 @@ $ mkdir -p ~/moveit_ws/src
 `moveit2`と依存パッケージをダウンロードします。
 
 ```sh
+$ cd ~/moveit_ws/src
 $ wget https://raw.githubusercontent.com/ros-planning/moveit2/main/moveit2.repos
 $ vcs import < moveit2.repos
 $ git clone https://github.com/ros-planning/moveit2.git
@@ -99,9 +100,14 @@ $ rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y
 `moveit2`をビルドします。
 パッケージ数が多いためビルド時間は長いです。
 
+メモリ不足でビルドに失敗する場合は`MAKEFLAGS=-j1`や`--executor sequential`オプションをつけてください。
+
 ```sh
 $ cd ~/moveit_ws
 $ colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+
+# メモリ不足対策
+$ MAKEFLAGS=-j1 colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF --executor sequential
 ```
 
 ビルドが完了したら次のコマンドを実行してパッケージを読み込みます。
