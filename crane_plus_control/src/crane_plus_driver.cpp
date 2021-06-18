@@ -234,7 +234,9 @@ bool CranePlusDriver::read_present_joint_temperatures(std::vector<double> & join
   return retval;
 }
 
-bool CranePlusDriver::read_byte_data_from_each_joints(const uint16_t address, std::vector<uint8_t> & buffer)
+bool CranePlusDriver::read_byte_data_from_each_joints(
+  const uint16_t address,
+  std::vector<uint8_t> & buffer)
 {
   bool retval = true;
   for (auto dxl_id : id_list_) {
@@ -254,7 +256,9 @@ bool CranePlusDriver::read_byte_data_from_each_joints(const uint16_t address, st
   return retval;
 }
 
-bool CranePlusDriver::read_word_data_from_each_joints(const uint16_t address, std::vector<uint16_t> & buffer)
+bool CranePlusDriver::read_word_data_from_each_joints(
+  const uint16_t address,
+  std::vector<uint16_t> & buffer)
 {
   bool retval = true;
   for (auto dxl_id : id_list_) {
