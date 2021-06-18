@@ -8,8 +8,8 @@
 - `crane_plus_control::CranePlusHardware (crane_plus_hardware)`
   - 本パッケージがエクスポートする[Hardware Components](https://ros-controls.github.io/control.ros.org/getting_started.html#hardware-components)です
   - CRANE+V2実機と通信します
-  - [crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)から読み込まれます
-- [crane_plus_control.launch.py](./launch/crane_plus_control.launch.py)
+  - [crane_plus_description/urdf/crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)から読み込まれます
+- [launch/crane_plus_control.launch.py](./launch/crane_plus_control.launch.py)
   - [Controller Manager](https://ros-controls.github.io/control.ros.org/getting_started.html#controller-manager)とコントローラを起動するlaunchファイルです
 - [config/crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
   - Controller Managerのパラメータファイルです
@@ -107,7 +107,7 @@ $ ros2 topic echo /joint_states
 ## Controller Managerのパラメータ
 
 `Controller Manager`のパラメータは
-[crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
+[config/crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
 で設定しています。
 
 ```yaml
@@ -138,7 +138,7 @@ CRANE+V2の腕の制御用に`crane_plus_arm_controller`を、
 ## crane_plus_hardwareのパラメータ
 
 `crane_plus_hardware`のパラメータは
-[crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)
+[crane_plus_description/urdf/crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)
 で設定しています。
 
 ```xml
