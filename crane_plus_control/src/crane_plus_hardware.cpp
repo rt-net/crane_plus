@@ -200,7 +200,7 @@ return_type CranePlusHardware::read()
   }
 
   std::vector<double> joint_positions;
-  if (!driver_->read_present_joint_positions(&joint_positions)) {
+  if (!driver_->read_present_joint_positions(joint_positions)) {
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"),
       driver_->get_last_error_log());
@@ -215,7 +215,7 @@ return_type CranePlusHardware::read()
   // causes a decrease of the communication rate.
   if (read_velocities_) {
     std::vector<double> joint_speeds;
-    if (driver_->read_present_joint_speeds(&joint_speeds)) {
+    if (driver_->read_present_joint_speeds(joint_speeds)) {
       for (uint i = 0; i < hw_velocity_states_.size(); ++i) {
         hw_velocity_states_[i] = joint_speeds[i];
       }
@@ -224,7 +224,7 @@ return_type CranePlusHardware::read()
 
   if (read_loads_) {
     std::vector<double> joint_loads;
-    if (driver_->read_present_joint_loads(&joint_loads)) {
+    if (driver_->read_present_joint_loads(joint_loads)) {
       for (uint i = 0; i < hw_load_states_.size(); ++i) {
         hw_load_states_[i] = joint_loads[i];
       }
@@ -233,7 +233,7 @@ return_type CranePlusHardware::read()
 
   if (read_voltages_) {
     std::vector<double> joint_voltages;
-    if (driver_->read_present_joint_voltages(&joint_voltages)) {
+    if (driver_->read_present_joint_voltages(joint_voltages)) {
       for (uint i = 0; i < hw_voltage_states_.size(); ++i) {
         hw_voltage_states_[i] = joint_voltages[i];
       }
@@ -243,7 +243,7 @@ return_type CranePlusHardware::read()
 
   if (read_temperatures_) {
     std::vector<double> joint_temperatures;
-    if (driver_->read_present_joint_temperatures(&joint_temperatures)) {
+    if (driver_->read_present_joint_temperatures(joint_temperatures)) {
       for (uint i = 0; i < hw_temperature_states_.size(); ++i) {
         hw_temperature_states_[i] = joint_temperatures[i];
       }

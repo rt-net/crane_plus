@@ -174,67 +174,67 @@ bool CranePlusDriver::write_moving_speed_rpm_all(const double speed_rpm)
   return retval;
 }
 
-bool CranePlusDriver::read_present_joint_positions(std::vector<double> * joint_positions)
+bool CranePlusDriver::read_present_joint_positions(std::vector<double> & joint_positions)
 {
   std::vector<uint16_t> buffer;
-  bool retval = read_2byte_list(ADDR_PRESENT_POSITION, &buffer);
+  bool retval = read_2byte_list(ADDR_PRESENT_POSITION, buffer);
 
   for (auto data : buffer) {
-    joint_positions->push_back(dxl_pos_to_radian(data));
+    joint_positions.push_back(dxl_pos_to_radian(data));
   }
 
   return retval;
 }
 
-bool CranePlusDriver::read_present_joint_speeds(std::vector<double> * joint_speeds)
+bool CranePlusDriver::read_present_joint_speeds(std::vector<double> & joint_speeds)
 {
   std::vector<uint16_t> buffer;
-  bool retval = read_2byte_list(ADDR_PRESENT_SPEED, &buffer);
+  bool retval = read_2byte_list(ADDR_PRESENT_SPEED, buffer);
 
   for (auto data : buffer) {
-    joint_speeds->push_back(dxl_speed_to_rps(data));
+    joint_speeds.push_back(dxl_speed_to_rps(data));
   }
 
   return retval;
 }
 
-bool CranePlusDriver::read_present_joint_loads(std::vector<double> * joint_loads)
+bool CranePlusDriver::read_present_joint_loads(std::vector<double> & joint_loads)
 {
   std::vector<uint16_t> buffer;
-  bool retval = read_2byte_list(ADDR_PRESENT_LOAD, &buffer);
+  bool retval = read_2byte_list(ADDR_PRESENT_LOAD, buffer);
 
   for (auto data : buffer) {
-    joint_loads->push_back(dxl_load_to_percent(data));
+    joint_loads.push_back(dxl_load_to_percent(data));
   }
 
   return retval;
 }
 
-bool CranePlusDriver::read_present_joint_voltages(std::vector<double> * joint_voltages)
+bool CranePlusDriver::read_present_joint_voltages(std::vector<double> & joint_voltages)
 {
   std::vector<uint8_t> buffer;
-  bool retval = read_1byte_list(ADDR_PRESENT_VOLTAGE, &buffer);
+  bool retval = read_1byte_list(ADDR_PRESENT_VOLTAGE, buffer);
 
   for (auto data : buffer) {
-    joint_voltages->push_back(dxl_voltage_to_actual_voltage(data));
+    joint_voltages.push_back(dxl_voltage_to_actual_voltage(data));
   }
 
   return retval;
 }
 
-bool CranePlusDriver::read_present_joint_temperatures(std::vector<double> * joint_temperatures)
+bool CranePlusDriver::read_present_joint_temperatures(std::vector<double> & joint_temperatures)
 {
   std::vector<uint8_t> buffer;
-  bool retval = read_1byte_list(ADDR_PRESENT_TEMPERATURE, &buffer);
+  bool retval = read_1byte_list(ADDR_PRESENT_TEMPERATURE, buffer);
 
   for (auto data : buffer) {
-    joint_temperatures->push_back(data);
+    joint_temperatures.push_back(data);
   }
 
   return retval;
 }
 
-bool CranePlusDriver::read_1byte_list(const uint16_t address, std::vector<uint8_t> * buffer)
+bool CranePlusDriver::read_1byte_list(const uint16_t address, std::vector<uint8_t> & buffer)
 {
   bool retval = true;
   for (auto dxl_id : id_list_) {
@@ -248,13 +248,13 @@ bool CranePlusDriver::read_1byte_list(const uint16_t address, std::vector<uint8_
       retval = false;
     }
 
-    buffer->push_back(data);
+    buffer.push_back(data);
   }
 
   return retval;
 }
 
-bool CranePlusDriver::read_2byte_list(const uint16_t address, std::vector<uint16_t> * buffer)
+bool CranePlusDriver::read_2byte_list(const uint16_t address, std::vector<uint16_t> & buffer)
 {
   bool retval = true;
   for (auto dxl_id : id_list_) {
@@ -268,7 +268,7 @@ bool CranePlusDriver::read_2byte_list(const uint16_t address, std::vector<uint16
       retval = false;
     }
 
-    buffer->push_back(data);
+    buffer.push_back(data);
   }
 
   return retval;

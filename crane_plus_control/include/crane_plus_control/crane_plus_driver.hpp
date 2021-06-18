@@ -34,11 +34,11 @@ public:
   bool write_goal_joint_positions(const std::vector<double> & goal_positions);
   bool write_moving_speed_rpm(const uint8_t dxl_id, const double speed_rpm);
   bool write_moving_speed_rpm_all(const double speed_rpm);
-  bool read_present_joint_positions(std::vector<double> * joint_positions);
-  bool read_present_joint_speeds(std::vector<double> * joint_speeds);
-  bool read_present_joint_loads(std::vector<double> * joint_loads);
-  bool read_present_joint_voltages(std::vector<double> * joint_voltages);
-  bool read_present_joint_temperatures(std::vector<double> * joint_temperatures);
+  bool read_present_joint_positions(std::vector<double> & joint_positions);
+  bool read_present_joint_speeds(std::vector<double> & joint_speeds);
+  bool read_present_joint_loads(std::vector<double> & joint_loads);
+  bool read_present_joint_voltages(std::vector<double> & joint_voltages);
+  bool read_present_joint_temperatures(std::vector<double> & joint_temperatures);
 
 private:
   std::shared_ptr<dynamixel::PortHandler> dxl_port_handler_;
@@ -47,8 +47,8 @@ private:
   std::vector<uint8_t> id_list_;
   std::string last_error_log_;
 
-  bool read_1byte_list(const uint16_t address, std::vector<uint8_t> * buffer);
-  bool read_2byte_list(const uint16_t address, std::vector<uint16_t> * buffer);
+  bool read_1byte_list(const uint16_t address, std::vector<uint8_t> & buffer);
+  bool read_2byte_list(const uint16_t address, std::vector<uint16_t> & buffer);
   bool parse_dxl_error(
     const std::string func_name, const uint8_t dxl_id,
     const int dxl_comm_result, const uint8_t dxl_packet_error);
