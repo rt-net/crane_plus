@@ -46,17 +46,27 @@ def generate_launch_description():
           },
         )
 
-    load_controllers = []
-    for controller in ['joint_state_controller', 'crane_plus_arm_controller',
-                       'crane_plus_gripper_controller']:
-        load_controllers.append(
-            ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner.py {}'.format(controller)],
+    spawn_joint_state_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py joint_state_controller'],
                 shell=True,
                 output='screen',
             )
-        )
+
+    spawn_arm_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py crane_plus_arm_controller'],
+                shell=True,
+                output='screen',
+            )
+
+    spawn_gripper_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py crane_plus_gripper_controller'],
+                shell=True,
+                output='screen',
+            )
 
     return LaunchDescription([
       controller_manager,
-    ] + load_controllers)
+      spawn_joint_state_controller,
+      spawn_arm_controller,
+      spawn_gripper_controller
+    ])
