@@ -17,31 +17,42 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(controller_interface REQUIRED)
-find_package(controller_manager REQUIRED)
 find_package(dynamixel_sdk REQUIRED)
 find_package(hardware_interface REQUIRED)
+find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 
-include_directories(include)
-
-add_executable(crane_plus_control_node
-  src/crane_plus_control_node.cpp src/crane_plus_interface.cpp src/crane_plus_driver.cpp)
-
-ament_target_dependencies(crane_plus_control_node
-    controller_interface
-    controller_manager
-    dynamixel_sdk
-    hardware_interface
-    rclcpp
+## COMPILE
+set(LIBRARY_NAME "crane_plus_hardware")
+add_library(
+  ${LIBRARY_NAME}
+  SHARED
+  src/crane_plus_hardware.cpp src/crane_plus_driver.cpp
+)
+target_include_directories(
+  ${LIBRARY_NAME}
+  PRIVATE
+  include
+)
+ament_target_dependencies(
+  ${LIBRARY_NAME}
+  dynamixel_sdk
+  hardware_interface
+  pluginlib
+  rclcpp
 )
 
-install(TARGETS crane_plus_control_node
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
+pluginlib_export_plugin_description_file(hardware_interface crane_plus_hardware.xml)
 
-install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION include)
+# INSTALL
+install(
+  TARGETS ${LIBRARY_NAME}
+  DESTINATION lib
+)
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
 
 install(DIRECTORY
   launch
@@ -53,5 +64,19 @@ if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+## EXPORTS
+ament_export_include_directories(
+  include
+)
+ament_export_libraries(
+  ${LIBRARY_NAME}
+)
+ament_export_dependencies(
+  dynamixel_sdk
+  hardware_interface
+  pluginlib
+  rclcpp
+)
 
 ament_package()

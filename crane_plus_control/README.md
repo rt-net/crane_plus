@@ -1,17 +1,29 @@
 # crane_plus_control
 
-このパッケージはros2_controlをベースにした、CRANE+V2 のコントローラパッケージです。
+このパッケージは[ros2_control](https://github.com/ros-controls/ros2_control)
+をベースにした、CRANE+V2 のコントローラパッケージです。
+
+## ros2_control関連ファイル
+
+- `crane_plus_control::CranePlusHardware (crane_plus_hardware)`
+  - 本パッケージがエクスポートする[Hardware Components](https://ros-controls.github.io/control.ros.org/getting_started.html#hardware-components)です
+  - CRANE+V2実機と通信します
+  - [crane_plus_description/urdf/crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)から読み込まれます
+- [launch/crane_plus_control.launch.py](./launch/crane_plus_control.launch.py)
+  - [Controller Manager](https://ros-controls.github.io/control.ros.org/getting_started.html#controller-manager)とコントローラを起動するlaunchファイルです
+- [config/crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
+  - Controller Managerのパラメータファイルです
 
 ## 実機のセットアップ
 
-`crane_plus_control`はCRANE+V2実機と通信するパッケージのため、
-事前にPCとCRANE+V2の設定が必要です。
+`crane_plus_hardware`がCRANE+V2実機と通信するために、
+PCとCRANE+V2の設定が必要です。
 
-**正しく設定できていない場合、CRANE+V2が動作しない、振動する、などの不安定な動きになるので注意してください**
+**正しく設定できていない場合、CRANE+V2が動作しない、振動する、などの不安定な動きをするため注意してください**
 
 ### USB通信ポートの設定
 
-`crane_plus_control`はUSB通信ポート（`/dev/ttyUSB*`）を経由してCRANE+V2と通信します。
+`crane_plus_hardware`はUSB通信ポート（`/dev/ttyUSB*`）を経由してCRANE+V2と通信します。
 
 次のコマンドでアクセス権限を変更します。
 
@@ -23,20 +35,21 @@ $ sudo chmod 666 /dev/ttyUSB0
 ### USB通信ポートの変更
 
 `/dev/ttyUBS0`以外の通信ポートを使用する場合は
-[crane_plus_control/config/crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
+[crane_plus_description/urdf/crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)
 の`port_name`を変更します。
 
-```yaml
-control_param_node:
-  ros__parameters:
-    port_name: /dev/ttyUSB0
-    baudrate: 1000000
+```xml
+<ros2_control name="${name}" type="system">
+  <hardware>
+    <plugin>crane_plus_hardware/CranePlusHardware</plugin>
+    <param name="port_name">/dev/ttyUSB0</param>
+    <param name="baudrate">1000000</param>
 ```
 
 ### latency_timerの設定
 
-`crane_plus_control`は100 Hz周期で制御するように設定されていますが、
-USB通信ポートとサーボモータの設定を変更しなければ100 Hzで制御できません。
+CRANE+V2を100 Hz周期で制御するためには、
+USB通信ポートとサーボモータの設定を変更します。
 
 下記のコマンドを実行してUSB通信ポートの`latency_timer`を変更します。
 
@@ -71,7 +84,7 @@ CRANE+V2に搭載されているサーボモータ[Dynamixel AX-12A](https://ema
 
 ## ノードの起動
 
-下記のコマンドで`crane_plus_control`のノードが起動します。
+下記のコマンドで`Controller Manager`ノードが起動します。
 
 ```sh
 $ ros2 launch crane_plus_control crane_plus_control.launch.py 
@@ -91,19 +104,88 @@ $ ros2 launch crane_plus_control crane_plus_control.launch.py
 $ ros2 topic echo /joint_states
 ```
 
-### 通信タイムアウト機能
+## Controller Managerのパラメータ
 
-ノードは一定時間通信しない場合にシャットダウンします。
-
-タイムアウト時間はデフォルトで5.0秒です。
-タイムアウト時間を変更する場合は
-[crane_plus_control/config/crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
-の`timeout_seconds`を変更します。
+`Controller Manager`のパラメータは
+[config/crane_plus_controllers.yaml](./config/crane_plus_controllers.yaml)
+で設定しています。
 
 ```yaml
-control_param_node:
+controller_manager:
   ros__parameters:
-    timeout_seconds: 5.0
+    update_rate: 100  # Hz
+
+    crane_plus_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    crane_plus_gripper_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    joint_state_controller:
+      type: joint_state_controller/JointStateController
+```
+
+### 制御周期
+
+`update_rate`は制御周期を設定します。
+
+CRANE+V2に使用しているサーボモータの仕様により、
+100 Hz以上の周期で制御できません。
+
+### コントローラ
+
+CRANE+V2の腕の制御用に`crane_plus_arm_controller`を、
+グリッパの制御用に`crane_plus_gripper_controller`を設定しています。
+
+## crane_plus_hardwareのパラメータ
+
+`crane_plus_hardware`のパラメータは
+[crane_plus_description/urdf/crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)
+で設定しています。
+
+```xml
+<ros2_control name="${name}" type="system">
+  <hardware>
+    <plugin>crane_plus_hardware/CranePlusHardware</plugin>
+    <param name="port_name">/dev/ttyUSB0</param>
+    <param name="baudrate">1000000</param>
+    <param name="timeout_seconds">5.0</param>
+    <param name="read_velocities">0</param>
+    <param name="read_loads">0</param>
+    <param name="read_voltages">0</param>
+    <param name="read_temperatures">0</param>
+  </hardware>
+```
+
+### USB通信ポート
+
+[USB通信ポートの変更](#usb通信ポートの変更)を参照してください。
+
+### ボーレート
+
+`baudrate`はCRANE+V2に搭載したDynamixelとの通信ボーレートを設定します。
+
+デフォルト値にはDynamixel AX-12Aの最高ボーレートである`1000000` (1 Mbps)を設定しています。
+
+### 通信タイムアウト
+
+`timeout_seconds`は通信タイムアウト時間（秒）を設定します。
+
+`crane_plus_hardware`は、一定時間（デフォルト5秒間）通信に失敗し続けると、
+read/write動作を停止します。
+USBケーブルや電源ケーブルが抜けた場合等に有効です。
+
+### サーボパラメータ
+
+`read_velocities`、`read_loads`、`read_voltages`、`read_temperatures`
+は、サーボの回転速度、電圧、負荷、温度を読み取るためのパラメータです。
+
+`1`をセットすると、サーボパラメータを読み取るみます。
+
+これらのパラメータを読み取ると通信データ量が増加するため、制御周期が100 Hzより低下します。
+
+読み取ったパラメータは`dynamic_joint_states`トピックとしてパブリッシュされます。
+
+```sh
+$ ros2 topic echo /dynamic_joint_states
 ```
 
 ---

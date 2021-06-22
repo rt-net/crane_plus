@@ -33,19 +33,15 @@ CRANE+V2に搭載されているサーボモータはROBOTISのAX-12Aのため�
   <xacro:property name="M_PI" value="3.14159"/>
   <xacro:property name="TO_RADIAN" value="${M_PI / 180.0}"/>
   <xacro:property name="SERVO_HOME" value="${TO_RADIAN * 150.0}"/>
-
-  <xacro:crane_plus parent="base_link"
-    joints_vlimit="2.0"
-    joint1_lower_limit="${0.0 * TO_RADIAN - SERVO_HOME}"
-    joint1_upper_limit="${300.0 * TO_RADIAN - SERVO_HOME}"
-    joint2_lower_limit="${45.45 * TO_RADIAN - SERVO_HOME}"
-    joint2_upper_limit="${252.20 * TO_RADIAN - SERVO_HOME}"
-    joint3_lower_limit="${3.52 * TO_RADIAN - SERVO_HOME}"
-    joint3_upper_limit="${290.62 * TO_RADIAN - SERVO_HOME}"
-    joint4_lower_limit="${44.57 * TO_RADIAN - SERVO_HOME}"
-    joint4_upper_limit="${251.32 * TO_RADIAN - SERVO_HOME}"
-    joint_hand_lower_limit="${109.38 * TO_RADIAN - SERVO_HOME}"
-    joint_hand_upper_limit="${188.27 * TO_RADIAN - SERVO_HOME}">
-    <origin xyz="0 0 0"/>
-  </xacro:crane_plus>
+  <xacro:property name="JOINT_VELOCITY_LIMIT" value="2.0"/>
+  <xacro:property name="JOINT_1_LOWER_LIMIT" value="${0.0 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_1_UPPER_LIMIT" value="${300.0 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${45.45 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${252.20 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${3.52 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${290.62 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${44.57 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${251.32 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${109.38 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${188.27 * TO_RADIAN - SERVO_HOME}"/>
 ```

@@ -26,6 +26,11 @@ constexpr double DXL_MAX_POSITION = 1023.0;
 constexpr double DXL_MAX_POSITION_DEGREES = 300.0;
 constexpr double TO_RADIANS = (DXL_MAX_POSITION_DEGREES / DXL_MAX_POSITION) * M_PI / 180.0;
 constexpr double TO_DXL_POS = 1.0 / TO_RADIANS;
+constexpr double TO_SPEED_REV_PER_MIN = 0.111;
+constexpr double TO_SPEED_RAD_PER_MIN = TO_SPEED_REV_PER_MIN * 2.0 * M_PI;
+constexpr double TO_SPEED_RAD_PER_SEC = TO_SPEED_RAD_PER_MIN / 60.0;
+constexpr double TO_LOAD_PERCENT = 0.1;
+constexpr double TO_VOLTAGE = 0.1;
 
 // Dynamixel AX-12A address table
 // Ref: https://emanual.robotis.com/docs/en/dxl/ax/ax-12a/
@@ -33,6 +38,10 @@ constexpr uint16_t ADDR_TORQUE_ENABLE = 24;
 constexpr uint16_t ADDR_GOAL_POSITION = 30;
 constexpr uint16_t ADDR_MOVING_SPEED = 32;
 constexpr uint16_t ADDR_PRESENT_POSITION = 36;
+constexpr uint16_t ADDR_PRESENT_SPEED = 38;
+constexpr uint16_t ADDR_PRESENT_LOAD = 40;
+constexpr uint16_t ADDR_PRESENT_VOLTAGE = 42;
+constexpr uint16_t ADDR_PRESENT_TEMPERATURE = 43;
 
 CranePlusDriver::CranePlusDriver(
   const std::string port_name, const int baudrate,
@@ -165,21 +174,105 @@ bool CranePlusDriver::write_moving_speed_rpm_all(const double speed_rpm)
   return retval;
 }
 
-bool CranePlusDriver::read_present_joint_positions(std::vector<double> * joint_positions)
+bool CranePlusDriver::read_present_joint_positions(std::vector<double> & joint_positions)
+{
+  std::vector<uint16_t> buffer;
+  bool retval = read_word_data_from_each_joints(ADDR_PRESENT_POSITION, buffer);
+
+  for (auto data : buffer) {
+    joint_positions.push_back(dxl_pos_to_radian(data));
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::read_present_joint_speeds(std::vector<double> & joint_speeds)
+{
+  std::vector<uint16_t> buffer;
+  bool retval = read_word_data_from_each_joints(ADDR_PRESENT_SPEED, buffer);
+
+  for (auto data : buffer) {
+    joint_speeds.push_back(dxl_speed_to_rps(data));
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::read_present_joint_loads(std::vector<double> & joint_loads)
+{
+  std::vector<uint16_t> buffer;
+  bool retval = read_word_data_from_each_joints(ADDR_PRESENT_LOAD, buffer);
+
+  for (auto data : buffer) {
+    joint_loads.push_back(dxl_load_to_percent(data));
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::read_present_joint_voltages(std::vector<double> & joint_voltages)
+{
+  std::vector<uint8_t> buffer;
+  bool retval = read_byte_data_from_each_joints(ADDR_PRESENT_VOLTAGE, buffer);
+
+  for (auto data : buffer) {
+    joint_voltages.push_back(dxl_voltage_to_actual_voltage(data));
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::read_present_joint_temperatures(std::vector<double> & joint_temperatures)
+{
+  std::vector<uint8_t> buffer;
+  bool retval = read_byte_data_from_each_joints(ADDR_PRESENT_TEMPERATURE, buffer);
+
+  for (auto data : buffer) {
+    joint_temperatures.push_back(data);
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::read_byte_data_from_each_joints(
+  const uint16_t address,
+  std::vector<uint8_t> & buffer)
 {
   bool retval = true;
   for (auto dxl_id : id_list_) {
     uint8_t dxl_error = 0;
-    uint16_t dxl_present_position = 0;
-    int dxl_result = dxl_packet_handler_->read2ByteTxRx(
+    uint8_t data = 0;
+    int dxl_result = dxl_packet_handler_->read1ByteTxRx(
       dxl_port_handler_.get(),
-      dxl_id, ADDR_PRESENT_POSITION, &dxl_present_position, &dxl_error);
+      dxl_id, address, &data, &dxl_error);
 
     if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
       retval = false;
     }
 
-    joint_positions->push_back(dxl_pos_to_radian(dxl_present_position));
+    buffer.push_back(data);
+  }
+
+  return retval;
+}
+
+bool CranePlusDriver::read_word_data_from_each_joints(
+  const uint16_t address,
+  std::vector<uint16_t> & buffer)
+{
+  bool retval = true;
+  for (auto dxl_id : id_list_) {
+    uint8_t dxl_error = 0;
+    uint16_t data = 0;
+    int dxl_result = dxl_packet_handler_->read2ByteTxRx(
+      dxl_port_handler_.get(),
+      dxl_id, address, &data, &dxl_error);
+
+    if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
+      retval = false;
+    }
+
+    buffer.push_back(data);
   }
 
   return retval;
@@ -214,4 +307,27 @@ double CranePlusDriver::dxl_pos_to_radian(const uint16_t position)
 uint16_t CranePlusDriver::radian_to_dxl_pos(const double position)
 {
   return position * TO_DXL_POS + DXL_HOME_POSITION;
+}
+
+double CranePlusDriver::dxl_speed_to_rps(const uint16_t speed)
+{
+  if (speed < 1024) {  // CCW, positive rotation
+    return speed * TO_SPEED_RAD_PER_SEC;
+  } else {  // CW, negative rotation
+    return -(speed - 1024) * TO_SPEED_RAD_PER_SEC;
+  }
+}
+
+double CranePlusDriver::dxl_load_to_percent(const uint16_t load)
+{
+  if (load < 1024) {  // CCW, positive rotation
+    return load * TO_LOAD_PERCENT;
+  } else {  // CW, negative rotation
+    return -(load - 1024) * TO_LOAD_PERCENT;
+  }
+}
+
+double CranePlusDriver::dxl_voltage_to_actual_voltage(const uint8_t voltage)
+{
+  return voltage * TO_VOLTAGE;
 }

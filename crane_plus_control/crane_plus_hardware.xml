@@ -1,0 +1,9 @@
+<library path="crane_plus_hardware">
+  <class name="crane_plus_hardware/CranePlusHardware"
+         type="crane_plus_control::CranePlusHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      A CRANE+V2 hardware plugin for the ros2_control.
+    </description>
+  </class>
+</library>
