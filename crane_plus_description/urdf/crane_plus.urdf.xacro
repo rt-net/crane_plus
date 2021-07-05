@@ -9,6 +9,10 @@
 
   <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.xacro"/>
   <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.ros2_control.xacro"/>
+  <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.gazebo.xacro"/>
+  <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.gazebo_ros2_control.xacro"/>
+
+  <xacro:arg name="use_gazebo" default="false" />
 
   <!-- Link to provide the location reference for the arm -->
   <link name="base_link"/>
@@ -79,22 +83,52 @@
     <origin xyz="0 0 0"/>
   </xacro:crane_plus>
 
-  <xacro:crane_plus_ros2_control_settings 
-    name="crane_plus"
-    name_joint_1="${NAME_JOINT_1}"
-    name_joint_2="${NAME_JOINT_2}"
-    name_joint_3="${NAME_JOINT_3}"
-    name_joint_4="${NAME_JOINT_4}"
-    name_joint_hand="${NAME_JOINT_HAND}"
-    joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
-    joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
-    joint_2_lower_limit="${JOINT_2_LOWER_LIMIT}"
-    joint_2_upper_limit="${JOINT_2_UPPER_LIMIT}"
-    joint_3_lower_limit="${JOINT_3_LOWER_LIMIT}"
-    joint_3_upper_limit="${JOINT_3_UPPER_LIMIT}"
-    joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
-    joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
-    joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
-    joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}" />
+  <xacro:unless value="$(arg use_gazebo)">
+    <xacro:crane_plus_ros2_control_settings 
+      name="crane_plus"
+      name_joint_1="${NAME_JOINT_1}"
+      name_joint_2="${NAME_JOINT_2}"
+      name_joint_3="${NAME_JOINT_3}"
+      name_joint_4="${NAME_JOINT_4}"
+      name_joint_hand="${NAME_JOINT_HAND}"
+      joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
+      joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
+      joint_2_lower_limit="${JOINT_2_LOWER_LIMIT}"
+      joint_2_upper_limit="${JOINT_2_UPPER_LIMIT}"
+      joint_3_lower_limit="${JOINT_3_LOWER_LIMIT}"
+      joint_3_upper_limit="${JOINT_3_UPPER_LIMIT}"
+      joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
+      joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
+      joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
+      joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}" />
+  </xacro:unless>
+
+  <xacro:if value="$(arg use_gazebo)">
+    <xacro:gazebo_robot_settings
+      name_link_base="${NAME_LINK_BASE}"
+      name_link_1="${NAME_LINK_1}"
+      name_link_2="${NAME_LINK_2}"
+      name_link_3="${NAME_LINK_3}"
+      name_link_4="${NAME_LINK_4}"
+      name_link_hand="${NAME_LINK_HAND}" />
+
+    <xacro:crane_plus_gazebo_ros2_control_settings 
+      name="crane_plus"
+      name_joint_1="${NAME_JOINT_1}"
+      name_joint_2="${NAME_JOINT_2}"
+      name_joint_3="${NAME_JOINT_3}"
+      name_joint_4="${NAME_JOINT_4}"
+      name_joint_hand="${NAME_JOINT_HAND}"
+      joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
+      joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
+      joint_2_lower_limit="${JOINT_2_LOWER_LIMIT}"
+      joint_2_upper_limit="${JOINT_2_UPPER_LIMIT}"
+      joint_3_lower_limit="${JOINT_3_LOWER_LIMIT}"
+      joint_3_upper_limit="${JOINT_3_UPPER_LIMIT}"
+      joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
+      joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
+      joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
+      joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}" />
+  </xacro:if>
 
 </robot>

@@ -17,8 +17,9 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.substitutions import Command
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-import xacro
 import yaml
 
 
@@ -49,11 +50,14 @@ def load_yaml(package_name, file_path):
 
 def generate_launch_description():
     # planning_context
+    declare_xacro_use_gazebo = DeclareLaunchArgument(
+        'xacro_use_gazebo',
+        default_value='false',
+        description='Set "true" to enable gazebo_ros2_control plugin.'
+    )
     xacro_file = os.path.join(get_package_share_directory('crane_plus_description'),
                               'urdf', 'crane_plus.urdf.xacro')
-    doc = xacro.process_file(xacro_file)
-    robot_description_config = doc.toprettyxml(indent='  ')
-    robot_description = {'robot_description': robot_description_config}
+    robot_description = {'robot_description': Command(['xacro ', xacro_file, ' use_gazebo:=', LaunchConfiguration('xacro_use_gazebo')])}
 
     robot_description_semantic_config = load_file(
         'crane_plus_moveit_config', 'config/crane_plus.srdf')
@@ -90,12 +94,6 @@ def generate_launch_description():
                                          'publish_geometry_updates': True,
                                          'publish_state_updates': True,
                                          'publish_transforms_updates': True}
-
-    # Declare launch arguments
-    declare_arg_controller = DeclareLaunchArgument(
-        'controller',
-        default_value='true',
-        description='Set to "true" to launch crane_plus_controller.')
 
     # Start the actual move_group node/action server
     run_move_group_node = Node(package='moveit_ros_move_group',
@@ -136,7 +134,7 @@ def generate_launch_description():
                                  output='both',
                                  parameters=[robot_description])
 
-    return LaunchDescription([declare_arg_controller,
+    return LaunchDescription([declare_xacro_use_gazebo,
                               run_move_group_node,
                               rviz_node,
                               static_tf,

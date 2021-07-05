@@ -5,6 +5,12 @@
       <shadows>0</shadows>
     </scene>
 
+    <gui>
+      <camera name="user_camera">
+        <pose>0.75 -0.75 1.4 0 0.29 2.21</pose>
+      </camera>
+    </gui>
+
     <include>
       <uri>model://sun</uri>
     </include>
@@ -18,12 +24,12 @@
       <pose>0.29 0 0 0 0 1.5708</pose>
     </model>
 
-    <model name="wood_cube_5cm">
+    <model name="wood_cube_7.5cm">
       <include>
-        <uri>model://wood_cube_5cm</uri>
+        <uri>model://wood_cube_7_5cm</uri>
       </include>
 
-      <pose>0.20 0 1.0 0 0 0</pose>
+      <pose>0 -0.1 1.0 0 0 0</pose>
     </model>
 
     <model name="ground_plane">
