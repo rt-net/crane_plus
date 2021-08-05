@@ -57,7 +57,8 @@ def generate_launch_description():
     )
     xacro_file = os.path.join(get_package_share_directory('crane_plus_description'),
                               'urdf', 'crane_plus.urdf.xacro')
-    robot_description = {'robot_description': Command(['xacro ', xacro_file, ' use_gazebo:=', LaunchConfiguration('xacro_use_gazebo')])}
+    robot_description = {'robot_description': Command(
+        ['xacro ', xacro_file, ' use_gazebo:=', LaunchConfiguration('xacro_use_gazebo')])}
 
     robot_description_semantic_config = load_file(
         'crane_plus_moveit_config', 'config/crane_plus.srdf')
