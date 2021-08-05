@@ -41,23 +41,15 @@
     </gazebo>
 
     <gazebo reference="${name_link_4}">
-      <!-- <mu1>10.0</mu1>
-      <mu2>100.0</mu2> -->
-      <min_depth>0.001</min_depth>
-      <maxVel>0</maxVel>  
-      <kp>100000</kp>
-      <kd>100</kd>
-      <material>Gazebo/Green</material>
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/Black</material>
     </gazebo>
 
     <gazebo reference="${name_link_hand}">
-      <!-- <mu1>10.0</mu1>
-      <mu2>100.0</mu2> -->
-      <min_depth>0.001</min_depth>
-      <maxVel>0</maxVel>  
-      <kp>100000</kp>
-      <kd>100</kd>
-      <material>Gazebo/Green</material>
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/White</material>
     </gazebo>
 
   </xacro:macro>
