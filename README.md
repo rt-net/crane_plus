@@ -1,6 +1,6 @@
 # crane_plus
 
-[![container_ci](https://github.com/rt-net/crane_plus/workflows/container_ci/badge.svg?branch=master)](https://github.com/rt-net/crane_plus/actions?query=workflow%3Acontainer_ci+branch%3Amaster)
+[![industrial_ci](https://github.com/rt-net/crane_plus/workflows/industrial_ci/badge.svg?branch=master)](https://github.com/rt-net/crane_plus/actions?query=workflow%3Aindustrial_ci+branch%3Amaster)
 
 ROS 2 package suite of CRANE+V2.
 
@@ -10,17 +10,18 @@ ROS 2 package suite of CRANE+V2.
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-  - [MoveIt 2 Source Build](#moveit-2-source-build)
-  - [Crane_plus Source Build](#crane_plus-source-build)
+  - [Binary installation](#binary-installation)
+  - [Source Build](#source-build)
 - [Quick Start](#quick-start)
 - [Packages](#packages)
 - [License](#license)
+- [Disclaimer](#disclaimer)
 
 ## Requirements
 
 - CRANE+V2
-    - https://rt-net.jp/products/cranev2/
-    - [RT Robot Shop](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1&products_id=3626&language=ja)
+  - [Product Introduction](https://rt-net.jp/products/cranev2/)
+  - [Web Shop](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1&products_id=3626&language=ja)
 - Linux OS
   - Ubuntu 20.04
 - ROS
@@ -28,124 +29,22 @@ ROS 2 package suite of CRANE+V2.
 
 ## Installation
 
-このパッケージで使用している[moveit2](https://github.com/ros-planning/moveit2)
-パッケージはROS 2 Foxy向けにリリースされていません。
-そのため、[moveit2 website](https://moveit.ros.org/install-moveit2/source/)
-の手順に従って`moveit2`及び依存パッケージをインストールした後に
-`crane_plus`パケージをインストールします。
+### Binary installation
 
-### MoveIt 2 Source Build
+TBD
 
-詳細は[こちら](https://moveit.ros.org/install-moveit2/source/)
-を参照してください。
-
-まずはじめにビルドツールをインストールします。
-(詳細は[こちら](https://index.ros.org/doc/ros2/Installation/Foxy/Linux-Development-Setup/#install-development-tools-and-ros-tools))
-
-次のコマンドを実行します。
-
-```sh
-# インストール済みパッケージの更新
-$ sudo apt update
-$ sudo apt dist-upgrade
-$ rosdep update
-
-# ビルドツールのインストール
-$ sudo apt install -y \
-  build-essential \
-  cmake \
-  git \
-  libbullet-dev \
-  python3-colcon-common-extensions \
-  python3-flake8 \
-  python3-pip \
-  python3-pytest-cov \
-  python3-rosdep \
-  python3-setuptools \
-  python3-vcstool \
-  wget \
-  clang-format-10
-
-$ python3 -m pip install -U \
-  argcomplete \
-  flake8-blind-except \
-  flake8-builtins \
-  flake8-class-newline \
-  flake8-comprehensions \
-  flake8-deprecated \
-  flake8-docstrings \
-  flake8-import-order \
-  flake8-quotes \
-  pytest-repeat \
-  pytest-rerunfailures \
-  pytest
-```
-
-`moveit2`用のワークスペースを作成します。
-
-```sh
-$ mkdir -p ~/moveit_ws/src
-```
-
-`moveit2`と依存パッケージをダウンロードします。
-
-```sh
-$ cd ~/moveit_ws/src
-$ wget https://raw.githubusercontent.com/ros-planning/moveit2/main/moveit2.repos
-$ vcs import < moveit2.repos
-$ git clone https://github.com/ros-planning/moveit2.git
-$ rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y
-```
-
-`moveit2`をビルドします。
-パッケージ数が多いためビルド時間は長いです。
-
-メモリ不足でビルドに失敗する場合は`MAKEFLAGS=-j1`や`--executor sequential`オプションをつけてください。
-
-```sh
-$ cd ~/moveit_ws
-$ colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
-
-# メモリ不足対策
-$ MAKEFLAGS=-j1 colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF --executor sequential
-```
-
-ビルドが完了したら次のコマンドを実行してパッケージを読み込みます。
-
-```sh
-$ source ~/moveit_ws/install/setup.bash
-```
-
-### Crane_plus Source Build
-
-`moveit2`とは別のワークスペースを作成します。
-
-```sh
-$ mkdir -p ~/ros2_ws/src
-```
-
-`crane_plus`と依存パッケージをダウンロードします。
+### Source Build
 
 ```sh
 $ cd ~/ros2_ws/src
 $ git clone https://github.com/rt-net/crane_plus.git
 
 # Install dependencies
-# Run 'source ~/moveit_ws/install/setup.bash' before installation.
 $ rosdep install -r -y -i --from-paths .
-```
 
-`crane_plus`をビルドします。
-
-```sh
+# Build & Install
 $ cd ~/ros2_ws
 $ colcon build --symlink-install
-```
-
-ビルドが完了したら次のコマンドを実行してパッケージを読み込みます。
-このコマンドは`crane_plus`を使用する際に毎回実行します。
-
-```sh
 $ source ~/ros2_ws/install/setup.bash
 ```
 
@@ -153,9 +52,11 @@ $ source ~/ros2_ws/install/setup.bash
 
 ```sh
 # Connect CRANE+V2 to PC, then
+$ source ~/ros2_ws/install/setup.bash
 $ ros2 launch crane_plus_examples demo.launch.py
 
 # Terminal 2
+$ source ~/ros2_ws/install/setup.bash
 $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 # Press [Ctrl-c] to terminate.
