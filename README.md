@@ -36,6 +36,11 @@ TBD
 ### Source Build
 
 ```sh
+# Setup ROS environment
+$ source /opt/ros/foxy/setup.bash
+
+# Download crane_plus repository
+$ mkdir -p ~/ros2_ws/src
 $ cd ~/ros2_ws/src
 $ git clone https://github.com/rt-net/crane_plus.git
 
