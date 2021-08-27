@@ -87,7 +87,6 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 - crane_plus_gazebo
   - [README](./crane_plus_gazebo/README.md)
   - CRANE+V2のGazeboシミュレーションパッケージです
-  - **現在、Gazebo上のCRANE+V2を制御することはできません**
 - crane_plus_moveit_config
   - [README](./crane_plus_moveit_config/README.md)
   - CRANE+V2の`moveit2`設定ファイルです
