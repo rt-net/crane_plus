@@ -2,7 +2,9 @@
 
 このパッケージはCRANE+V2 ROS 2パッケージのサンプルコード集です。
 
-## 実行手順
+## 準備（実機を使う場合）
+
+![crane_plus](https://rt-net.github.io/images/crane-plus/CRANEV2-500x500.png)
 
 ### 1. CRANE+V2本体をPCに接続する
 
@@ -28,18 +30,29 @@ controller (`crane_plus_control`)を起動します。
 $ ros2 launch crane_plus_examples demo.launch.py
 ```
 
-### 4. サンプルプログラムを実行する
+## 準備（Gazeboを使う場合）
 
-サンプルプログラムを実行します。
+![crane_plus_gazebo](https://rt-net.github.io/images/crane-plus/crane_plus_gazebo.png)
+
+### 1. move_groupとgazeboを起動する
+
+次のコマンドでmove_group (`crane_plus_moveit_config`)と
+Gazeboを起動します。
+
+```sh
+$ ros2 launch crane_plus_gazebo crane_plus_gazebo.launch.py
+```
+
+## サンプルプログラムを実行する
+
+準備ができたらサンプルプログラムを実行します。
 例えばグリッパを開閉するサンプルは次のコマンドで実行できます。
 
 ```sh
 $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
-### 5. サンプルプログラムを終了する
-
-`Ctrl+c`を入力してサンプルプログラムを終了します。
+終了するときは`Ctrl+c`を入力します。
 
 ## Examples
 

@@ -2,18 +2,13 @@
 
 CRANE+V2 のGazeboシミュレーションパッケージです。
 
-**現在、Gazebo上のCRANE+V2を動かすことは出来ません**
-
-`crane_plus_gazebo`は
-[gazebo_ros2_control](https://github.com/ros-simulation/gazebo_ros2_control)及び
-[ros2_control](https://github.com/ros-controls/ros2_control)
-の開発状況に依存しています。
-
 ## ノードの起動
 
-次のコマンドを実行するとGazeboが起動し、CRANE+V2モデルと、Table、Cubeが表示がされます。
+次のコマンドを実行するとGazeboが起動し、CRANE+V2モデルとTableが表示されます。
 
-初回起動時はTableとCubeのモデルをダウンロードするため、モデルの表示に時間がかかることがあります。
+初回起動時はTableのモデルをダウンロードするため、モデルの表示に時間がかかることがあります。
+
+実機との接続や`crane_plus_examples/launch/demo.launch/py`の実行は必要ありません。
 
 ```sh
 $ ros2 launch crane_plus_gazebo crane_plus_gazebo.launch.py

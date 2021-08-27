@@ -17,6 +17,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.actions import ExecuteProcess
 from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -57,12 +58,31 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_moveit_config'),
                 '/launch/run_move_group.launch.py']),
+            launch_arguments={'xacro_use_gazebo': 'true'}.items(),
         )
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-entity', 'crane_plus', '-x', '0', '-y', '0',
                                    '-z', '1.02', '-topic', '/robot_description'],
                         output='screen')
+
+    spawn_joint_state_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py joint_state_controller'],
+                shell=True,
+                output='screen',
+            )
+
+    spawn_arm_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py crane_plus_arm_controller'],
+                shell=True,
+                output='screen',
+            )
+
+    spawn_gripper_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py crane_plus_gripper_controller'],
+                shell=True,
+                output='screen',
+            )
 
     return LaunchDescription([
         declare_arg_gui,
@@ -71,4 +91,7 @@ def generate_launch_description():
         gzclient,
         move_group,
         spawn_entity,
+        spawn_joint_state_controller,
+        spawn_arm_controller,
+        spawn_gripper_controller
     ])

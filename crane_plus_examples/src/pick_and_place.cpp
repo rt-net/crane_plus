@@ -57,7 +57,7 @@ int main(int argc, char ** argv)
   auto gripper_joint_values = move_group_gripper.getCurrentJointValues();
   double GRIPPER_DEFAULT = 0.0;
   double GRIPPER_OPEN = to_radians(-30);
-  double GRIPPER_CLOSE = to_radians(10);
+  double GRIPPER_CLOSE = to_radians(-5);
 
   move_group_arm.setNamedTarget("vertical");
   move_group_arm.move();
@@ -89,10 +89,18 @@ int main(int argc, char ** argv)
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
+  target_pose.position.z = 0.15;
+  move_group_arm.setPoseTarget(target_pose);
+  move_group_arm.move();
+
   // Grasp
   gripper_joint_values[0] = GRIPPER_CLOSE;
   move_group_gripper.setJointValueTarget(gripper_joint_values);
   move_group_gripper.move();
+
+  target_pose.position.z = 0.17;
+  move_group_arm.setPoseTarget(target_pose);
+  move_group_arm.move();
 
   // ----- Placing Preparation -----
   move_group_arm.setNamedTarget("home");
