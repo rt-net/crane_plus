@@ -10,7 +10,6 @@ on:
 env:
   ROS_DISTRO: foxy
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.ROS_DISTRO }}
 
 jobs:
   build-and-push-image:
@@ -36,4 +35,4 @@ jobs:
           file: .docker/source/Dockerfile
           build-args: ROS_DISTRO=${{ env.ROS_DISTRO }}
           push: true
-          tags: ${{ env.IMAGE_NAME }}
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.ROS_DISTRO }}
