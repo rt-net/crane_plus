@@ -17,6 +17,18 @@ RUN cd $OVERLAY_WS && \
         . /opt/ros/${ROS_DISTRO}/setup.sh && \
         colcon build --symlink-install $COLCON_OPTION
 
+# Download gazebo models by sparse checkout
+RUN mkdir -p /root/.gazebo/models && \
+    cd  /root/.gazebo/models && \
+    git init . && \
+    git config core.sparsecheckout true && \
+    echo "ground_plane" >> .git/info/sparse-checkout && \
+    echo "sun" >> .git/info/sparse-checkout && \
+    echo "table" >> .git/info/sparse-checkout && \
+    git remote add origin https://github.com/osrf/gazebo_models && \
+    git pull origin master && \
+    rm -rf .git
+
 # Edit entrypoint to source overlay setup file
 WORKDIR $OVERLAY_WS
 RUN sed --in-place --expression \
