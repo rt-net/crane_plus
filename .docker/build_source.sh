@@ -9,7 +9,7 @@ fi
 ROS_DISTRO=$1
 
 DOCKER_OPTION=""
-if [ $# -ge 1 ]; then
+if [ $# -ge 2 ]; then
     DOCKER_OPTION=$2
 fi
 
