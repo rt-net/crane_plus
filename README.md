@@ -29,6 +29,11 @@ ROS 2 package suite of CRANE+V2.
 
 ## Installation
 
+### Docker images
+
+ビルド済みのパッケージ含むDocker imageを用意してます。
+詳細は[.docker/README.md](./.docker/README.md)を参照してください。
+
 ### Binary installation
 
 TBD
