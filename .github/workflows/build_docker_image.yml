@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  ROS_DISTRO: foxy
+  ROS_DISTRO: galactic
   REGISTRY: ghcr.io
 
 jobs:
