@@ -46,8 +46,8 @@ def generate_launch_description():
           },
         )
 
-    spawn_joint_state_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner.py joint_state_controller'],
+    spawn_joint_state_broadcaster = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py joint_state_broadcaster'],
                 shell=True,
                 output='screen',
             )
@@ -66,7 +66,7 @@ def generate_launch_description():
 
     return LaunchDescription([
       controller_manager,
-      spawn_joint_state_controller,
+      spawn_joint_state_broadcaster,
       spawn_arm_controller,
       spawn_gripper_controller
     ])

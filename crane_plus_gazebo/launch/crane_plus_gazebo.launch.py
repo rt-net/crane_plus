@@ -66,8 +66,8 @@ def generate_launch_description():
                                    '-z', '1.02', '-topic', '/robot_description'],
                         output='screen')
 
-    spawn_joint_state_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner.py joint_state_controller'],
+    spawn_joint_state_broadcaster = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py joint_state_broadcaster'],
                 shell=True,
                 output='screen',
             )
@@ -91,7 +91,7 @@ def generate_launch_description():
         gzclient,
         move_group,
         spawn_entity,
-        spawn_joint_state_controller,
+        spawn_joint_state_broadcaster,
         spawn_arm_controller,
         spawn_gripper_controller
     ])

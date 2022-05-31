@@ -92,7 +92,7 @@ $ ros2 launch crane_plus_control crane_plus_control.launch.py
 
 ノードが起動すると以下のコントローラが読み込まれます。
 
-- crane_plus_joint_state_controller (`joint_state_controller/JointStateController`)
+- crane_plus_joint_state_broadcaster (`joint_state_broadcaster/JointStateBroadcaster`)
 - crane_plus_arm_controller (`joint_trajectory_controller/JointTrajectoryController`)
 - crane_plus_gripper_controller (`joint_trajectory_controller/JointTrajectoryController`)
   - **`gripper_action_controller`が`ros2_controllers`に移植されたら変更します**
@@ -119,8 +119,8 @@ controller_manager:
       type: joint_trajectory_controller/JointTrajectoryController
     crane_plus_gripper_controller:
       type: joint_trajectory_controller/JointTrajectoryController
-    joint_state_controller:
-      type: joint_state_controller/JointStateController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
 ```
 
 ### 制御周期
