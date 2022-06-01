@@ -13,6 +13,7 @@
   <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.gazebo_ros2_control.xacro"/>
 
   <xacro:arg name="use_gazebo" default="false" />
+  <xacro:arg name="port_name" default="/dev/ttyUSB0" />
 
   <!-- Link to provide the location reference for the arm -->
   <link name="base_link"/>
@@ -100,7 +101,8 @@
       joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
       joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
       joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
-      joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}" />
+      joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"
+      port_name="$(arg port_name)" />
   </xacro:unless>
 
   <xacro:if value="$(arg use_gazebo)">

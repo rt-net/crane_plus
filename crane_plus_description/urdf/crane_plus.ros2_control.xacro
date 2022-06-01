@@ -17,12 +17,13 @@
             joint_4_lower_limit
             joint_4_upper_limit
             joint_hand_lower_limit
-            joint_hand_upper_limit">
+            joint_hand_upper_limit
+            port_name">
 
     <ros2_control name="${name}" type="system">
       <hardware>
         <plugin>crane_plus_hardware/CranePlusHardware</plugin>
-        <param name="port_name">/dev/ttyUSB0</param>
+        <param name="port_name">${port_name}</param>
         <param name="baudrate">1000000</param>
         <param name="timeout_seconds">5.0</param>
         <param name="read_velocities">0</param>
