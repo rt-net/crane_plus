@@ -21,7 +21,6 @@ from launch.actions import DeclareLaunchArgument
 from launch.substitutions import Command
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-import xacro
 
 
 def generate_launch_description():
@@ -31,15 +30,16 @@ def generate_launch_description():
         default_value='/dev/ttyUSB0',
         description='Set port name.'
     )
+
     robot_description_path = os.path.join(
         get_package_share_directory('crane_plus_description'),
         'urdf',
         'crane_plus.urdf.xacro')
-    
-    robot_description = {'robot_description': Command(
-        ['xacro ',
-         robot_description_path,
-         ' port_name:=', LaunchConfiguration('port_name')
+
+    robot_description = {'robot_description': Command([
+        'xacro ',
+        robot_description_path,
+        ' port_name:=', LaunchConfiguration('port_name')
         ])}
 
     crane_plus_controllers = os.path.join(

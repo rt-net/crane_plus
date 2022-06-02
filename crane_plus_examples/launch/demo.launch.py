@@ -36,9 +36,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_control'),
                 '/launch/crane_plus_control.launch.py']),
-                launch_arguments={
-                    'port_name': LaunchConfiguration('port_name')
-                }.items(),
+            launch_arguments={'port_name': LaunchConfiguration('port_name')}.items()
         )
 
     return LaunchDescription([
