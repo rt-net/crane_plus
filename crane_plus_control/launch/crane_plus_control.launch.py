@@ -18,6 +18,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess
 from launch.actions import DeclareLaunchArgument
+from launch.substitutions import Command
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 import xacro
@@ -25,8 +26,8 @@ import xacro
 
 def generate_launch_description():
     # Get URDF via xacro
-    declare_xacro_port_name = DeclareLaunchArgument(
-        'xacro_port_name',
+    declare_port_name = DeclareLaunchArgument(
+        'port_name',
         default_value='/dev/ttyUSB0',
         description='Set port name.'
     )
@@ -35,8 +36,11 @@ def generate_launch_description():
         'urdf',
         'crane_plus.urdf.xacro')
     
-    robot_description_config = xacro.process_file(robot_description_path, mappings={'port_name' : LaunchConfiguration('xacro_port_name')})
-    robot_description = {'robot_description': robot_description_config.toxml()}
+    robot_description = {'robot_description': Command(
+        ['xacro ',
+         robot_description_path,
+         ' port_name:=', LaunchConfiguration('port_name')
+        ])}
 
     crane_plus_controllers = os.path.join(
         get_package_share_directory('crane_plus_control'),
@@ -73,7 +77,7 @@ def generate_launch_description():
             )
 
     return LaunchDescription([
-      declare_xacro_port_name,
+      declare_port_name,
       controller_manager,
       spawn_joint_state_controller,
       spawn_arm_controller,

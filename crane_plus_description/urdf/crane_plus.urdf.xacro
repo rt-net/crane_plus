@@ -14,6 +14,12 @@
 
   <xacro:arg name="use_gazebo" default="false" />
   <xacro:arg name="port_name" default="/dev/ttyUSB0" />
+  <xacro:arg name="baudrate" default="1000000" />
+  <xacro:arg name="timeout_seconds" default="5.0" />
+  <xacro:arg name="read_velocities" default="0" />
+  <xacro:arg name="read_loads" default="0" />
+  <xacro:arg name="read_voltages" default="0" />
+  <xacro:arg name="read_temperatures" default="0" />
 
   <!-- Link to provide the location reference for the arm -->
   <link name="base_link"/>
@@ -102,7 +108,13 @@
       joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
       joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
       joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"
-      port_name="$(arg port_name)" />
+      port_name="$(arg port_name)"
+      baudrate="$(arg baudrate)"
+      timeout_seconds="$(arg timeout_seconds)"
+      read_velocities="$(arg read_velocities)"
+      read_loads="$(arg read_loads)"
+      read_voltages="$(arg read_voltages)"
+      read_temperatures="$(arg read_temperatures)" />
   </xacro:unless>
 
   <xacro:if value="$(arg use_gazebo)">

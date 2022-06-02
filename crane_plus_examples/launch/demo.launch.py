@@ -15,10 +15,17 @@
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def generate_launch_description():
+    declare_port_name = DeclareLaunchArgument(
+        'port_name',
+        default_value='/dev/ttyUSB0',
+        description='Set port name.'
+    )
     move_group = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_moveit_config'),
@@ -29,8 +36,13 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_control'),
                 '/launch/crane_plus_control.launch.py']),
+                launch_arguments={
+                    'port_name': LaunchConfiguration('port_name')
+                }.items(),
         )
 
-    return LaunchDescription([move_group,
-                              control_node
-                              ])
+    return LaunchDescription([
+        declare_port_name,
+        move_group,
+        control_node
+    ])
