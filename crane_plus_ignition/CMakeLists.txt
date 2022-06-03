@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
-project(crane_plus_description)
+project(crane_plus_ignition)
 
 find_package(ament_cmake REQUIRED)
 
 install(DIRECTORY
-  meshes
-  urdf
   launch
   DESTINATION share/${PROJECT_NAME}/
 )
@@ -14,8 +12,5 @@ if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
 endif()
-
-# Ref:https://github.com/chapulina/dolly/blob/foxy/dolly_gazebo/CMakeLists.txt
-ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/${PROJECT_NAME}.dsv.in")
 
 ament_package()
