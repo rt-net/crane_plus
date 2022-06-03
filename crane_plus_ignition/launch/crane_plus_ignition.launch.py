@@ -60,8 +60,10 @@ def generate_launch_description():
     env = {'IGN_GAZEBO_SYSTEM_PLUGIN_PATH': os.environ['LD_LIBRARY_PATH'],
            'IGN_GAZEBO_RESOURCE_PATH': os.path.dirname(get_package_share_directory('crane_plus_description'))}
 
+    world_file = os.path.join(get_package_share_directory('crane_plus_ignition'),
+        'worlds', 'table.sdf')
     ign_gazebo = ExecuteProcess(
-            cmd=['ign gazebo', 'empty.sdf'],
+            cmd=['ign gazebo -r', world_file],
             output='screen',
             additional_env=env,
             shell=True
@@ -72,6 +74,7 @@ def generate_launch_description():
         output='screen',
         arguments=['-topic', '/robot_description',
                    '-name', 'crane_plus',
+                   '-z', '1.02',
                    '-allow_renaming', 'true'],
     )
 
@@ -102,29 +105,29 @@ def generate_launch_description():
     #                                '-z', '1.02', '-topic', '/robot_description'],
     #                     output='screen')
 
-    # spawn_joint_state_controller = ExecuteProcess(
-    #             cmd=['ros2 run controller_manager spawner.py joint_state_controller'],
-    #             shell=True,
-    #             output='screen',
-    #         )
+    spawn_joint_state_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py joint_state_controller'],
+                shell=True,
+                output='screen',
+            )
 
-    # spawn_arm_controller = ExecuteProcess(
-    #             cmd=['ros2 run controller_manager spawner.py crane_plus_arm_controller'],
-    #             shell=True,
-    #             output='screen',
-    #         )
+    spawn_arm_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py crane_plus_arm_controller'],
+                shell=True,
+                output='screen',
+            )
 
-    # spawn_gripper_controller = ExecuteProcess(
-    #             cmd=['ros2 run controller_manager spawner.py crane_plus_gripper_controller'],
-    #             shell=True,
-    #             output='screen',
-    #         )
+    spawn_gripper_controller = ExecuteProcess(
+                cmd=['ros2 run controller_manager spawner.py crane_plus_gripper_controller'],
+                shell=True,
+                output='screen',
+            )
 
     return LaunchDescription([
         # launch_ignition,
         ign_gazebo,
         move_group,
-        ignition_spawn_entity
+        ignition_spawn_entity,
         # node_robot_state_publisher
         # declare_arg_gui,
         # declare_arg_server,
@@ -132,7 +135,7 @@ def generate_launch_description():
         # gzclient,
         # move_group,
         # spawn_entity,
-        # spawn_joint_state_controller,
-        # spawn_arm_controller,
-        # spawn_gripper_controller
+        spawn_joint_state_controller,
+        spawn_arm_controller,
+        spawn_gripper_controller
     ])
