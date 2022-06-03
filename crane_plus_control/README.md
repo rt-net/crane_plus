@@ -32,15 +32,6 @@ PCとCRANE+V2の設定が必要です。
 $ sudo chmod 666 /dev/ttyUSB0
 ```
 
-### USB通信ポートの変更
-
-`/dev/ttyUBS0`以外の通信ポートを使用する場合は
-起動時の引数`port_name`を変更します。
-
-```sh
-$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
-```
-
 ### latency_timerの設定
 
 CRANE+V2を100 Hz周期で制御するためには、
@@ -149,7 +140,13 @@ CRANE+V2の腕の制御用に`crane_plus_arm_controller`を、
 
 ### USB通信ポート
 
-[USB通信ポートの変更](#usb通信ポートの変更)を参照してください。
+`port_name`はCRANE+V2との通信に使用するUSB通信ポートを設定します。
+
+コマンド実行時の引数からも変更が可能です。
+
+```sh
+$ ros2 launch crane_plus_control crane_plus_control.launch.py port_name:=/dev/ttyUSB0
+```
 
 ### ボーレート
 
