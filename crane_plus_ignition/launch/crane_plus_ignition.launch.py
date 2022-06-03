@@ -52,12 +52,20 @@ def generate_launch_description():
     #     parameters=[robot_description]
     # )
 
-    launch_ignition = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [os.path.join(get_package_share_directory('ros_ign_gazebo'),
-                              'launch', 'ign_gazebo.launch.py')]),
-            launch_arguments=[('ign_args', [' -r -v 4 empty.sdf'])])
+    # launch_ignition = IncludeLaunchDescription(
+    #         PythonLaunchDescriptionSource(
+    #             [os.path.join(get_package_share_directory('ros_ign_gazebo'),
+    #                           'launch', 'ign_gazebo.launch.py')]),
+    #         launch_arguments=[('ign_args', [' -r -v 4 empty.sdf'])])
+    env = {'IGN_GAZEBO_SYSTEM_PLUGIN_PATH': os.environ['LD_LIBRARY_PATH'],
+           'IGN_GAZEBO_RESOURCE_PATH': os.path.dirname(get_package_share_directory('crane_plus_description'))}
 
+    ign_gazebo = ExecuteProcess(
+            cmd=['ign gazebo', 'empty.sdf'],
+            output='screen',
+            additional_env=env,
+            shell=True
+        )
     ignition_spawn_entity = Node(
         package='ros_ign_gazebo',
         executable='create',
@@ -113,9 +121,10 @@ def generate_launch_description():
     #         )
 
     return LaunchDescription([
-        launch_ignition,
+        # launch_ignition,
+        ign_gazebo,
         move_group,
-        # ignition_spawn_entity
+        ignition_spawn_entity
         # node_robot_state_publisher
         # declare_arg_gui,
         # declare_arg_server,
