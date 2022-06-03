@@ -32,20 +32,6 @@ PCとCRANE+V2の設定が必要です。
 $ sudo chmod 666 /dev/ttyUSB0
 ```
 
-### USB通信ポートの変更
-
-`/dev/ttyUBS0`以外の通信ポートを使用する場合は
-[crane_plus_description/urdf/crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)
-の`port_name`を変更します。
-
-```xml
-<ros2_control name="${name}" type="system">
-  <hardware>
-    <plugin>crane_plus_hardware/CranePlusHardware</plugin>
-    <param name="port_name">/dev/ttyUSB0</param>
-    <param name="baudrate">1000000</param>
-```
-
 ### latency_timerの設定
 
 CRANE+V2を100 Hz周期で制御するためには、
@@ -138,26 +124,29 @@ CRANE+V2の腕の制御用に`crane_plus_arm_controller`を、
 ## crane_plus_hardwareのパラメータ
 
 `crane_plus_hardware`のパラメータは
-[crane_plus_description/urdf/crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)
+[crane_plus_description/urdf/crane_plus.urdf.xacro](../crane_plus_description/urdf/crane_plus.urdf.xacro)
 で設定しています。
 
 ```xml
-<ros2_control name="${name}" type="system">
-  <hardware>
-    <plugin>crane_plus_hardware/CranePlusHardware</plugin>
-    <param name="port_name">/dev/ttyUSB0</param>
-    <param name="baudrate">1000000</param>
-    <param name="timeout_seconds">5.0</param>
-    <param name="read_velocities">0</param>
-    <param name="read_loads">0</param>
-    <param name="read_voltages">0</param>
-    <param name="read_temperatures">0</param>
-  </hardware>
+<xacro:arg name="use_gazebo" default="false" />
+<xacro:arg name="port_name" default="/dev/ttyUSB0" />
+<xacro:arg name="baudrate" default="1000000" />
+<xacro:arg name="timeout_seconds" default="5.0" />
+<xacro:arg name="read_velocities" default="0" />
+<xacro:arg name="read_loads" default="0" />
+<xacro:arg name="read_voltages" default="0" />
+<xacro:arg name="read_temperatures" default="0" />
 ```
 
 ### USB通信ポート
 
-[USB通信ポートの変更](#usb通信ポートの変更)を参照してください。
+`port_name`はCRANE+V2との通信に使用するUSB通信ポートを設定します。
+
+コマンド実行時の引数からも変更が可能です。
+
+```sh
+$ ros2 launch crane_plus_control crane_plus_control.launch.py port_name:=/dev/ttyUSB0
+```
 
 ### ボーレート
 
@@ -178,7 +167,7 @@ USBケーブルや電源ケーブルが抜けた場合等に有効です。
 `read_velocities`、`read_loads`、`read_voltages`、`read_temperatures`
 は、サーボの回転速度、電圧、負荷、温度を読み取るためのパラメータです。
 
-`1`をセットすると、サーボパラメータを読み取るみます。
+`1`をセットすると、サーボパラメータを読み取ります。
 
 これらのパラメータを読み取ると通信データ量が増加するため、制御周期が100 Hzより低下します。
 

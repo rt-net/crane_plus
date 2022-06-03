@@ -63,7 +63,7 @@ $ source ~/ros2_ws/install/setup.bash
 ```sh
 # Connect CRANE+V2 to PC, then
 $ source ~/ros2_ws/install/setup.bash
-$ ros2 launch crane_plus_examples demo.launch.py
+$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
 
 # Terminal 2
 $ source ~/ros2_ws/install/setup.bash

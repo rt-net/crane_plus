@@ -27,7 +27,7 @@ USB通信ポートの設定については`crane_plus_control`の
 controller (`crane_plus_control`)を起動します。
 
 ```sh
-$ ros2 launch crane_plus_examples demo.launch.py
+$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
 ```
 
 ## 準備（Gazeboを使う場合）
