@@ -12,6 +12,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>gazebo_ros2_control</depend>
+  <depend>ign_ros2_control</depend>
   <depend>joint_state_publisher_gui</depend>
   <depend>robot_state_publisher</depend>
   <depend>rviz2</depend>
