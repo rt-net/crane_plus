@@ -30,18 +30,20 @@ def generate_launch_description():
 
     description_loader = RobotDescriptionLoader()
     description_loader.port_name = LaunchConfiguration('port_name')
+    description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_moveit_config'),
                 '/launch/run_move_group.launch.py']),
+            launch_arguments={'loaded_description': description}.items()
         )
 
     control_node = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_control'),
                 '/launch/crane_plus_control.launch.py']),
-            launch_arguments={'loaded_description': description_loader.load()}.items()
+            launch_arguments={'loaded_description': description}.items()
         )
 
     return LaunchDescription([

@@ -23,7 +23,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    declare_robot_description = DeclareLaunchArgument(
+    declare_loaded_description = DeclareLaunchArgument(
         'loaded_description',
         default_value='',
         description='Set robot_description text.  \
@@ -66,7 +66,7 @@ def generate_launch_description():
             )
 
     return LaunchDescription([
-      declare_robot_description,
+      declare_loaded_description,
       controller_manager,
       spawn_joint_state_controller,
       spawn_arm_controller,
