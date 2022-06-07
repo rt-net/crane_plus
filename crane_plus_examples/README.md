@@ -80,9 +80,6 @@ Arguments (pass arguments as '<name>:=<value>'):
 
 グリッパを開閉させるコード例です。
 
-**注意：`gripper_action_controller`が`ros2_controllers`に移植されていないため、
-代わりに`joint_trajectory_controller`でグリッパを操作しています**
-
 次のコマンドを実行します。
 
 ```sh
