@@ -13,7 +13,7 @@ install(DIRECTORY
 
 ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
-    ${PROJECT_NAME}/load_robot_description.py
+    ${PROJECT_NAME}/robot_description_loader.py
     DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
