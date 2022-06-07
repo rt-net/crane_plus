@@ -70,13 +70,8 @@ CRANE+V2に搭載されているサーボモータ[Dynamixel AX-12A](https://ema
 
 ## ノードの起動
 
-下記のコマンドで`Controller Manager`ノードが起動します。
-
-```sh
-$ ros2 launch crane_plus_control crane_plus_control.launch.py 
-```
-
-ノードが起動すると以下のコントローラが読み込まれます。
+`crane_plus_control.launch.py`を実行すると、`Controller Manager`ノードが起動し、
+以下のコントローラが読み込まれます。
 
 - crane_plus_joint_state_controller (`joint_state_controller/JointStateController`)
 - crane_plus_arm_controller (`joint_trajectory_controller/JointTrajectoryController`)
@@ -141,12 +136,6 @@ CRANE+V2の腕の制御用に`crane_plus_arm_controller`を、
 ### USB通信ポート
 
 `port_name`はCRANE+V2との通信に使用するUSB通信ポートを設定します。
-
-コマンド実行時の引数からも変更が可能です。
-
-```sh
-$ ros2 launch crane_plus_control crane_plus_control.launch.py port_name:=/dev/ttyUSB0
-```
 
 ### ボーレート
 
