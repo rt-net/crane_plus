@@ -5,7 +5,7 @@ controller_manager:
     crane_plus_arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
     crane_plus_gripper_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
+      type: position_controllers/GripperActionController
     joint_state_controller:
       type: joint_state_controller/JointStateController
 
@@ -25,8 +25,7 @@ crane_plus_arm_controller:
 
 crane_plus_gripper_controller:
   ros__parameters:
-    joints:
-      - crane_plus_joint_hand
+    joint: crane_plus_joint_hand
 
     command_interfaces:
       - position
