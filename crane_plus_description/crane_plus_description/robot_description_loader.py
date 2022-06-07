@@ -21,7 +21,6 @@ from launch.substitutions import Command
 class RobotDescriptionLoader():
 
     def __init__(self):
-        self.param_name = 'robot_description'
         self.robot_description_path = os.path.join(
             get_package_share_directory('crane_plus_description'),
             'urdf',
@@ -29,8 +28,8 @@ class RobotDescriptionLoader():
         self.port_name = '/dev/ttyUSB0'
 
     def load(self):
-        return {self.param_name: Command([
+        return Command([
                 'xacro ',
                 self.robot_description_path,
                 ' port_name:=', self.port_name
-                ])}
+                ])

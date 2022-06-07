@@ -25,7 +25,7 @@ def generate_launch_description():
     rsp = Node(package='robot_state_publisher',
                executable='robot_state_publisher',
                output='both',
-               parameters=[description_loader.load()])
+               parameters=[{'robot_description': description_loader.load()}])
     jsp = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',

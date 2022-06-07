@@ -21,26 +21,13 @@ def exec_load(loader):
     # Command substitutionの実行方法はCommandのテストを参考にした
     # https://github.com/ros2/launch/blob/074cd2903ddccd61bce8f40a0f58da0b7c200481/launch/test/launch/substitutions/test_command.py#L47
     context = LaunchContext()
-    return loader.load()['robot_description'].perform(context)
+    return loader.load().perform(context)
 
 
 def test_load_description():
     # xacroの読み込みが成功することを期待
     rdl = RobotDescriptionLoader()
     assert exec_load(rdl)
-
-
-def test_param_size():
-    # パラメータのサイズが1つであることを期待
-    rdl = RobotDescriptionLoader()
-    assert len(rdl.load()) == 1
-
-
-def test_change_param_name():
-    # パラメータ名を変更できることを期待
-    rdl = RobotDescriptionLoader()
-    rdl.param_name = 'test_name'
-    assert 'test_name' in rdl.load().keys()
 
 
 def test_change_description_path():
