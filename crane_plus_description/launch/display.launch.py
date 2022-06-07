@@ -12,28 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 
 from ament_index_python.packages import get_package_share_directory
+from crane_plus_description.load_robot_description import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
-
-import xacro
 
 
 def generate_launch_description():
-    pkg_share = FindPackageShare('crane_plus_description').find('crane_plus_description')
-    urdf_dir = os.path.join(pkg_share, 'urdf')
-    xacro_file = os.path.join(urdf_dir, 'crane_plus.urdf.xacro')
-    doc = xacro.process_file(xacro_file)
-    robot_desc = doc.toprettyxml(indent='  ')
-    params = {'robot_description': robot_desc}
+    description_loader = RobotDescriptionLoader()
 
     rsp = Node(package='robot_state_publisher',
                executable='robot_state_publisher',
                output='both',
-               parameters=[params])
+               parameters=[description_loader.load()])
     jsp = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
