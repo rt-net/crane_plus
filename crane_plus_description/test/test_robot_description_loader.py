@@ -39,8 +39,15 @@ def test_change_description_path():
     assert e.value
 
 
-def test_change_port_name():
-    # port_nameが変更されることを期待
+def test_port_name():
+    # port_nameが変更され、xacroにポート名がセットされることを期待
     rdl = RobotDescriptionLoader()
     rdl.port_name = '/dev/ttyUSB1'
     assert '/dev/ttyUSB1' in exec_load(rdl)
+
+
+def test_use_gazebo():
+    # use_gazeboが変更され、xacroにgazeboタグがセットされることを期待
+    rdl = RobotDescriptionLoader()
+    rdl.use_gazebo = 'true'
+    assert '<gazebo>' in exec_load(rdl)
