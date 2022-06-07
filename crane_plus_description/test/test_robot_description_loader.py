@@ -50,3 +50,10 @@ def test_change_description_path():
     with pytest.raises(Exception) as e:
         exec_load(rdl)
     assert e.value
+
+
+def test_change_port_name():
+    # port_nameが変更されることを期待
+    rdl = RobotDescriptionLoader()
+    rdl.port_name = '/dev/ttyUSB1'
+    assert '/dev/ttyUSB1' in exec_load(rdl)
