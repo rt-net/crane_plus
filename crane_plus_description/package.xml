@@ -14,8 +14,10 @@
 
   <depend>gazebo_ros2_control</depend>
   <depend>joint_state_publisher_gui</depend>
+  <depend>launch</depend>
   <depend>robot_state_publisher</depend>
   <depend>rviz2</depend>
+  <depend>xacro</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
