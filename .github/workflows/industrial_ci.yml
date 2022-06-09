@@ -24,6 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: "ros-industrial/industrial_ci@master"
-        env: |
+        env:
           ${{ matrix.env }}
-          ${{ env.BEFORE_RUN_TARGET_TEST }}
+          BEFORE_RUN_TARGET_TEST: ${{ env.BEFORE_RUN_TARGET_TEST }}
