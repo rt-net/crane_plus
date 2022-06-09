@@ -30,7 +30,9 @@ RUN mkdir -p /root/.gazebo/models && \
     rm -rf .git
 
 # Download ignition model
-RUN ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/wood%20cube%205cm && \
+RUN ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/sun && \
+    ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/ground%20plane && \
+    ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/wood%20cube%205cm && \
     ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/table
 
 # Edit entrypoint to source overlay setup file
