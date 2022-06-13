@@ -47,7 +47,15 @@ def test_port_name():
 
 
 def test_use_gazebo():
-    # use_gazeboが変更され、xacroにgazeboタグがセットされることを期待
+    # use_gazeboが変更され、xacroにgazebo_ros2_controlがセットされることを期待
     rdl = RobotDescriptionLoader()
     rdl.use_gazebo = 'true'
-    assert '<gazebo>' in exec_load(rdl)
+    assert 'gazebo_ros2_control/GazeboSystem' in exec_load(rdl)
+
+
+def test_use_ignition():
+    # use_gazeboとuse_ignitionが変更され、xacroにign_ros2_controlがセットされることを期待
+    rdl = RobotDescriptionLoader()
+    rdl.use_gazebo = 'true'
+    rdl.use_ignition = 'true'
+    assert 'ign_ros2_control/IgnitionSystem' in exec_load(rdl)
