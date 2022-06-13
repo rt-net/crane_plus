@@ -15,11 +15,11 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
+from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-import xacro
 import yaml
 
 
@@ -46,12 +46,7 @@ def load_yaml(package_name, file_path):
 
 
 def generate_launch_description():
-    # planning_context
-    xacro_file = os.path.join(get_package_share_directory('crane_plus_description'),
-                              'urdf', 'crane_plus.urdf.xacro')
-    doc = xacro.process_file(xacro_file)
-    robot_description_config = doc.toprettyxml(indent='  ')
-    robot_description = {'robot_description': robot_description_config}
+    description_loader = RobotDescriptionLoader()
 
     robot_description_semantic_config = load_file(
         'crane_plus_moveit_config', 'config/crane_plus.srdf')
@@ -70,7 +65,7 @@ def generate_launch_description():
                         package='crane_plus_examples',
                         executable=LaunchConfiguration('example'),
                         output='screen',
-                        parameters=[robot_description,
+                        parameters=[{'robot_description': description_loader.load()},
                                     robot_description_semantic,
                                     kinematics_yaml])
 

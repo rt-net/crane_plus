@@ -13,11 +13,12 @@
 # limitations under the License.
 
 from ament_index_python.packages import get_package_share_directory
+from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
@@ -26,17 +27,23 @@ def generate_launch_description():
         default_value='/dev/ttyUSB0',
         description='Set port name.'
     )
+
+    description_loader = RobotDescriptionLoader()
+    description_loader.port_name = LaunchConfiguration('port_name')
+    description = description_loader.load()
+
     move_group = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_moveit_config'),
                 '/launch/run_move_group.launch.py']),
+            launch_arguments={'loaded_description': description}.items()
         )
 
     control_node = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_control'),
                 '/launch/crane_plus_control.launch.py']),
-            launch_arguments={'port_name': LaunchConfiguration('port_name')}.items()
+            launch_arguments={'loaded_description': description}.items()
         )
 
     return LaunchDescription([
