@@ -44,7 +44,7 @@ def generate_launch_description():
         output='screen',
         arguments=['-topic', '/robot_description',
                    '-name', 'crane_plus',
-                   '-z', '1.02',
+                   '-z', '1.015',
                    '-allow_renaming', 'true'],
     )
 
