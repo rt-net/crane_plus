@@ -89,9 +89,9 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 - crane_plus_examples
   - [README](./crane_plus_examples/README.md)
   - CRANE+V2のサンプルコード集です
-- crane_plus_gazebo
-  - [README](./crane_plus_gazebo/README.md)
-  - CRANE+V2のGazeboシミュレーションパッケージです
+- crane_plus_ignition
+  - [README](./crane_plus_ignition/README.md)
+  - CRANE+V2のIgnition Gazeboシミュレーションパッケージです
 - crane_plus_moveit_config
   - [README](./crane_plus_moveit_config/README.md)
   - CRANE+V2の`moveit2`設定ファイルです
