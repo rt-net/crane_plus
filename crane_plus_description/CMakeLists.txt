@@ -24,7 +24,4 @@ if(BUILD_TESTING)
   ament_add_pytest_test(test_robot_description_loader test/test_robot_description_loader.py)
 endif()
 
-# Ref:https://github.com/chapulina/dolly/blob/foxy/dolly_gazebo/CMakeLists.txt
-ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/${PROJECT_NAME}.dsv.in")
-
 ament_package()
