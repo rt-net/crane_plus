@@ -17,11 +17,19 @@
             joint_4_lower_limit
             joint_4_upper_limit
             joint_hand_lower_limit
-            joint_hand_upper_limit">
+            joint_hand_upper_limit
+            use_ignition
+            ">
 
     <ros2_control name="${name}" type="system">
       <hardware>
-        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        <xacro:if value="${use_ignition}">
+          <plugin>ign_ros2_control/IgnitionSystem</plugin>
+        </xacro:if>
+
+        <xacro:unless value="${use_ignition}">
+          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </xacro:unless>
       </hardware>
 
       <joint name="${name_joint_1}">

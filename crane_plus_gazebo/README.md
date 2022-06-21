@@ -2,6 +2,11 @@
 
 CRANE+V2 のGazeboシミュレーションパッケージです。
 
+**[物体をつかめない問題](https://github.com/rt-net/crane_plus/issues/33)
+が発生しているため、
+[crane_plus_ignition](../crane_plus_ignition/README.md)
+の使用を推奨します。**
+
 ## ノードの起動
 
 次のコマンドを実行するとGazeboが起動し、CRANE+V2モデルとTableが表示されます。

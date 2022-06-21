@@ -27,11 +27,13 @@ class RobotDescriptionLoader():
             'crane_plus.urdf.xacro')
         self.port_name = '/dev/ttyUSB0'
         self.use_gazebo = 'false'
+        self.use_ignition = 'false'
 
     def load(self):
         return Command([
                 'xacro ',
                 self.robot_description_path,
                 ' port_name:=', self.port_name,
-                ' use_gazebo:=', self.use_gazebo
+                ' use_gazebo:=', self.use_gazebo,
+                ' use_ignition:=', self.use_ignition
                 ])
