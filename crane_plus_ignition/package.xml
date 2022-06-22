@@ -2,10 +2,12 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>crane_plus_ignition</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="macakasit@gmail.com">shotaak</maintainer>
-  <license>TODO: License declaration</license>
+  <version>0.1.0</version>
+  <description>CRANE+V2 ignition gazebo simulation package</description>
+  <maintainer email="shop@rt-net.jp">RT Corporation</maintainer>
+  <license>Apache License 2.0</license>
+
+  <author email="s.aoki@rt-net.jp">ShotaAk</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
