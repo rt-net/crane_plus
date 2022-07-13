@@ -1,13 +1,13 @@
 # crane_plus_control
 
 このパッケージは[ros2_control](https://github.com/ros-controls/ros2_control)
-をベースにした、CRANE+V2 のコントローラパッケージです。
+をベースにした、CRANE+ V2 のコントローラパッケージです。
 
 ## ros2_control関連ファイル
 
 - `crane_plus_control::CranePlusHardware (crane_plus_hardware)`
   - 本パッケージがエクスポートする[Hardware Components](https://ros-controls.github.io/control.ros.org/getting_started.html#hardware-components)です
-  - CRANE+V2実機と通信します
+  - CRANE+ V2実機と通信します
   - [crane_plus_description/urdf/crane_plus.ros2_control.xacro](../crane_plus_description/urdf/crane_plus.ros2_control.xacro)から読み込まれます
 - [launch/crane_plus_control.launch.py](./launch/crane_plus_control.launch.py)
   - [Controller Manager](https://ros-controls.github.io/control.ros.org/getting_started.html#controller-manager)とコントローラを起動するlaunchファイルです
@@ -16,14 +16,14 @@
 
 ## 実機のセットアップ
 
-`crane_plus_hardware`がCRANE+V2実機と通信するために、
-PCとCRANE+V2の設定が必要です。
+`crane_plus_hardware`がCRANE+ V2実機と通信するために、
+PCとCRANE+ V2の設定が必要です。
 
-**正しく設定できていない場合、CRANE+V2が動作しない、振動する、などの不安定な動きをするため注意してください**
+**正しく設定できていない場合、CRANE+ V2が動作しない、振動する、などの不安定な動きをするため注意してください**
 
 ### USB通信ポートの設定
 
-`crane_plus_hardware`はUSB通信ポート（`/dev/ttyUSB*`）を経由してCRANE+V2と通信します。
+`crane_plus_hardware`はUSB通信ポート（`/dev/ttyUSB*`）を経由してCRANE+ V2と通信します。
 
 次のコマンドでアクセス権限を変更します。
 
@@ -34,7 +34,7 @@ $ sudo chmod 666 /dev/ttyUSB0
 
 ### latency_timerの設定
 
-CRANE+V2を100 Hz周期で制御するためには、
+CRANE+ V2を100 Hz周期で制御するためには、
 USB通信ポートとサーボモータの設定を変更します。
 
 下記のコマンドを実行してUSB通信ポートの`latency_timer`を変更します。
@@ -57,7 +57,7 @@ $ sudo su
 
 ### Return Delay Timeの設定
 
-CRANE+V2に搭載されているサーボモータ[Dynamixel AX-12A](https://emanual.robotis.com/docs/en/dxl/ax/ax-12a/)
+CRANE+ V2に搭載されているサーボモータ[Dynamixel AX-12A](https://emanual.robotis.com/docs/en/dxl/ax/ax-12a/)
 には`Return Delay Time`というパラメータがあります。
 
 デフォルトは250がセットされており、
@@ -107,12 +107,12 @@ controller_manager:
 
 `update_rate`は制御周期を設定します。
 
-CRANE+V2に使用しているサーボモータの仕様により、
+CRANE+ V2に使用しているサーボモータの仕様により、
 100 Hz以上の周期で制御できません。
 
 ### コントローラ
 
-CRANE+V2の腕の制御用に`crane_plus_arm_controller`を、
+CRANE+ V2の腕の制御用に`crane_plus_arm_controller`を、
 グリッパの制御用に`crane_plus_gripper_controller`を設定しています。
 
 ## crane_plus_hardwareのパラメータ
@@ -134,11 +134,11 @@ CRANE+V2の腕の制御用に`crane_plus_arm_controller`を、
 
 ### USB通信ポート
 
-`port_name`はCRANE+V2との通信に使用するUSB通信ポートを設定します。
+`port_name`はCRANE+ V2との通信に使用するUSB通信ポートを設定します。
 
 ### ボーレート
 
-`baudrate`はCRANE+V2に搭載したDynamixelとの通信ボーレートを設定します。
+`baudrate`はCRANE+ V2に搭載したDynamixelとの通信ボーレートを設定します。
 
 デフォルト値にはDynamixel AX-12Aの最高ボーレートである`1000000` (1 Mbps)を設定しています。
 
