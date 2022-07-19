@@ -1,17 +1,17 @@
 # crane_plus_examples
 
-このパッケージはCRANE+V2 ROS 2パッケージのサンプルコード集です。
+このパッケージはCRANE+ V2 ROS 2パッケージのサンプルコード集です。
 
 ## 準備（実機を使う場合）
 
 ![crane_plus](https://rt-net.github.io/images/crane-plus/CRANEV2-500x500.png)
 
-### 1. CRANE+V2本体をPCに接続する
+### 1. CRANE+ V2本体をPCに接続する
 
-CRANE+V2本体をPCに接続します。
+CRANE+ V2本体をPCに接続します。
 接続方法は製品マニュアルを参照してください。
 
-**※CRANE+V2本体が接触しないように、十分なスペースを確保してください。**
+**※CRANE+ V2本体が接触しないように、十分なスペースを確保してください。**
 
 ### 2. USB通信ポートの接続を確認する
 
@@ -19,7 +19,7 @@ USB通信ポートの設定については`crane_plus_control`の
 [README](../crane_plus_control/README.md)
 を参照してください。
 
-**正しく設定できていない場合、CRANE+V2が動作しない、振動する、などの不安定な動きになるので注意してください**
+**正しく設定できていない場合、CRANE+ V2が動作しない、振動する、などの不安定な動きになるので注意してください**
 
 ### 3. move_groupとcontrollerを起動する
 

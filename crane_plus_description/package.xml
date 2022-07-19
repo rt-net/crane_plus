@@ -3,7 +3,7 @@
 <package format="3">
   <name>crane_plus_description</name>
   <version>1.0.0</version>
-  <description>CRANE+V2 description package</description>
+  <description>CRANE+ V2 description package</description>
   <maintainer email="shop@rt-net.jp">RT Corporation</maintainer>
   <license>Apache License 2.0</license>
 

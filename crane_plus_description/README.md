@@ -1,12 +1,12 @@
 # crane_plus_description
 
-このパッケージはCRANE+V2のモデルデータ(xacro)を所持しています。
+このパッケージはCRANE+ V2のモデルデータ(xacro)を所持しています。
 
 ## display robot model
 
 下記のコマンドを実行して、`robot_state_publisher`、`joint_state_publisher`、`rviz2`を起動します。
 
-CRANE+V2のモデルが表示されるので、xacroファイルのデバッグに役立ちます。
+CRANE+ V2のモデルが表示されるので、xacroファイルのデバッグに役立ちます。
 
 ```sh
 $ ros2 launch crane_plus_description display.launch.py
@@ -16,10 +16,10 @@ $ ros2 launch crane_plus_description display.launch.py
 
 ## configure servo angle limits
 
-CRANE+V2の実機を動かす場合は、
+CRANE+ V2の実機を動かす場合は、
 事前にサーボモータ内部の角度リミット（`CW Angle Limit`、`CCW Angle Limit`）を設定してください。
 
-CRANE+V2に搭載されているサーボモータはROBOTISのAX-12Aのため、
+CRANE+ V2に搭載されているサーボモータはROBOTISのAX-12Aのため、
 [Dynamixel Wizard 2](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/)
 を使用して角度リミットを設定できます。
 
