@@ -7,7 +7,8 @@
   <maintainer email="shop@rt-net.jp">RT Corporation</maintainer>
   <license>Apache License 2.0</license>
 
-  <author email="s.aoki@rt-net.jp">ShotaAk</author>
+  <author email="s.aoki@rt-net.jp">Shota Aoki</author>
+  <author email="kuwagata@rt-net.jp">Atsushi Kuwagata</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
