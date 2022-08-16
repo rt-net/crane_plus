@@ -36,7 +36,9 @@ ROS 2 package suite of CRANE+ V2.
 
 ### Binary installation
 
-TBD
+```sh
+$ sudo apt install ros-foxy-crane-plus
+```
 
 ### Source Build
 
