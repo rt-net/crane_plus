@@ -2,8 +2,8 @@
 Changelog for package crane_plus_gazebo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2022-08-16)
+------------------
 * Update author tags (`#49 <https://github.com/rt-net/crane_plus/issues/49>`_)
 * Rename CRANE+V2 to CRANE+ V2 (`#44 <https://github.com/rt-net/crane_plus/issues/44>`_)
 * Contributors: Shota Aoki

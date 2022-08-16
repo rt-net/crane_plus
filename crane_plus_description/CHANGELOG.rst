@@ -2,8 +2,8 @@
 Changelog for package crane_plus_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2022-08-16)
+------------------
 * Update author tags (`#49 <https://github.com/rt-net/crane_plus/issues/49>`_)
 * effort limitをサーボのカタログ値に変更 (`#46 <https://github.com/rt-net/crane_plus/issues/46>`_)
 * Rename CRANE+V2 to CRANE+ V2 (`#44 <https://github.com/rt-net/crane_plus/issues/44>`_)

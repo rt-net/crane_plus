@@ -2,8 +2,8 @@
 Changelog for package crane_plus
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2022-08-16)
+------------------
 * Update author tags (`#49 <https://github.com/rt-net/crane_plus/issues/49>`_)
 * Add crane_plus_ignition dependency (`#48 <https://github.com/rt-net/crane_plus/issues/48>`_)
 * Rename CRANE+V2 to CRANE+ V2 (`#44 <https://github.com/rt-net/crane_plus/issues/44>`_)
