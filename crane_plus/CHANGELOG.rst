@@ -2,10 +2,17 @@
 Changelog for package crane_plus
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.0 (2022-08-16)
+------------------
+* Update author tags (`#49 <https://github.com/rt-net/crane_plus/issues/49>`_)
+* Add crane_plus_ignition dependency (`#48 <https://github.com/rt-net/crane_plus/issues/48>`_)
+* Rename CRANE+V2 to CRANE+ V2 (`#44 <https://github.com/rt-net/crane_plus/issues/44>`_)
+* Contributors: Shota Aoki
+
 1.0.0 (2022-06-22)
 ------------------
 * パッケージバージョン表記の更新 (`#40 <https://github.com/rt-net/crane_plus/issues/40>`_)
-* Contributors: Kuwamai
+* Contributors: Atsushi Kuwagata
 
 0.1.0 (2020-11-11)
 ------------------

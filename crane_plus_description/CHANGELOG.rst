@@ -2,6 +2,13 @@
 Changelog for package crane_plus_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.0 (2022-08-16)
+------------------
+* Update author tags (`#49 <https://github.com/rt-net/crane_plus/issues/49>`_)
+* effort limitをサーボのカタログ値に変更 (`#46 <https://github.com/rt-net/crane_plus/issues/46>`_)
+* Rename CRANE+V2 to CRANE+ V2 (`#44 <https://github.com/rt-net/crane_plus/issues/44>`_)
+* Contributors: Atsushi Kuwagata, Shota Aoki
+
 1.0.0 (2022-06-22)
 ------------------
 * パッケージバージョン表記の更新 (`#40 <https://github.com/rt-net/crane_plus/issues/40>`_)
@@ -10,7 +17,7 @@ Changelog for package crane_plus_description
 * hardware_interfaceのパラメータをxacro引数から変更する (`#35 <https://github.com/rt-net/crane_plus/issues/35>`_)
 * Update crane_plus_gazebo (`#30 <https://github.com/rt-net/crane_plus/issues/30>`_)
 * Use new ros2 control interface (`#27 <https://github.com/rt-net/crane_plus/issues/27>`_)
-* Contributors: Kuwamai, Shota Aoki
+* Contributors: Atsushi Kuwagata, Shota Aoki
 
 0.1.0 (2020-11-11)
 ------------------
@@ -22,4 +29,4 @@ Changelog for package crane_plus_description
 * Add crane_plus_gazebo (`#5 <https://github.com/rt-net/crane_plus/issues/5>`_)
 * Update xacro (`#1 <https://github.com/rt-net/crane_plus/issues/1>`_)
 * First commit -m
-* Contributors: Shota Aoki, ShotaAk
+* Contributors: Shota Aoki

@@ -2,6 +2,12 @@
 Changelog for package crane_plus_control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.0 (2022-08-16)
+------------------
+* Update author tags (`#49 <https://github.com/rt-net/crane_plus/issues/49>`_)
+* Rename CRANE+V2 to CRANE+ V2 (`#44 <https://github.com/rt-net/crane_plus/issues/44>`_)
+* Contributors: Shota Aoki
+
 1.0.0 (2022-06-22)
 ------------------
 * パッケージバージョン表記の更新 (`#40 <https://github.com/rt-net/crane_plus/issues/40>`_)
@@ -9,7 +15,7 @@ Changelog for package crane_plus_control
 * GripperActionControllerに関するコメントを削除 (`#37 <https://github.com/rt-net/crane_plus/issues/37>`_)
 * hardware_interfaceのパラメータをxacro引数から変更する (`#35 <https://github.com/rt-net/crane_plus/issues/35>`_)
 * Use new ros2 control interface (`#27 <https://github.com/rt-net/crane_plus/issues/27>`_)
-* Contributors: Kuwamai, Shota Aoki
+* Contributors: Atsushi Kuwagata, Shota Aoki
 
 0.1.0 (2020-11-11)
 ------------------
