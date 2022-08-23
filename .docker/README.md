@@ -24,7 +24,7 @@ rockerのオプションには、
 [ネットワーク使用時のエラー](https://github.com/osrf/rocker/issues/13)
 を回避するための`--privileged`を与えます
 
-またCRANE+V2実機を動かす場合は、[crane_plus_control/README.md](../crane_plus_control/README.md)
+またCRANE+ V2実機を動かす場合は、[crane_plus_control/README.md](../crane_plus_control/README.md)
 を参考に、USB通信ポートのアクセス権限を変更してください。
 
 ```sh

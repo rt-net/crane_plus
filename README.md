@@ -2,7 +2,7 @@
 
 [![industrial_ci](https://github.com/rt-net/crane_plus/workflows/industrial_ci/badge.svg?branch=master)](https://github.com/rt-net/crane_plus/actions?query=workflow%3Aindustrial_ci+branch%3Amaster)
 
-ROS 2 package suite of CRANE+V2.
+ROS 2 package suite of CRANE+ V2.
 
 <img src=https://www.rt-shop.jp/images/RT/CRANEplusV2.png width=400px/><img src=https://rt-net.github.io/images/crane-plus/pick_and_place.gif width=400px />
 
@@ -19,7 +19,7 @@ ROS 2 package suite of CRANE+V2.
 
 ## Requirements
 
-- CRANE+V2
+- CRANE+ V2
   - [Product Introduction](https://rt-net.jp/products/cranev2/)
   - [Web Shop](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1&products_id=3626&language=ja)
 - Linux OS
@@ -36,7 +36,9 @@ ROS 2 package suite of CRANE+V2.
 
 ### Binary installation
 
-TBD
+```sh
+$ sudo apt install ros-foxy-crane-plus
+```
 
 ### Source Build
 
@@ -61,7 +63,7 @@ $ source ~/ros2_ws/install/setup.bash
 ## Quick Start
 
 ```sh
-# Connect CRANE+V2 to PC, then
+# Connect CRANE+ V2 to PC, then
 $ source ~/ros2_ws/install/setup.bash
 $ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
 
@@ -81,20 +83,20 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 - crane_plus_control
   - [README](./crane_plus_control/README.md)
-  - CRANE+V2を制御するパッケージです
+  - CRANE+ V2を制御するパッケージです
   - USB通信ポートの設定方法をREAMDEに記載してます
 - crane_plus_description
   - [README](./crane_plus_description/README.md)
-  - CRANE+V2のモデルデータ（xacro）を定義するパッケージです
+  - CRANE+ V2のモデルデータ（xacro）を定義するパッケージです
 - crane_plus_examples
   - [README](./crane_plus_examples/README.md)
-  - CRANE+V2のサンプルコード集です
+  - CRANE+ V2のサンプルコード集です
 - crane_plus_ignition
   - [README](./crane_plus_ignition/README.md)
-  - CRANE+V2のIgnition Gazeboシミュレーションパッケージです
+  - CRANE+ V2のIgnition Gazeboシミュレーションパッケージです
 - crane_plus_moveit_config
   - [README](./crane_plus_moveit_config/README.md)
-  - CRANE+V2の`moveit2`設定ファイルです
+  - CRANE+ V2の`moveit2`設定ファイルです
 
 ## License
 
@@ -102,7 +104,7 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ライセンスについては[LICENSE](./LICENSE)を参照ください。
 
 サーボモータのAX-12Aに関するCADモデルの使用については、ROBOTIS社より使用許諾を受けています。 
-CRANE+V2に使用されているROBOTIS社の部品類にかかる著作権、商標権、その他の知的財産権は、ROBOTIS社に帰属します。
+CRANE+ V2に使用されているROBOTIS社の部品類にかかる著作権、商標権、その他の知的財産権は、ROBOTIS社に帰属します。
 
 We have obtained permission from ROBOTIS Co., Ltd. to use CAD models relating to servo motors AX-12A. The proprietary rights relating to any components or parts manufactured by ROBOTIS and used in this product, including but not limited to copyrights, trademarks, and other intellectual property rights, shall remain vested in ROBOTIS.
 

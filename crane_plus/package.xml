@@ -2,12 +2,13 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>crane_plus</name>
-  <version>1.0.0</version>
-  <description>ROS 2 package suite of CRANE+V2</description>
+  <version>1.1.0</version>
+  <description>ROS 2 package suite of CRANE+ V2</description>
   <maintainer email="shop@rt-net.jp">RT Corporation</maintainer>
   <license>Apache License 2.0</license>
 
-  <author email="s.aoki@rt-net.jp">ShotaAk</author>
+  <author email="s.aoki@rt-net.jp">Shota Aoki</author>
+  <author email="kuwagata@rt-net.jp">Atsushi Kuwagata</author>
 
   <url type="website">https://rt-net.jp/products/cranev2/</url>
   <url type="bugtracker">https://github.com/rt-net/crane_plus/issues</url>
@@ -19,6 +20,7 @@
   <exec_depend>crane_plus_description</exec_depend>
   <exec_depend>crane_plus_examples</exec_depend>
   <exec_depend>crane_plus_gazebo</exec_depend>
+  <exec_depend>crane_plus_ignition</exec_depend>
   <exec_depend>crane_plus_moveit_config</exec_depend>
 
   <export>

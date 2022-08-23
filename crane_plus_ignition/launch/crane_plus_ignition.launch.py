@@ -30,9 +30,11 @@ def generate_launch_description():
                get_package_share_directory('crane_plus_description'))}
     world_file = os.path.join(
         get_package_share_directory('crane_plus_ignition'), 'worlds', 'table.sdf')
+    gui_config = os.path.join(
+        get_package_share_directory('crane_plus_ignition'), 'gui', 'gui.config')
     # -r オプションで起動時にシミュレーションをスタートしないと、コントローラが起動しない
     ign_gazebo = ExecuteProcess(
-            cmd=['ign gazebo -r', world_file],
+            cmd=['ign gazebo -r', world_file, '--gui-config', gui_config],
             output='screen',
             additional_env=env,
             shell=True

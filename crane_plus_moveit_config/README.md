@@ -1,6 +1,6 @@
 # crane_plus_moveit_config
 
-このパッケージはCRANE+V2のmove_group設定ファイル及びlaunchファイルを含んでいます。
+このパッケージはCRANE+ V2のmove_group設定ファイル及びlaunchファイルを含んでいます。
 
 [ros-planning/moveit2/moveit_demo_nodes/run_move_group](https://github.com/ros-planning/moveit2/tree/main/moveit_demo_nodes/run_move_group)
 を参考にパッケージを作成しています。
@@ -9,7 +9,7 @@
 
 `run_move_group.launch.py`を実行すると、`move_group`や`rviz`等のノードが起動します。
 コントローラノードは起動しないため、
-CRANE+V2本体を動かすことはできません。(`crane_plus_examples`を参照してください。)
+CRANE+ V2本体を動かすことはできません。(`crane_plus_examples`を参照してください。)
 
 ## configファイル
 
