@@ -12,6 +12,12 @@ CRANE+ V2のモデルが表示されるので、xacroファイルのデバッグ
 $ ros2 launch crane_plus_description display.launch.py
 ```
 
+Webカメラ搭載モデルの場合は、下記のコマンドを実行してください。
+
+```sh
+$ ros2 launch crane_plus_description display.launch.py use_camera:=true
+```
+
 ![display.launch.py](https://rt-net.github.io/images/crane-plus/display_launch.png)
 
 ## configure servo angle limits

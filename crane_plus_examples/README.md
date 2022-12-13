@@ -30,6 +30,12 @@ controller (`crane_plus_control`)を起動します。
 $ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
 ```
 
+Webカメラ搭載モデルの場合は、次のコマンドを実行してください。
+
+```sh
+$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0 use_camera:=true
+```
+
 ## 準備（Ignition Gazeboを使う場合）
 
 ![crane_plus_ignition](https://rt-net.github.io/images/crane-plus/crane_plus_ignition.png)
