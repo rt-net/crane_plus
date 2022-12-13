@@ -28,8 +28,15 @@ def generate_launch_description():
         description='Set port name.'
     )
 
+    declare_use_camera = DeclareLaunchArgument(
+        'use_camera',
+        default_value='false',
+        description='Use camera.'
+    )
+
     description_loader = RobotDescriptionLoader()
     description_loader.port_name = LaunchConfiguration('port_name')
+    description_loader.use_camera = LaunchConfiguration('use_camera')
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
@@ -48,6 +55,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_port_name,
+        declare_use_camera,
         move_group,
         control_node
     ])
