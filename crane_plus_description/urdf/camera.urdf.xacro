@@ -3,6 +3,8 @@
 
   <xacro:macro name="sensor_camera" params="parent">
 
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
     <link name="camera_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -12,11 +14,24 @@
 	<material name="Black" />
       </visual>
     </link>
-
     <joint name="camera_joint" type="fixed">
       <origin xyz="0.1030 0.1025 0.4600" rpy="0 0 0" />
       <parent link="${parent}" />
       <child link="camera_link" />
+    </joint>
+
+    <link name="camera_color_frame" />
+    <joint name="camera_color_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="camera_link" />
+      <child link="camera_color_frame" />
+    </joint>
+
+    <link name="camera_color_optical_frame" />
+    <joint name="camera_color_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 ${M_PI} ${M_PI/2}" />
+      <parent link="camera_color_frame" />
+      <child link="camera_color_optical_frame" />
     </joint>
 
   </xacro:macro>
