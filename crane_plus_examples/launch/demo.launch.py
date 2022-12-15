@@ -17,6 +17,7 @@ from crane_plus_description.robot_description_loader import RobotDescriptionLoad
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
@@ -53,9 +54,17 @@ def generate_launch_description():
             launch_arguments={'loaded_description': description}.items()
         )
 
+    usb_cam_node = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                get_package_share_directory('usb_cam'),
+                '/launch/demo_launch.py']),
+            condition=IfCondition(LaunchConfiguration('use_camera')),
+        )
+
     return LaunchDescription([
         declare_port_name,
         declare_use_camera,
         move_group,
-        control_node
+        control_node,
+        usb_cam_node
     ])
