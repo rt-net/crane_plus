@@ -31,9 +31,10 @@ $ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
 ```
 
 Webカメラ搭載モデルの場合は、次のコマンドを実行してください。
+```video_device```は使用するWebカメラを指定してください。
 
 ```sh
-$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0 use_camera:=true
+$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0 use_camera:=true video_device:=/dev/video0
 ```
 
 ## 準備（Ignition Gazeboを使う場合）
