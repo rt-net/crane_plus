@@ -9,8 +9,8 @@
         <geometry>
           <box size="0.02 0.02 0.285" />
         </geometry>
-	<material name="grey">
-	  <color rgba="0.8 0.8 0.8 1.0" />
+        <material name="grey">
+          <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
     </link>
@@ -26,8 +26,8 @@
         <geometry>
           <box size="0.02 0.02 0.44" />
         </geometry>
-	<material name="grey">
-	  <color rgba="0.8 0.8 0.8 1.0" />
+        <material name="grey">
+          <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
     </link>
@@ -43,8 +43,8 @@
         <geometry>
           <box size="0.02 0.02 0.13" />
         </geometry>
-	<material name="grey">
-	  <color rgba="0.8 0.8 0.8 1.0" />
+        <material name="grey">
+          <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
     </link>
@@ -60,8 +60,8 @@
         <geometry>
           <box size="0.02 0.02 0.13" />
         </geometry>
-	<material name="grey">
-	  <color rgba="0.8 0.8 0.8 1.0" />
+        <material name="grey">
+          <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
     </link>
@@ -77,8 +77,8 @@
         <geometry>
           <box size="0.02 0.02 0.13" />
         </geometry>
-	<material name="grey">
-	  <color rgba="0.8 0.8 0.8 1.0" />
+        <material name="grey">
+          <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
     </link>
@@ -94,8 +94,8 @@
         <geometry>
           <box size="0.02 0.02 0.13" />
         </geometry>
-	<material name="grey">
-	  <color rgba="0.8 0.8 0.8 1.0" />
+        <material name="grey">
+          <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
     </link>

@@ -63,7 +63,7 @@
               joint_4_upper_limit
               joint_hand_lower_limit
               joint_hand_upper_limit
-	      use_camera
+              use_camera
               *origin">
 
     <joint name="${name_joint_base}" type="fixed">
