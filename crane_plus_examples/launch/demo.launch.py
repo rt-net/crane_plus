@@ -17,8 +17,10 @@ from crane_plus_description.robot_description_loader import RobotDescriptionLoad
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 
 
 def generate_launch_description():
@@ -28,8 +30,21 @@ def generate_launch_description():
         description='Set port name.'
     )
 
+    declare_use_camera = DeclareLaunchArgument(
+        'use_camera',
+        default_value='false',
+        description='Use camera.'
+    )
+
+    declare_video_device = DeclareLaunchArgument(
+        'video_device',
+        default_value='/dev/video0',
+        description='Set video device.'
+    )
+
     description_loader = RobotDescriptionLoader()
     description_loader.port_name = LaunchConfiguration('port_name')
+    description_loader.use_camera = LaunchConfiguration('use_camera')
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
@@ -46,8 +61,21 @@ def generate_launch_description():
             launch_arguments={'loaded_description': description}.items()
         )
 
+    usb_cam_node = Node(
+            package='usb_cam',
+            executable='usb_cam_node_exe',
+            parameters=[
+                {'video_device': LaunchConfiguration('video_device')},
+                {'frame_id': 'camera_color_optical_frame'}
+            ],
+            condition=IfCondition(LaunchConfiguration('use_camera'))
+        )
+
     return LaunchDescription([
         declare_port_name,
+        declare_use_camera,
+        declare_video_device,
         move_group,
-        control_node
+        control_node,
+        usb_cam_node
     ])
