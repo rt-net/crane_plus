@@ -22,11 +22,13 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+
     declare_use_camera = DeclareLaunchArgument(
             'use_camera',
             default_value='false',
             description='Set true to attach the camera model.'
     )
+
     description_loader = RobotDescriptionLoader()
     description_loader.use_camera = LaunchConfiguration('use_camera')
 

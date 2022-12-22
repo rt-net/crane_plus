@@ -24,6 +24,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+
     declare_port_name = DeclareLaunchArgument(
         'port_name',
         default_value='/dev/ttyUSB0',
@@ -45,7 +46,6 @@ def generate_launch_description():
     description_loader = RobotDescriptionLoader()
     description_loader.port_name = LaunchConfiguration('port_name')
     description_loader.use_camera = LaunchConfiguration('use_camera')
-    description_loader.video_device = LaunchConfiguration('video_device')
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
@@ -66,7 +66,7 @@ def generate_launch_description():
             package='usb_cam',
             executable='usb_cam_node_exe',
             parameters=[
-                {'video_device': description_loader.video_device},
+                {'video_device': LaunchConfiguration('video_device')},
                 {'frame_id': 'camera_color_optical_frame'}
             ],
             condition=IfCondition(LaunchConfiguration('use_camera'))

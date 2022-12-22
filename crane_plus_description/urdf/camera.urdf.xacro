@@ -12,6 +12,7 @@
         <material name="Black" />
       </visual>
     </link>
+
     <joint name="camera_joint" type="fixed">
       <origin xyz="0.1030 0.1025 0.4600" rpy="0 0 0" />
       <parent link="${parent}" />
@@ -19,6 +20,7 @@
     </joint>
 
     <link name="camera_color_frame" />
+
     <joint name="camera_color_joint" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="camera_link" />
@@ -26,6 +28,7 @@
     </joint>
 
     <link name="camera_color_optical_frame" />
+
     <joint name="camera_color_optical_joint" type="fixed">
       <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(90)}" />
       <parent link="camera_color_frame" />
