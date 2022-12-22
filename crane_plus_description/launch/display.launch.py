@@ -22,7 +22,6 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-
     declare_use_camera = DeclareLaunchArgument(
             'use_camera',
             default_value='false',

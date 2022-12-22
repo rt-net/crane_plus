@@ -24,7 +24,6 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-
     declare_port_name = DeclareLaunchArgument(
         'port_name',
         default_value='/dev/ttyUSB0',
