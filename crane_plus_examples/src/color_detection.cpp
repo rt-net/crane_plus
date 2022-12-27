@@ -45,11 +45,11 @@ class ImageSubscriber : public rclcpp::Node
 
     // 1ピクセルあたりの距離（メートル）
     // 適当にメジャーで計測
-    double mppX = 0.60 / 640;
-    double mppY = 0.44 / 480;
+    double mppX = 0.60 / 640; // 0.60
+    double mppY = 0.44 / 480; // 0.44
 
-    int posX = -1;
-    int posY = -1;
+    int posX = 0;
+    int posY = 0;
     double X = 0;
     double Y = 0;
     double Z = 0.46; // 決め打ち
