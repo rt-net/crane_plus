@@ -66,11 +66,27 @@ private:
     auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
     cv::cvtColor(cv_img->image, cv_img->image, cv::COLOR_RGB2HSV);
     cv::Mat img_thresholded;
-    cv::inRange(cv_img->image, cv::Scalar(low_h, low_s, low_v), cv::Scalar(high_h, high_s, high_v), img_thresholded);
-    erode(img_thresholded, img_thresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    dilate(img_thresholded, img_thresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    dilate(img_thresholded, img_thresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    erode(img_thresholded, img_thresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+    cv::inRange(
+      cv_img->image,
+      cv::Scalar(low_h, low_s, low_v),
+      cv::Scalar(high_h, high_s, high_v),
+      img_thresholded);
+    erode(
+      img_thresholded,
+      img_thresholded,
+      cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+    dilate(
+      img_thresholded,
+      img_thresholded,
+      cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+    dilate(
+      img_thresholded,
+      img_thresholded,
+      cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+    erode(
+      img_thresholded,
+      img_thresholded,
+      cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
     cv::Moments moment = moments(img_thresholded);
     double d_m01 = moment.m01;
     double d_m10 = moment.m10;
