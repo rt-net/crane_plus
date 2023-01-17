@@ -52,75 +52,67 @@ public:
 private:
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription_;
   rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_subscription_;
-  sensor_msgs::msg::CameraInfo::SharedPtr camera_info;
+  sensor_msgs::msg::CameraInfo::SharedPtr camera_info_;
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
   // 環境に合わせて調整
-  int lowH = 150, highH = 200;
-  int lowS = 100, highS = 255;
-  int lowV = 30, highV = 255;
+  int low_h = 150, high_h = 200;
+  int low_s = 100, high_s = 255;
+  int low_v = 30, high_v = 255;
 
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
   {
     // OpenCVによる色検出
     auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
     cv::cvtColor(cv_img->image, cv_img->image, cv::COLOR_RGB2HSV);
-    cv::Mat imageCopy;
-    cv_img->image.copyTo(imageCopy);
-    cv::Mat imageT;
-    cv::inRange(imageCopy, cv::Scalar(lowH, lowS, lowV), cv::Scalar(highH, highS, highV), imageT);
-    erode(imageT, imageT, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    dilate(imageT, imageT, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    dilate(imageT, imageT, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    erode(imageT, imageT, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    cv::Moments oMoments = moments(imageT);
-    double dM01 = oMoments.m01;
-    double dM10 = oMoments.m10;
-    double dArea = oMoments.m00;
+    cv::Mat img_thresholded;
+    cv::inRange(cv_img->image, cv::Scalar(low_h, low_s, low_v), cv::Scalar(high_h, high_s, high_v), img_thresholded);
+    erode(img_thresholded, img_thresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+    dilate(img_thresholded, img_thresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+    dilate(img_thresholded, img_thresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+    erode(img_thresholded, img_thresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+    cv::Moments moment = moments(img_thresholded);
+    double d_m01 = moment.m01;
+    double d_m10 = moment.m10;
+    double d_area = moment.m00;
 
-    if (dArea > 10000) {
+    if (d_area > 10000) {
       // カメラモデル作成
-      image_geometry::PinholeCameraModel cam_model;
-      cam_model.fromCameraInfo(camera_info);
+      image_geometry::PinholeCameraModel camera_model;
 
-      // 画像中の把持対象物の位置（2D）
-      const double x = dM10 / dArea;
-      const double y = dM01 / dArea;
-      const cv::Point2d pt(x, y);
+      // カメラのパラメータを設定
+      camera_model.fromCameraInfo(camera_info_);
+
+      // 画像中の把持対象物の位置（2D、ピクセル）
+      const double pixel_x = d_m10 / d_area;
+      const double pixel_y = d_m01 / d_area;
+      const cv::Point2d point(pixel_x, pixel_y);
 
       // 補正後のカメラ画像における位置を取得（2D）
-      const cv::Point2d rect_pt = cam_model.rectifyPoint(pt);
+      const cv::Point2d rect_point = camera_model.rectifyPoint(point);
 
       // 画像における位置（2D）をカメラ座標系における位置（3D）に変換
-      const cv::Point3d ray = cam_model.projectPixelTo3dRay(rect_pt);
+      const cv::Point3d ray = camera_model.projectPixelTo3dRay(rect_point);
 
-      // 高さ1.0mを高さ0.46mとして計算
-      const double h = 0.46;
-      cv::Point3d r(ray.x * h, ray.y * h, ray.z * h);
-
-      // デバッグ用の出力
-      std::cout << "X : " << r.x << std::endl;
-      std::cout << "Y : " << r.y << std::endl;
-      std::cout << "Z : " << r.z << std::endl;
+      // 高さ1.0[m]を高さcamera_height[m]として計算
+      const double camera_height = 0.44;
+      cv::Point3d ray_after(ray.x * camera_height, ray.y * camera_height, ray.z * camera_height);
 
       // 把持対象物の位置をTFに配信
       geometry_msgs::msg::TransformStamped t;
       t.header.stamp = this->get_clock()->now();
       t.header.frame_id = "camera_color_optical_frame";
       t.child_frame_id = "target";
-      t.transform.translation.x = r.x;
-      t.transform.translation.y = r.y;
-      t.transform.translation.z = r.z;
+      t.transform.translation.x = ray_after.x;
+      t.transform.translation.y = ray_after.y;
+      t.transform.translation.z = ray_after.z;
       tf_broadcaster_->sendTransform(t);
     }
-
-    cv::imshow("out", imageT);
-    cv::waitKey(1);
   }
 
   void camera_info_callback(const sensor_msgs::msg::CameraInfo::SharedPtr msg)
   {
-    camera_info = msg;
+    camera_info_ = msg;
   }
 };
 
