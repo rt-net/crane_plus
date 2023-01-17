@@ -23,6 +23,7 @@ find_package(moveit_ros_planning_interface REQUIRED)
 find_package(OpenCV REQUIRED COMPONENTS core highgui)
 find_package(rclcpp REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
+find_package(image_geometry REQUIRED)
 
 # Build and install node executables
 set(executable_list
@@ -42,6 +43,7 @@ foreach(loop_var IN LISTS executable_list)
     OpenCV
     rclcpp
     tf2_geometry_msgs
+    image_geometry
   )
 
   install(TARGETS

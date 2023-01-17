@@ -30,6 +30,7 @@
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "tf2_ros/transform_broadcaster.h"
+#include "image_geometry/pinhole_camera_model.h"
 using std::placeholders::_1;
 
 class ImageSubscriber : public rclcpp::Node
@@ -55,26 +56,9 @@ private:
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
   // 環境に合わせて調整
-  int lowH = 150;
-  int highH = 200;
-  int lowS = 100;
-  int highS = 255;
-  int lowV = 30;
-  int highV = 255;
-
-  // 1ピクセルあたりの距離（メートル）
-  // 適当にメジャーで計測
-  double mppX = 0.60 / 640;
-  double mppY = 0.44 / 480;
-
-  // 画像中の把持対象物の位置
-  int posX = 0;
-  int posY = 0;
-
-  // カメラ座標系における把持対象物の位置
-  double X = 0;
-  double Y = 0;
-  double Z = 0.46;  // 決め打ち
+  int lowH = 150, highH = 200;
+  int lowS = 100, highS = 255;
+  int lowV = 30, highV = 255;
 
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
   {
@@ -95,32 +79,38 @@ private:
     double dArea = oMoments.m00;
 
     if (dArea > 10000) {
-      // 把持対象物の位置を算出
-      posX = dM10 / dArea;
-      posY = dM01 / dArea;
-      posX -= imageT.cols / 2;  // 原点の調整
-      posY -= imageT.rows / 2;  // 原点の調整
-      X = posX * mppX;
-      Y = posY * mppY;
+      // カメラモデル作成
+      image_geometry::PinholeCameraModel cam_model;
+      cam_model.fromCameraInfo(camera_info);
+
+      // 画像中の把持対象物の位置（2D）
+      const double x = dM10 / dArea;
+      const double y = dM01 / dArea;
+      const cv::Point2d pt(x, y);
+
+      // 補正後のカメラ画像における位置を取得（2D）
+      const cv::Point2d rect_pt = cam_model.rectifyPoint(pt);
+
+      // 画像における位置（2D）をカメラ座標系における位置（3D）に変換
+      const cv::Point3d ray = cam_model.projectPixelTo3dRay(rect_pt);
+
+      // 高さ1.0mを高さ0.46mとして計算
+      const double h = 0.46;
+      cv::Point3d r(ray.x * h, ray.y * h, ray.z * h);
 
       // デバッグ用の出力
-      std::cout << std::fixed;
-      std::cout << "X : ";
-      std::cout << std::setprecision(3) << X;
-      std::cout << ", Y : ";
-      std::cout << std::setprecision(3) << Y;
-      std::cout << ", Z : ";
-      std::cout << std::setprecision(3) << Z;
-      std::cout << std::endl;
+      std::cout << "X : " << r.x << std::endl;
+      std::cout << "Y : " << r.y << std::endl;
+      std::cout << "Z : " << r.z << std::endl;
 
       // 把持対象物の位置をTFに配信
       geometry_msgs::msg::TransformStamped t;
       t.header.stamp = this->get_clock()->now();
       t.header.frame_id = "camera_color_optical_frame";
       t.child_frame_id = "target";
-      t.transform.translation.x = X;
-      t.transform.translation.y = Y;
-      t.transform.translation.z = Z;
+      t.transform.translation.x = r.x;
+      t.transform.translation.y = r.y;
+      t.transform.translation.z = r.z;
       tf_broadcaster_->sendTransform(t);
     }
 
