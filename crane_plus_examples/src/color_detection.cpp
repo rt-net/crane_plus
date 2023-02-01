@@ -55,74 +55,81 @@ private:
   sensor_msgs::msg::CameraInfo::SharedPtr camera_info_;
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
-  // 環境に合わせて調整
-  int low_h = 150, high_h = 200;
-  int low_s = 100, high_s = 255;
-  int low_v = 30, high_v = 255;
-
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
   {
-    // OpenCVによる色検出
-    auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
-    cv::cvtColor(cv_img->image, cv_img->image, cv::COLOR_RGB2HSV);
-    cv::Mat img_thresholded;
-    cv::inRange(
-      cv_img->image,
-      cv::Scalar(low_h, low_s, low_v),
-      cv::Scalar(high_h, high_s, high_v),
-      img_thresholded);
-    erode(
-      img_thresholded,
-      img_thresholded,
-      cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    dilate(
-      img_thresholded,
-      img_thresholded,
-      cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    dilate(
-      img_thresholded,
-      img_thresholded,
-      cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    erode(
-      img_thresholded,
-      img_thresholded,
-      cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-    cv::Moments moment = moments(img_thresholded);
-    double d_m01 = moment.m01;
-    double d_m10 = moment.m10;
-    double d_area = moment.m00;
+    // カメラのパラメータを取得してから処理を行う
+    if(camera_info_) {
+      // 赤い物体を認識するようにHSVの範囲を設定
+      // 周囲の明るさ等の動作環境に合わせて調整
+      const int low_h = 150, high_h = 200;
+      const int low_s = 100, high_s = 255;
+      const int low_v = 30, high_v = 255;
 
-    if (d_area > 10000) {
-      // カメラモデル作成
-      image_geometry::PinholeCameraModel camera_model;
+      // OpenCVによる色検出
+      auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
+      cv::cvtColor(cv_img->image, cv_img->image, cv::COLOR_RGB2HSV);
+      cv::Mat img_thresholded;
+      cv::inRange(
+        cv_img->image,
+        cv::Scalar(low_h, low_s, low_v),
+        cv::Scalar(high_h, high_s, high_v),
+        img_thresholded);
+      erode(
+        img_thresholded,
+        img_thresholded,
+        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+      dilate(
+        img_thresholded,
+        img_thresholded,
+        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+      dilate(
+        img_thresholded,
+        img_thresholded,
+        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+      erode(
+        img_thresholded,
+        img_thresholded,
+        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
 
-      // カメラのパラメータを設定
-      camera_model.fromCameraInfo(camera_info_);
+      // 画像の検出領域のモーメントを計算
+      cv::Moments moment = moments(img_thresholded);
+      double d_m01 = moment.m01;
+      double d_m10 = moment.m10;
+      double d_area = moment.m00;
 
-      // 画像中の把持対象物の位置（2D、ピクセル）
-      const double pixel_x = d_m10 / d_area;
-      const double pixel_y = d_m01 / d_area;
-      const cv::Point2d point(pixel_x, pixel_y);
+      // 検出した領域のピクセル数が10000より大きい場合
+      if (d_area > 10000) {
+        // カメラモデル作成
+        image_geometry::PinholeCameraModel camera_model;
 
-      // 補正後のカメラ画像における位置を取得（2D）
-      const cv::Point2d rect_point = camera_model.rectifyPoint(point);
+        // カメラのパラメータを設定
+        camera_model.fromCameraInfo(camera_info_);
 
-      // 画像における位置（2D）をカメラ座標系における位置（3D）に変換
-      const cv::Point3d ray = camera_model.projectPixelTo3dRay(rect_point);
+        // 画像座標系における把持対象物の位置（2D）
+        const double pixel_x = d_m10 / d_area;
+        const double pixel_y = d_m01 / d_area;
+        const cv::Point2d point(pixel_x, pixel_y);
 
-      // 高さ1.0[m]を高さcamera_height[m]として計算
-      const double camera_height = 0.44;
-      cv::Point3d ray_after(ray.x * camera_height, ray.y * camera_height, ray.z * camera_height);
+        // 補正後の画像座標系における位置を取得（2D）
+        const cv::Point2d rect_point = camera_model.rectifyPoint(point);
 
-      // 把持対象物の位置をTFに配信
-      geometry_msgs::msg::TransformStamped t;
-      t.header.stamp = this->get_clock()->now();
-      t.header.frame_id = "camera_color_optical_frame";
-      t.child_frame_id = "target";
-      t.transform.translation.x = ray_after.x;
-      t.transform.translation.y = ray_after.y;
-      t.transform.translation.z = ray_after.z;
-      tf_broadcaster_->sendTransform(t);
+        // 画像座標系における位置（2D）をカメラ座標系における位置（3D）に変換
+        const cv::Point3d ray = camera_model.projectPixelTo3dRay(rect_point);
+
+        // カメラの高さを0.44[m]として把持対象物の位置を計算
+        const double camera_height = 0.44;
+        cv::Point3d ray_after(ray.x * camera_height, ray.y * camera_height, ray.z * camera_height);
+
+        // 把持対象物の位置をTFに配信
+        geometry_msgs::msg::TransformStamped t;
+        t.header.stamp = this->get_clock()->now();
+        t.header.frame_id = "camera_color_optical_frame";
+        t.child_frame_id = "target";
+        t.transform.translation.x = ray_after.x;
+        t.transform.translation.y = ray_after.y;
+        t.transform.translation.z = ray_after.z;
+        tf_broadcaster_->sendTransform(t);
+      }
     }
   }
 
