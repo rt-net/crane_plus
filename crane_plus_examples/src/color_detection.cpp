@@ -58,7 +58,7 @@ private:
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
   {
     // カメラのパラメータを取得してから処理を行う
-    if(camera_info_) {
+    if (camera_info_) {
       // 赤い物体を認識するようにHSVの範囲を設定
       // 周囲の明るさ等の動作環境に合わせて調整
       const int low_h = 150, high_h = 200;
@@ -114,10 +114,10 @@ private:
         const double pixel_y = d_m01 / d_area;
         const cv::Point2d point(pixel_x, pixel_y);
 
-        // 補正後の画像座標系における位置を取得（2D）
+        // 補正後の画像座標系における把持対象物の位置を取得（2D）
         const cv::Point2d rect_point = camera_model.rectifyPoint(point);
 
-        // 画像座標系における位置（2D）をカメラ座標系における位置（3D）に変換
+        // 画像座標系における把持対象物の位置（2D）をカメラ座標系における位置（3D）に変換
         const cv::Point3d ray = camera_model.projectPixelTo3dRay(rect_point);
 
         // カメラの高さを0.44[m]として把持対象物の位置を計算
