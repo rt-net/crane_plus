@@ -65,33 +65,37 @@ private:
       const int low_s = 100, high_s = 255;
       const int low_v = 30, high_v = 255;
 
-      // OpenCVによる色検出
+      // ウェブカメラの画像を受け取る
       auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
+
+      // 画像をRGBからHSVに変換
       cv::cvtColor(cv_img->image, cv_img->image, cv::COLOR_RGB2HSV);
+
+      // 画像処理用の変数を用意
       cv::Mat img_thresholded;
+
+      // 画像の二値化
       cv::inRange(
         cv_img->image,
         cv::Scalar(low_h, low_s, low_v),
         cv::Scalar(high_h, high_s, high_v),
         img_thresholded);
-      erode(
+
+      // ノイズ除去の処理
+      cv::morphologyEx(
         img_thresholded,
         img_thresholded,
-        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-      dilate(
-        img_thresholded,
-        img_thresholded,
-        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-      dilate(
-        img_thresholded,
-        img_thresholded,
-        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-      erode(
-        img_thresholded,
-        img_thresholded,
+        cv::MORPH_OPEN,
         cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
 
-      // 画像の検出領域のモーメントを計算
+      // 穴埋めの処理
+      cv::morphologyEx(
+        img_thresholded,
+        img_thresholded,
+        cv::MORPH_CLOSE,
+        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+
+      // 画像の検出領域におけるモーメントを計算
       cv::Moments moment = moments(img_thresholded);
       double d_m01 = moment.m01;
       double d_m10 = moment.m10;
