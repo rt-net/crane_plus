@@ -19,12 +19,12 @@
 #include <iostream>
 #include <iomanip>
 #include <memory>
+
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "sensor_msgs/msg/camera_info.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "opencv2/opencv.hpp"
-#include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "cv_bridge/cv_bridge.h"
 #include "tf2/LinearMath/Quaternion.h"
