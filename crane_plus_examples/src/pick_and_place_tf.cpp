@@ -93,7 +93,7 @@ private:
 
     try {
       tf_msg = tf_buffer_->lookupTransform(
-        "base_link", "target",
+        "base_link", "target_0",
         tf2::TimePointZero);
     } catch (const tf2::TransformException & ex) {
       RCLCPP_INFO(
