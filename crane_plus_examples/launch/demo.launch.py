@@ -18,10 +18,10 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition
+from launch.conditions import UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-
 
 def generate_launch_description():
     declare_port_name = DeclareLaunchArgument(
@@ -51,7 +51,23 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_moveit_config'),
                 '/launch/run_move_group.launch.py']),
-            launch_arguments={'loaded_description': description}.items()
+            condition=UnlessCondition(LaunchConfiguration('use_camera')),
+            launch_arguments={
+                'loaded_description': description
+            }.items()
+        )
+
+    rviz_config_file = get_package_share_directory(
+        'crane_plus_examples') + '/launch/camera_example.rviz'
+    move_group_camera = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                get_package_share_directory('crane_plus_moveit_config'),
+                '/launch/run_move_group.launch.py']),
+            condition=IfCondition(LaunchConfiguration('use_camera')),
+            launch_arguments={
+                'loaded_description': description,
+                'rviz_config_file': rviz_config_file
+            }.items()
         )
 
     control_node = IncludeLaunchDescription(
@@ -76,6 +92,7 @@ def generate_launch_description():
         declare_use_camera,
         declare_video_device,
         move_group,
+        move_group_camera,
         control_node,
         usb_cam_node
     ])
