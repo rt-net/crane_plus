@@ -88,7 +88,7 @@ public:
 private:
   void on_timer()
   {
-    // 把持物体の位置を取得
+    // ID 0のマーカ位置姿勢を取得
     geometry_msgs::msg::TransformStamped tf_msg;
 
     try {
@@ -102,21 +102,22 @@ private:
       return;
     }
 
-    rclcpp::Clock system_clock(RCL_SYSTEM_TIME);
-    rclcpp::Time now = system_clock.now();
-    std::chrono::nanoseconds filtering_time = 1s;
-    std::chrono::nanoseconds rest_time = 3s;
+    rclcpp::Time now = this->get_clock()->now();
+    const std::chrono::nanoseconds FILTERING_TIME = 1s;
+    const std::chrono::nanoseconds STOP_TIME_THRESHOLD = 3s;
+    const float DISTANCE_THRESHOLD = 0.01;
     tf2::Stamped<tf2::Transform> tf;
     tf2::convert(tf_msg, tf);
+    const auto TF_ELAPSED_TIME = now.nanoseconds() - tf.stamp_.time_since_epoch().count();
+    const auto TF_STOP_TIME = now.nanoseconds() - tf_past_.stamp_.time_since_epoch().count();
 
     // 現在時刻から1秒以内に受け取ったtfを使用
-    if ((now.nanoseconds() - tf.stamp_.time_since_epoch().count()) < filtering_time.count()) {
+    if (TF_ELAPSED_TIME < FILTERING_TIME.count()) {
       double tf_diff = (tf_past_.getOrigin() - tf.getOrigin()).length();
-
-      // 把持物体の位置が止まっていることを判定
-      if (tf_diff < 0.01) {
-        // 3秒以上停止している場合ピッキング動作開始
-        if ((now.nanoseconds() - tf_past_.stamp_.time_since_epoch().count()) > rest_time.count()) {
+      // 把持対象の位置が停止していることを判定
+      if (tf_diff < DISTANCE_THRESHOLD) {
+        // 把持対象が3秒以上停止している場合ピッキング動作開始
+        if (TF_STOP_TIME > STOP_TIME_THRESHOLD.count()) {
           picking(tf.getOrigin());
         }
       } else {
@@ -127,35 +128,36 @@ private:
 
   void picking(tf2::Vector3 target_position)
   {
-    const double GRIPPER_DEFAULT_ = 0.0;
-    const double GRIPPER_OPEN_ = angles::from_degrees(-30.0);
-    const double GRIPPER_CLOSE_ = angles::from_degrees(10.0);
+    const double GRIPPER_DEFAULT = 0.0;
+    const double GRIPPER_OPEN = angles::from_degrees(-30.0);
+    const double GRIPPER_CLOSE = angles::from_degrees(10.0);
 
     // 何かを掴んでいた時のためにハンドを開閉
-    control_gripper(GRIPPER_OPEN_);
-    control_gripper(GRIPPER_DEFAULT_);
+    control_gripper(GRIPPER_OPEN);
+    control_gripper(GRIPPER_DEFAULT);
 
+    // ロボット座標系（2D）の原点から見た把持対象物への角度を計算
     double x = target_position.x();
     double y = target_position.y();
-    double t = std::atan2(y, x) * 180.0 / 3.1415926535;
-
-    std::cout << "x : " << x << " y : " << y << std::endl;
-    std::cout << "t : " << t << std::endl;
+    double theta = std::atan2(y, x) * 180.0 / 3.1415926535;
 
     // 掴む準備をする
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
 
     // ハンドを開く
-    control_gripper(GRIPPER_OPEN_);
+    control_gripper(GRIPPER_OPEN);
+
+    // 手先を把持対象物の真上に移動
+    control_arm(0.0, 0.0, 0.17, 0, 90, theta);
 
     // 掴みに行く
-    control_arm(x, y, 0.14, 0, 180, t);
+    control_arm(x, y, 0.14, 0, 180, theta);
 
     // ハンドを閉じる
-    control_gripper(GRIPPER_CLOSE_);
+    control_gripper(GRIPPER_CLOSE);
 
     // 持ち上げる
-    control_arm(x, y, 0.17, 0, 180, t);
+    control_arm(x, y, 0.17, 0, 180, theta);
 
     // 移動する
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
@@ -164,7 +166,7 @@ private:
     control_arm(0.15, 0.0, 0.06, 0, 90, 0);
 
     // ハンドを開く
-    control_gripper(GRIPPER_OPEN_);
+    control_gripper(GRIPPER_OPEN);
 
     // 少しだけハンドを持ち上げる
     control_arm(0.13, 0.0, 0.10, 0, 90, 0);
@@ -173,7 +175,7 @@ private:
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
 
     // ハンドを閉じる
-    control_gripper(GRIPPER_DEFAULT_);
+    control_gripper(GRIPPER_DEFAULT);
   }
 
   void control_gripper(const double angle)
