@@ -24,7 +24,6 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
-
 def generate_launch_description():
     declare_port_name = DeclareLaunchArgument(
         'port_name',
