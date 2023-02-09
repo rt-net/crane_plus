@@ -178,6 +178,7 @@ private:
     control_gripper(GRIPPER_DEFAULT);
   }
 
+  // グリッパ制御
   void control_gripper(const double angle)
   {
     auto joint_values = move_group_gripper_->getCurrentJointValues();
