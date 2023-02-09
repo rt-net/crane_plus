@@ -78,12 +78,15 @@ def generate_launch_description():
             launch_arguments={'loaded_description': description}.items()
         )
 
+    camera_info_file = 'file://' + get_package_share_directory(
+        'crane_plus_examples') + '/config/camera_info.yaml'
     usb_cam_node = Node(
             package='usb_cam',
             executable='usb_cam_node_exe',
             parameters=[
                 {'video_device': LaunchConfiguration('video_device')},
-                {'frame_id': 'camera_color_optical_frame'}
+                {'frame_id': 'camera_color_optical_frame'},
+                {'camera_info_url': camera_info_file}
             ],
             condition=IfCondition(LaunchConfiguration('use_camera'))
         )
