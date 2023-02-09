@@ -187,6 +187,7 @@ private:
     move_group_gripper_->move();
   }
 
+  // アーム制御
   void control_arm(
     const double x, const double y, const double z,
     const double roll, const double pitch, const double yaw)
