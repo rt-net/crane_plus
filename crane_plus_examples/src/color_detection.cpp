@@ -61,9 +61,10 @@ private:
     if (camera_info_) {
       // 赤い物体を認識するようにHSVの範囲を設定
       // 周囲の明るさ等の動作環境に合わせて調整
-      const int low_h = 150, high_h = 179;
+      const int low_h_1 = 0, high_h_1 = 20;
+      const int low_h_2 = 160, high_h_2 = 179;
       const int low_s = 100, high_s = 255;
-      const int low_v = 30, high_v = 255;
+      const int low_v = 50, high_v = 255;
 
       // ウェブカメラの画像を受け取る
       auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
@@ -72,14 +73,24 @@ private:
       cv::cvtColor(cv_img->image, cv_img->image, cv::COLOR_RGB2HSV);
 
       // 画像処理用の変数を用意
+      cv::Mat img_mask_1;
+      cv::Mat img_mask_2;
       cv::Mat img_thresholded;
 
       // 画像の二値化
       cv::inRange(
         cv_img->image,
-        cv::Scalar(low_h, low_s, low_v),
-        cv::Scalar(high_h, high_s, high_v),
-        img_thresholded);
+        cv::Scalar(low_h_1, low_s, low_v),
+        cv::Scalar(high_h_1, high_s, high_v),
+        img_mask_1);
+      cv::inRange(
+        cv_img->image,
+        cv::Scalar(low_h_2, low_s, low_v),
+        cv::Scalar(high_h_2, high_s, high_v),
+        img_mask_2);
+
+      // マスク画像の合成
+      img_thresholded = img_mask_1 | img_mask_2;
 
       // ノイズ除去の処理
       cv::morphologyEx(
