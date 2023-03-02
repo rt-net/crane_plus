@@ -128,7 +128,7 @@ private:
         // 補正後の画像座標系における把持対象物の位置を取得（2D）
         const cv::Point2d rect_point = camera_model.rectifyPoint(point);
 
-        // 画像座標系における把持対象物の位置（2D）をカメラ座標系における位置（3D）に変換
+        // カメラ座標系から見た把持対象物の方向（Ray）を取得する
         const cv::Point3d ray = camera_model.projectPixelTo3dRay(rect_point);
 
         // カメラの高さを0.44[m]として把持対象物の位置を計算
