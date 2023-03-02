@@ -45,6 +45,9 @@ public:
     camera_info_subscription_ = this->create_subscription<sensor_msgs::msg::CameraInfo>(
       "camera_info", 10, std::bind(&ImageSubscriber::camera_info_callback, this, _1));
 
+    image_thresholded_publisher_ =
+      this->create_publisher<sensor_msgs::msg::Image>("image_thresholded", 10);
+
     tf_broadcaster_ =
       std::make_unique<tf2_ros::TransformBroadcaster>(*this);
   }
@@ -53,6 +56,7 @@ private:
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription_;
   rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_subscription_;
   sensor_msgs::msg::CameraInfo::SharedPtr camera_info_;
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_thresholded_publisher_;
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
@@ -97,14 +101,14 @@ private:
         img_thresholded,
         img_thresholded,
         cv::MORPH_OPEN,
-        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+        cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5)));
 
       // 穴埋めの処理
       cv::morphologyEx(
         img_thresholded,
         img_thresholded,
         cv::MORPH_CLOSE,
-        cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+        cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5)));
 
       // 画像の検出領域におけるモーメントを計算
       cv::Moments moment = moments(img_thresholded);
@@ -144,6 +148,16 @@ private:
         t.transform.translation.y = ray_after.y;
         t.transform.translation.z = ray_after.z;
         tf_broadcaster_->sendTransform(t);
+
+        // 閾値の画像を配信
+        cv_bridge::CvImage cv_image;
+        cv_image.encoding = "mono8";
+        cv_image.header.stamp = this->now();
+        cv_image.header.frame_id = "image_thresholded_frame";
+        img_thresholded.copyTo(cv_image.image);
+        sensor_msgs::msg::Image ros_image;
+        cv_image.toImageMsg(ros_image);
+        image_thresholded_publisher_->publish(std::move(ros_image));
       }
     }
   }
