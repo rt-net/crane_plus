@@ -54,6 +54,14 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 終了するときは`Ctrl+c`を入力します。
 
+### Gazeboでサンプルプログラムを実行する場合
+
+Gazeboでサンプルプログラムを実行する場合は`use_sim_time`オプションを付けます。
+
+```sh
+ros2 launch crane_plus_examples example.launch.py example:='gripper_control' use_sim_time:='true'
+```
+
 ## Examples
 
 `demo.launch.py`を実行している状態で各サンプルを実行できます。

@@ -20,6 +20,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.actions import SetParameter
 import yaml
 
 
@@ -61,6 +62,11 @@ def generate_launch_description():
                      '[gripper_control, pose_groupstate, joint_values, pick_and_place]')
     )
 
+    declare_use_sim_time = DeclareLaunchArgument(
+        'use_sim_time', default_value='false',
+        description=('Set true when using the gazebo simulator.')
+    )
+
     example_node = Node(name=[LaunchConfiguration('example'), '_node'],
                         package='crane_plus_examples',
                         executable=LaunchConfiguration('example'),
@@ -69,4 +75,9 @@ def generate_launch_description():
                                     robot_description_semantic,
                                     kinematics_yaml])
 
-    return LaunchDescription([declare_example_name, example_node])
+    return LaunchDescription([
+        declare_use_sim_time,
+        SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
+        declare_example_name,
+        example_node
+    ])
