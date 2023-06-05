@@ -19,18 +19,17 @@
 #include <iostream>
 #include <iomanip>
 #include <memory>
-#include <utility>
 
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "sensor_msgs/msg/camera_info.hpp"
 #include "sensor_msgs/msg/image.hpp"
-#include "opencv2/opencv.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "cv_bridge/cv_bridge.h"
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "tf2_ros/transform_broadcaster.h"
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "cv_bridge/cv_bridge.h"
 #include "image_geometry/pinhole_camera_model.h"
 using std::placeholders::_1;
 
@@ -56,25 +55,25 @@ public:
 private:
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription_;
   rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_subscription_;
-  sensor_msgs::msg::CameraInfo::SharedPtr camera_info_;
   rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_thresholded_publisher_;
+  sensor_msgs::msg::CameraInfo::SharedPtr camera_info_;
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
   {
     // カメラのパラメータを取得してから処理を行う
     if (camera_info_) {
-      // 赤い物体を認識するようにHSVの範囲を設定
+      // 赤い物体を検出するようにHSVの範囲を設定
       // 周囲の明るさ等の動作環境に合わせて調整
-      const int low_h_1 = 0, high_h_1 = 10;
-      const int low_h_2 = 170, high_h_2 = 179;
+      const int low_h_1 = 0, high_h_1 = 20;
+      const int low_h_2 = 160, high_h_2 = 179;
       const int low_s = 100, high_s = 255;
       const int low_v = 50, high_v = 255;
 
       // ウェブカメラの画像を受け取る
       auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
 
-      // 画像をRGBからHSVに変換
+      // 画像をRGBからHSVに変換（取得したカメラ画像にフォーマットを合わせる）
       cv::cvtColor(cv_img->image, cv_img->image, cv::COLOR_RGB2HSV);
 
       // 画像処理用の変数を用意
@@ -149,17 +148,12 @@ private:
         t.transform.translation.y = ray_after.y;
         t.transform.translation.z = ray_after.z;
         tf_broadcaster_->sendTransform(t);
-
-        // 閾値の画像を配信
-        cv_bridge::CvImage cv_image;
-        cv_image.encoding = "mono8";
-        cv_image.header.stamp = this->now();
-        cv_image.header.frame_id = "image_thresholded_frame";
-        img_thresholded.copyTo(cv_image.image);
-        sensor_msgs::msg::Image ros_image;
-        cv_image.toImageMsg(ros_image);
-        image_thresholded_publisher_->publish(std::move(ros_image));
       }
+
+      // 閾値による二値化画像を配信
+      sensor_msgs::msg::Image::SharedPtr img_thresholded_msg =
+        cv_bridge::CvImage(msg->header, "mono8", img_thresholded).toImageMsg();
+      image_thresholded_publisher_->publish(*img_thresholded_msg);
     }
   }
 

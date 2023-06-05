@@ -86,7 +86,8 @@ def generate_launch_description():
             parameters=[
                 {'video_device': LaunchConfiguration('video_device')},
                 {'frame_id': 'camera_color_optical_frame'},
-                {'camera_info_url': camera_info_file}
+                {'camera_info_url': camera_info_file},
+                {'pixel_format': 'yuyv2rgb'}
             ],
             condition=IfCondition(LaunchConfiguration('use_camera'))
         )
