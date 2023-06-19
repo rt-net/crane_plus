@@ -160,7 +160,7 @@ CranePlusHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-CallbackReturn CranePlusHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn CranePlusHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   if (!driver_->torque_enable(false)) {
     RCLCPP_ERROR(
@@ -173,7 +173,7 @@ CallbackReturn CranePlusHardware::on_activate(const rclcpp_lifecycle::State & pr
   timeout_has_printed_ = false;
 
   // Set current joint positions to hw_position_commands.
-  read();
+  read(prev_comm_timestamp_, rclcpp::Duration::from_seconds(0));
   for (uint i = 0; i < hw_position_commands_.size(); i++) {
     hw_position_commands_[i] = hw_position_states_[i];
   }
@@ -181,14 +181,15 @@ CallbackReturn CranePlusHardware::on_activate(const rclcpp_lifecycle::State & pr
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn CranePlusHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
+CallbackReturn CranePlusHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   driver_->torque_enable(false);
 
   return CallbackReturn::SUCCESS;
 }
 
-return_type CranePlusHardware::read()
+return_type CranePlusHardware::read(
+		const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   if (communication_timeout()) {
     if (!timeout_has_printed_) {
@@ -254,7 +255,8 @@ return_type CranePlusHardware::read()
   return return_type::OK;
 }
 
-return_type CranePlusHardware::write()
+return_type CranePlusHardware::write(
+		const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   if (communication_timeout()) {
     if (!timeout_has_printed_) {
