@@ -50,14 +50,13 @@ int main(int argc, char ** argv)
   move_group_arm.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
   move_group_arm.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 
-  // TODO(ShotaAk): Switch to gripper_action_controller if it is implemented in ros2_controllers.
   MoveGroupInterface move_group_gripper(move_group_gripper_node, "gripper");
   move_group_gripper.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
   move_group_gripper.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
   auto gripper_joint_values = move_group_gripper.getCurrentJointValues();
   double GRIPPER_DEFAULT = 0.0;
   double GRIPPER_OPEN = to_radians(-30);
-  double GRIPPER_CLOSE = to_radians(-5);
+  double GRIPPER_CLOSE = to_radians(10);
 
   move_group_arm.setNamedTarget("vertical");
   move_group_arm.move();
@@ -89,7 +88,7 @@ int main(int argc, char ** argv)
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
-  target_pose.position.z = 0.15;
+  target_pose.position.z = 0.14;
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 

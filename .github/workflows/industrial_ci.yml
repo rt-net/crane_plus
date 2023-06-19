@@ -17,7 +17,9 @@ jobs:
     strategy:
       matrix:
         env:
-          - { ROS_DISTRO: galactic, ROS_REPO: ros }
+          # テストがワークスペース内のパッケージに依存しているため、setup.bashを読み込む
+          # Ref: https://github.com/ros-industrial/industrial_ci/issues/585
+          - { ROS_DISTRO: Humble, ROS_REPO: ros, BEFORE_RUN_TARGET_TEST_EMBED: "ici_with_unset_variables source /root/target_ws/install/setup.bash" }
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

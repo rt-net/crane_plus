@@ -1,17 +1,17 @@
 # crane_plus_examples
 
-このパッケージはCRANE+V2 ROS 2パッケージのサンプルコード集です。
+このパッケージはCRANE+ V2 ROS 2パッケージのサンプルコード集です。
 
 ## 準備（実機を使う場合）
 
 ![crane_plus](https://rt-net.github.io/images/crane-plus/CRANEV2-500x500.png)
 
-### 1. CRANE+V2本体をPCに接続する
+### 1. CRANE+ V2本体をPCに接続する
 
-CRANE+V2本体をPCに接続します。
+CRANE+ V2本体をPCに接続します。
 接続方法は製品マニュアルを参照してください。
 
-**※CRANE+V2本体が接触しないように、十分なスペースを確保してください。**
+**※CRANE+ V2本体が接触しないように、十分なスペースを確保してください。**
 
 ### 2. USB通信ポートの接続を確認する
 
@@ -19,7 +19,7 @@ USB通信ポートの設定については`crane_plus_control`の
 [README](../crane_plus_control/README.md)
 を参照してください。
 
-**正しく設定できていない場合、CRANE+V2が動作しない、振動する、などの不安定な動きになるので注意してください**
+**正しく設定できていない場合、CRANE+ V2が動作しない、振動する、などの不安定な動きになるので注意してください**
 
 ### 3. move_groupとcontrollerを起動する
 
@@ -27,20 +27,20 @@ USB通信ポートの設定については`crane_plus_control`の
 controller (`crane_plus_control`)を起動します。
 
 ```sh
-$ ros2 launch crane_plus_examples demo.launch.py
+$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
 ```
 
-## 準備（Gazeboを使う場合）
+## 準備（Ignition Gazeboを使う場合）
 
-![crane_plus_gazebo](https://rt-net.github.io/images/crane-plus/crane_plus_gazebo.png)
+![crane_plus_ignition](https://rt-net.github.io/images/crane-plus/crane_plus_ignition.png)
 
-### 1. move_groupとgazeboを起動する
+### 1. move_groupとIgnition Gazeboを起動する
 
 次のコマンドでmove_group (`crane_plus_moveit_config`)と
-Gazeboを起動します。
+Ignition Gazeboを起動します。
 
 ```sh
-$ ros2 launch crane_plus_gazebo crane_plus_gazebo.launch.py
+$ ros2 launch crane_plus_ignition crane_plus_ignition.launch.py
 ```
 
 ## サンプルプログラムを実行する
@@ -79,9 +79,6 @@ Arguments (pass arguments as '<name>:=<value>'):
 ### gripper_control
 
 グリッパを開閉させるコード例です。
-
-**注意：`gripper_action_controller`が`ros2_controllers`に移植されていないため、
-代わりに`joint_trajectory_controller`でグリッパを操作しています**
 
 次のコマンドを実行します。
 

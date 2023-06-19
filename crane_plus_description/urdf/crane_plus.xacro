@@ -101,7 +101,7 @@
       <origin xyz="0 0 0.0454" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit
-        effort="10.0"
+        effort="1.5"
         velocity="${joints_vlimit}"
         lower="${joint_1_lower_limit}"
         upper="${joint_1_upper_limit}"
@@ -141,7 +141,7 @@
       <origin xyz="0 0 0.026" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <limit
-        effort="10.0"
+        effort="1.5"
         velocity="${joints_vlimit}"
         lower="${joint_2_lower_limit}"
         upper="${joint_2_upper_limit}"
@@ -181,7 +181,7 @@
       <origin xyz="0 0 0.083" rpy="0 0 0"/>
       <axis xyz="0 -1 0"/>
       <limit
-        effort="10.0"
+        effort="1.5"
         velocity="${joints_vlimit}"
         lower="${joint_3_lower_limit}"
         upper="${joint_3_upper_limit}"
@@ -221,7 +221,7 @@
       <origin xyz="0 0 0.0935" rpy="0 0 0"/>
       <axis xyz="0 -1 0"/>
       <limit
-        effort="10.0"
+        effort="1.5"
         velocity="${joints_vlimit}"
         lower="${joint_4_lower_limit}"
         upper="${joint_4_upper_limit}"
@@ -261,7 +261,7 @@
       <origin xyz="0 -0.0145 0.045" rpy="0 0 0"/>
       <axis xyz="-1 0 0"/>
       <limit
-        effort="10.0"
+        effort="1.5"
         velocity="${joints_vlimit}"
         lower="${joint_hand_lower_limit}"
         upper="${joint_hand_upper_limit}"

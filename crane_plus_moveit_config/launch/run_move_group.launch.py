@@ -17,7 +17,6 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 import yaml
@@ -49,16 +48,14 @@ def load_yaml(package_name, file_path):
 
 
 def generate_launch_description():
-    # planning_context
-    declare_xacro_use_gazebo = DeclareLaunchArgument(
-        'xacro_use_gazebo',
-        default_value='false',
-        description='Set "true" to enable gazebo_ros2_control plugin.'
+    declare_loaded_description = DeclareLaunchArgument(
+        'loaded_description',
+        default_value='',
+        description='Set robot_description text.  \
+                     It is recommended to use RobotDescriptionLoader() in crane_plus_description.'
     )
-    xacro_file = os.path.join(get_package_share_directory('crane_plus_description'),
-                              'urdf', 'crane_plus.urdf.xacro')
-    robot_description = {'robot_description': Command(
-        ['xacro ', xacro_file, ' use_gazebo:=', LaunchConfiguration('xacro_use_gazebo')])}
+
+    robot_description = {'robot_description': LaunchConfiguration('loaded_description')}
 
     robot_description_semantic_config = load_file(
         'crane_plus_moveit_config', 'config/crane_plus.srdf')
@@ -135,7 +132,7 @@ def generate_launch_description():
                                  output='both',
                                  parameters=[robot_description])
 
-    return LaunchDescription([declare_xacro_use_gazebo,
+    return LaunchDescription([declare_loaded_description,
                               run_move_group_node,
                               rviz_node,
                               static_tf,
