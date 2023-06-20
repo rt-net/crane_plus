@@ -3,11 +3,21 @@ project(crane_plus_ignition)
 
 find_package(ament_cmake REQUIRED)
 
+find_package(ament_cmake REQUIRED COMPONENTS
+  gazebo_ros
+  gazebo_plugins
+  gazebo_ros_control
+)
+
 install(DIRECTORY
   launch
   worlds
   gui
   DESTINATION share/${PROJECT_NAME}/
+)
+
+include_directories(
+  ${catkin_INCLUDE_DIRS}
 )
 
 if(BUILD_TESTING)

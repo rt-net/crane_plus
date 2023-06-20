@@ -21,6 +21,7 @@ from launch.actions import ExecuteProcess
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
+from launch_ros.actions import SetParameter
 
 
 def generate_launch_description():
@@ -41,7 +42,7 @@ def generate_launch_description():
         )
 
     ignition_spawn_entity = Node(
-        package='ros_ign_gazebo',
+        package='ros_gz_sim',
         executable='create',
         output='screen',
         arguments=['-topic', '/robot_description',
@@ -53,6 +54,8 @@ def generate_launch_description():
     description_loader = RobotDescriptionLoader()
     description_loader.use_gazebo = 'true'
     description_loader.use_ignition = 'true'
+    description_loader.gz_control_config_package = 'crane_plus_control'
+    description_loader.gz_control_config_file_path = 'config/crane_plus_controllers.yaml'
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
@@ -63,27 +66,29 @@ def generate_launch_description():
         )
 
     spawn_joint_state_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner.py joint_state_controller'],
+#                cmd=['ros2 run controller_manager spawner joint_state_controller'],
+                cmd=['ros2 run controller_manager spawner joint_state_broadcaster'],
                 shell=True,
                 output='screen',
             )
 
     spawn_arm_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner.py crane_plus_arm_controller'],
+                cmd=['ros2 run controller_manager spawner crane_plus_arm_controller'],
                 shell=True,
                 output='screen',
             )
 
     spawn_gripper_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner.py crane_plus_gripper_controller'],
+                cmd=['ros2 run controller_manager spawner crane_plus_gripper_controller'],
                 shell=True,
                 output='screen',
             )
 
     return LaunchDescription([
+        SetParameter(name='use_sim_time', value=True),
         ign_gazebo,
-        move_group,
         ignition_spawn_entity,
+        move_group,
         spawn_joint_state_controller,
         spawn_arm_controller,
         spawn_gripper_controller

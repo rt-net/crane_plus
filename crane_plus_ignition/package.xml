@@ -15,7 +15,10 @@
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
-  <depend>ros_ign</depend>
+  <depend>controller_manager</depend>
+  <depend>gripper_controllers</depend>
+  <depend>ros2_controllers</depend>
+  <depend>ros_gz</depend>
   <depend>robot_state_publisher</depend>
 
   <export>

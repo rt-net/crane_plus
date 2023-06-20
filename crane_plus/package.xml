@@ -19,7 +19,6 @@
   <exec_depend>crane_plus_control</exec_depend>
   <exec_depend>crane_plus_description</exec_depend>
   <exec_depend>crane_plus_examples</exec_depend>
-  <exec_depend>crane_plus_gazebo</exec_depend>
   <exec_depend>crane_plus_ignition</exec_depend>
   <exec_depend>crane_plus_moveit_config</exec_depend>
 

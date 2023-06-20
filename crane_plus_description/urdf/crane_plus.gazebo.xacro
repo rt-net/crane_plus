@@ -6,7 +6,6 @@
       <material>
         <ambient>0 0 0 1</ambient>
         <diffuse>0 0 0 1</diffuse>
-        <specular>0.1 0.1 0.1 5.0</specular>
       </material>
     </visual>
   </xacro:macro>
@@ -16,7 +15,6 @@
       <material>
         <ambient>1 1 1 1</ambient>
         <diffuse>1 1 1 1</diffuse>
-        <specular>0.1 0.1 0.1 128.0</specular>
       </material>
     </visual>
   </xacro:macro>
@@ -29,7 +27,15 @@
             name_link_4
             name_link_hand
             use_ignition
+            config_package
+            config_file_path
             ">
+
+    <gazebo>
+      <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <parameters>$(find ${config_package})/${config_file_path}</parameters>
+      </plugin>
+    </gazebo>
 
     <gazebo>
       <xacro:if value="${use_ignition}">
