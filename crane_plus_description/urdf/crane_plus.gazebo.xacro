@@ -31,11 +31,13 @@
             config_file_path
             ">
 
+<!--
     <gazebo>
       <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
         <parameters>$(find ${config_package})/${config_file_path}</parameters>
       </plugin>
     </gazebo>
+-->
 
     <gazebo>
       <xacro:if value="${use_ignition}">
