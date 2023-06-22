@@ -28,8 +28,6 @@ class RobotDescriptionLoader():
         self.port_name = '/dev/ttyUSB0'
         self.use_gazebo = 'false'
         self.use_ignition = 'false'
-        self.gz_control_config_package = ''
-        self.gz_control_config_file_path = ''
 
     def load(self):
         return Command([
@@ -37,7 +35,5 @@ class RobotDescriptionLoader():
                 self.robot_description_path,
                 ' port_name:=', self.port_name,
                 ' use_gazebo:=', self.use_gazebo,
-                ' use_ignition:=', self.use_ignition,
-                ' gz_control_config_package:=', self.gz_control_config_package,
-                ' gz_control_config_file_path:=', self.gz_control_config_file_path
+                ' use_ignition:=', self.use_ignition
                 ])

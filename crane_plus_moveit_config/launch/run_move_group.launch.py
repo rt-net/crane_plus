@@ -103,8 +103,7 @@ def generate_launch_description():
                                            ompl_planning_pipeline_config,
                                            trajectory_execution,
                                            moveit_controllers,
-                                           planning_scene_monitor_parameters,
-                                           {"use_sim_time": True}])
+                                           planning_scene_monitor_parameters])
 
     # RViz
     rviz_config_file = get_package_share_directory(
@@ -117,8 +116,7 @@ def generate_launch_description():
                      parameters=[robot_description,
                                  robot_description_semantic,
                                  ompl_planning_pipeline_config,
-                                 kinematics_yaml,
-                                 {"use_sim_time": True}])
+                                 kinematics_yaml])
 
     # Static TF
     static_tf = Node(package='tf2_ros',
