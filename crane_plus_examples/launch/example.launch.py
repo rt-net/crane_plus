@@ -67,6 +67,7 @@ def generate_launch_description():
                         output='screen',
                         parameters=[{'robot_description': description_loader.load()},
                                     robot_description_semantic,
-                                    kinematics_yaml])
+                                    kinematics_yaml,
+                                    {"use_sim_time": True}])
 
     return LaunchDescription([declare_example_name, example_node])
