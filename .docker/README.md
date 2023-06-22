@@ -7,10 +7,10 @@ https://github.com/rt-net/crane_plus/pkgs/container/crane_plus
 をアップロードしています。
 tagにはROSのディストリビューションを指定してください。
 
-foxyディストリビューションのイメージをダウンロードする場合は次のコマンドを実行します。
+Humbleディストリビューションのイメージをダウンロードする場合は次のコマンドを実行します。
 
 ```sh
-$ docker pull ghcr.io/rt-net/crane_plus:foxy
+$ docker pull ghcr.io/rt-net/crane_plus:humble
 ```
 
 ### ノードの起動
@@ -67,7 +67,7 @@ $ rocker --x11 --net=host --privileged \
 ```sh
 # foxyディストリビューションのイメージを作成する
 $ cd crane_plus/.docker
-$ ./build_source.sh foxy
+$ ./build_source.sh humble
 ...
-Successfully tagged crane_plus:foxy
+Successfully tagged crane_plus:humble
 ```

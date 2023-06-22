@@ -4,7 +4,7 @@ set -e
 
 if [ $# -eq 0 ]; then
     echo "Please set ROS_DISTRO to the argument."
-    echo "e.g. ./build_source.sh foxy"
+    echo "e.g. ./build_source.sh humble"
 fi
 ROS_DISTRO=$1
 
