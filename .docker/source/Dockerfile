@@ -1,4 +1,4 @@
-ARG ROS_DISTRO="foxy"
+ARG ROS_DISTRO="humble"
 FROM osrf/ros:${ROS_DISTRO}-desktop
 ENV OVERLAY_WS /root/overlay_ws
 WORKDIR $OVERLAY_WS/src
