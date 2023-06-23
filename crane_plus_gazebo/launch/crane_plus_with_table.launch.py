@@ -30,9 +30,9 @@ def generate_launch_description():
            'IGN_GAZEBO_RESOURCE_PATH': os.path.dirname(
                get_package_share_directory('crane_plus_description'))}
     world_file = os.path.join(
-        get_package_share_directory('crane_plus_ignition'), 'worlds', 'table.sdf')
+        get_package_share_directory('crane_plus_gazebo'), 'worlds', 'table.sdf')
     gui_config = os.path.join(
-        get_package_share_directory('crane_plus_ignition'), 'gui', 'gui.config')
+        get_package_share_directory('crane_plus_gazebo'), 'gui', 'gui.config')
     # -r オプションで起動時にシミュレーションをスタートしないと、コントローラが起動しない
     ign_gazebo = ExecuteProcess(
             cmd=['ign gazebo -r', world_file, '--gui-config', gui_config],
@@ -41,7 +41,7 @@ def generate_launch_description():
             shell=True
         )
 
-    ignition_spawn_entity = Node(
+    gazebo_spawn_entity = Node(
         package='ros_gz_sim',
         executable='create',
         output='screen',
@@ -66,7 +66,6 @@ def generate_launch_description():
         )
 
     spawn_joint_state_controller = ExecuteProcess(
-#                cmd=['ros2 run controller_manager spawner joint_state_controller'],
                 cmd=['ros2 run controller_manager spawner joint_state_broadcaster'],
                 shell=True,
                 output='screen',
@@ -87,7 +86,7 @@ def generate_launch_description():
     return LaunchDescription([
         SetParameter(name='use_sim_time', value=True),
         ign_gazebo,
-        ignition_spawn_entity,
+        gazebo_spawn_entity,
         move_group,
         spawn_joint_state_controller,
         spawn_arm_controller,
