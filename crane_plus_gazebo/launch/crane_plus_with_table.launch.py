@@ -54,16 +54,14 @@ def generate_launch_description():
     description_loader = RobotDescriptionLoader()
     description_loader.use_gazebo = 'true'
     description_loader.use_ignition = 'true'
-    description_loader.gz_control_config_package = 'crane_plus_control'
-    description_loader.gz_control_config_file_path = 'config/crane_plus_controllers.yaml'
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_moveit_config'),
                 '/launch/run_move_group.launch.py']),
-            launch_arguments={'loaded_description': description}.items()
-        )
+                launch_arguments={'loaded_description': description}.items()
+            )
 
     spawn_joint_state_controller = ExecuteProcess(
                 cmd=['ros2 run controller_manager spawner joint_state_broadcaster'],
@@ -83,6 +81,13 @@ def generate_launch_description():
                 output='screen',
             )
 
+    bridge = Node(
+                package='ros_gz_bridge',
+                executable='parameter_bridge',
+                arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
+                output='screen'
+            )
+
     return LaunchDescription([
         SetParameter(name='use_sim_time', value=True),
         ign_gazebo,
@@ -90,5 +95,6 @@ def generate_launch_description():
         move_group,
         spawn_joint_state_controller,
         spawn_arm_controller,
-        spawn_gripper_controller
+        spawn_gripper_controller,
+        bridge
     ])
