@@ -60,8 +60,8 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_moveit_config'),
                 '/launch/run_move_group.launch.py']),
-                launch_arguments={'loaded_description': description}.items()
-            )
+            launch_arguments={'loaded_description': description}.items()
+        )
 
     spawn_joint_state_controller = ExecuteProcess(
                 cmd=['ros2 run controller_manager spawner joint_state_broadcaster'],

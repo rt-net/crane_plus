@@ -34,10 +34,9 @@ CranePlusHardware::~CranePlusHardware()
 CallbackReturn CranePlusHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
-   {
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
      return CallbackReturn::ERROR;
-   }
+  }
 
   // Get parameters from URDF
   // Initialize member variables
@@ -181,7 +180,8 @@ CallbackReturn CranePlusHardware::on_activate(const rclcpp_lifecycle::State & /*
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn CranePlusHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
+CallbackReturn CranePlusHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   driver_->torque_enable(false);
 
@@ -189,7 +189,7 @@ CallbackReturn CranePlusHardware::on_deactivate(const rclcpp_lifecycle::State & 
 }
 
 return_type CranePlusHardware::read(
-		const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   if (communication_timeout()) {
     if (!timeout_has_printed_) {
@@ -256,7 +256,7 @@ return_type CranePlusHardware::read(
 }
 
 return_type CranePlusHardware::write(
-		const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   if (communication_timeout()) {
     if (!timeout_has_printed_) {
