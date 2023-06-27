@@ -30,17 +30,16 @@ controller (`crane_plus_control`)を起動します。
 $ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
 ```
 
-## 準備（Ignition Gazeboを使う場合）
+## 準備（Gazeboを使う場合）
 
 ![crane_plus_ignition](https://rt-net.github.io/images/crane-plus/crane_plus_ignition.png)
 
 ### 1. move_groupとIgnition Gazeboを起動する
 
-次のコマンドでmove_group (`crane_plus_moveit_config`)と
-Ignition Gazeboを起動します。
+次のコマンドでmove_group (`crane_plus_moveit_config`)とGazeboを起動します。
 
 ```sh
-$ ros2 launch crane_plus_ignition crane_plus_ignition.launch.py
+$ ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py
 ```
 
 ## サンプルプログラムを実行する
@@ -53,6 +52,14 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
 終了するときは`Ctrl+c`を入力します。
+
+## Gazeboでサンプルプログラムを実行する場合
+
+Gazeboでサンプルプログラムを実行する場合は`use_sim_time`オプションを付けます。
+
+```sh
+$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control' use_sim_time:='True'
+```
 
 ## Examples
 
