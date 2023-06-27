@@ -35,7 +35,7 @@ CallbackReturn CranePlusHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
   if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
-     return CallbackReturn::ERROR;
+    return CallbackReturn::ERROR;
   }
 
   // Get parameters from URDF
