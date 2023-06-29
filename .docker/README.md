@@ -65,7 +65,7 @@ $ rocker --x11 --net=host --privileged \
 `./build_source.sh $ROS_DISTRO`を実行してイメージを作成します。
 
 ```sh
-# foxyディストリビューションのイメージを作成する
+# humbleディストリビューションのイメージを作成する
 $ cd crane_plus/.docker
 $ ./build_source.sh humble
 ...
