@@ -7,7 +7,7 @@ WORKDIR $OVERLAY_WS/src
 COPY . crane_plus
 
 # Install depnedencies
-RUN apt-get update && apt-get -y dist-upgrade rosdep update && \
+RUN apt-get update && apt-get -y dist-upgrade && rosdep update && \
     rosdep install -iy --from-paths . && \
     # https://github.com/ros-planning/moveit2/issues/1094
     apt install -y ros-${ROS_DISTRO}-backward-ros && \
