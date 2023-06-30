@@ -32,6 +32,7 @@ rockerのオプションには、
 $ sudo apt install python3-rocker
 
 $ rocker --x11 --net=host --privileged \
+    --volume /dev/shm:/dev/shm \
     -- ghcr.io/rt-net/crane_plus:$ROS_DISTRO \
     ros2 launch crane_plus_examples demo.launch.py
 ```
@@ -55,6 +56,7 @@ $ rocker --x11 --net=host --privileged \
 
 # ノードを起動
 $ rocker --x11 --net=host --privileged \
+    --volume /dev/shm:/dev/shm \
     --volume ~/crane_ws:/root/overlay_ws \
     -- ghcr.io/rt-net/crane_plus:$ROS_DISTRO \
     ros2 launch crane_plus_examples demo.launch.py

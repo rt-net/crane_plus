@@ -8,6 +8,7 @@ ROS 2 package suite of CRANE+ V2.
 
 ## Table of Contents
 
+- [Supported ROS 2 distributions](#supported-ROS-2-distributions)
 - [Requirements](#requirements)
 - [Installation](#installation)
   - [Binary installation](#binary-installation)
@@ -16,6 +17,11 @@ ROS 2 package suite of CRANE+ V2.
 - [Packages](#packages)
 - [License](#license)
 - [Disclaimer](#disclaimer)
+
+## Supported ROS 2 distributions
+
+- [Foxy](https://github.com/rt-net/crane_plus/tree/foxy-devel)
+- Humble
 
 ## Requirements
 
@@ -37,7 +43,7 @@ ROS 2 package suite of CRANE+ V2.
 ### Binary installation
 
 ```sh
-$ sudo apt install ros-humble-crane-plus
+TBD
 ```
 
 ### Source Build

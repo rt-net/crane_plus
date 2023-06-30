@@ -21,6 +21,8 @@
   <depend>ros2_controllers</depend>
   <depend>ros_gz</depend>
   <depend>robot_state_publisher</depend>
+  <depend>crane_plus_description</depend>
+  <depend>crane_plus_moveit_config</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
