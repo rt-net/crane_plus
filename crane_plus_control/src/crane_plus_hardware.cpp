@@ -31,11 +31,11 @@ CranePlusHardware::~CranePlusHardware()
   driver_->close_port();
 }
 
-return_type CranePlusHardware::configure(
+CallbackReturn CranePlusHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (configure_default(info) != return_type::OK) {
-    return return_type::ERROR;
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
+    return CallbackReturn::ERROR;
   }
 
   // Get parameters from URDF
@@ -57,7 +57,7 @@ return_type CranePlusHardware::configure(
         rclcpp::get_logger("CranePlusHardware"),
         "Joint '%s' does not have 'dxl_id' parameter.",
         joint.name.c_str());
-      return return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
   }
 
@@ -72,13 +72,13 @@ return_type CranePlusHardware::configure(
   driver_ = std::make_shared<CranePlusDriver>(port_name, baudrate, dxl_id_list);
   if (!driver_->open_port()) {
     RCLCPP_ERROR(
-      rclcpp::get_logger("CranePlusHardware"), driver_->get_last_error_log());
-    return return_type::ERROR;
+      rclcpp::get_logger("CranePlusHardware"), driver_->get_last_error_log().c_str());
+    return CallbackReturn::ERROR;
   }
   if (!driver_->torque_enable(false)) {
     RCLCPP_ERROR(
-      rclcpp::get_logger("CranePlusHardware"), driver_->get_last_error_log());
-    return return_type::ERROR;
+      rclcpp::get_logger("CranePlusHardware"), driver_->get_last_error_log().c_str());
+    return CallbackReturn::ERROR;
   }
 
   // Verify that the interface required by CranePlusHardware is set in the URDF.
@@ -86,9 +86,9 @@ return_type CranePlusHardware::configure(
     if (joint.command_interfaces.size() != 1) {
       RCLCPP_ERROR(
         rclcpp::get_logger("CranePlusHardware"),
-        "Joint '%s' has %d command interfaces found. 1 expected.",
+        "Joint '%s' has %lu command interfaces found. 1 expected.",
         joint.name.c_str(), joint.command_interfaces.size());
-      return return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
@@ -97,14 +97,14 @@ return_type CranePlusHardware::configure(
         "Joint '%s' have %s command interfaces found. '%s' expected.",
         joint.name.c_str(), joint.command_interfaces[0].name.c_str(),
         hardware_interface::HW_IF_POSITION);
-      return return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
   }
 
   steady_clock_ = rclcpp::Clock(RCL_STEADY_TIME);
 
-  status_ = hardware_interface::status::CONFIGURED;
-  return return_type::OK;
+
+  return CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface>
@@ -159,36 +159,37 @@ CranePlusHardware::export_command_interfaces()
   return command_interfaces;
 }
 
-return_type CranePlusHardware::start()
+CallbackReturn CranePlusHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   if (!driver_->torque_enable(false)) {
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"),
-      driver_->get_last_error_log());
-    return return_type::ERROR;
+      driver_->get_last_error_log().c_str());
+    return CallbackReturn::ERROR;
   }
   // Set current timestamp to disable the communication timeout.
   prev_comm_timestamp_ = steady_clock_.now();
   timeout_has_printed_ = false;
 
   // Set current joint positions to hw_position_commands.
-  read();
+  read(prev_comm_timestamp_, rclcpp::Duration::from_seconds(0));
   for (uint i = 0; i < hw_position_commands_.size(); i++) {
     hw_position_commands_[i] = hw_position_states_[i];
   }
 
-  status_ = hardware_interface::status::STARTED;
-  return return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-return_type CranePlusHardware::stop()
+CallbackReturn CranePlusHardware::on_deactivate(
+  const rclcpp_lifecycle::State & /*previous_state*/)
 {
   driver_->torque_enable(false);
-  status_ = hardware_interface::status::STOPPED;
-  return return_type::OK;
+
+  return CallbackReturn::SUCCESS;
 }
 
-return_type CranePlusHardware::read()
+return_type CranePlusHardware::read(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   if (communication_timeout()) {
     if (!timeout_has_printed_) {
@@ -203,7 +204,7 @@ return_type CranePlusHardware::read()
   if (!driver_->read_present_joint_positions(joint_positions)) {
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"),
-      driver_->get_last_error_log());
+      driver_->get_last_error_log().c_str());
     return return_type::ERROR;
   } else {
     for (uint i = 0; i < hw_position_states_.size(); ++i) {
@@ -254,7 +255,8 @@ return_type CranePlusHardware::read()
   return return_type::OK;
 }
 
-return_type CranePlusHardware::write()
+return_type CranePlusHardware::write(
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   if (communication_timeout()) {
     if (!timeout_has_printed_) {
@@ -268,7 +270,7 @@ return_type CranePlusHardware::write()
   if (!driver_->write_goal_joint_positions(hw_position_commands_)) {
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"),
-      driver_->get_last_error_log());
+      driver_->get_last_error_log().c_str());
     return return_type::ERROR;
   }
 

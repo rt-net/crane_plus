@@ -8,6 +8,7 @@ ROS 2 package suite of CRANE+ V2.
 
 ## Table of Contents
 
+- [Supported ROS 2 distributions](#supported-ROS-2-distributions)
 - [Requirements](#requirements)
 - [Installation](#installation)
   - [Binary installation](#binary-installation)
@@ -17,6 +18,11 @@ ROS 2 package suite of CRANE+ V2.
 - [License](#license)
 - [Disclaimer](#disclaimer)
 
+## Supported ROS 2 distributions
+
+- [Foxy](https://github.com/rt-net/crane_plus/tree/foxy-devel)
+- Humble
+
 ## Requirements
 
 - CRANE+ V2
@@ -25,7 +31,7 @@ ROS 2 package suite of CRANE+ V2.
 - Linux OS
   - Ubuntu 20.04
 - ROS
-  - [Foxy Fitzroy](https://index.ros.org/doc/ros2/Installation/Foxy/)
+  - [Humble Hawksbill](https://index.ros.org/doc/ros2/Installation/Humble/)
 
 ## Installation
 
@@ -37,14 +43,14 @@ ROS 2 package suite of CRANE+ V2.
 ### Binary installation
 
 ```sh
-$ sudo apt install ros-foxy-crane-plus
+TBD
 ```
 
 ### Source Build
 
 ```sh
 # Setup ROS environment
-$ source /opt/ros/foxy/setup.bash
+$ source /opt/ros/humble/setup.bash
 
 # Download crane_plus repository
 $ mkdir -p ~/ros2_ws/src
@@ -91,9 +97,9 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 - crane_plus_examples
   - [README](./crane_plus_examples/README.md)
   - CRANE+ V2のサンプルコード集です
-- crane_plus_ignition
-  - [README](./crane_plus_ignition/README.md)
-  - CRANE+ V2のIgnition Gazeboシミュレーションパッケージです
+- crane_plus_gazebo
+  - [README](./crane_plus_gazebo/README.md)
+  - CRANE+ V2のGazeboシミュレーションパッケージです
 - crane_plus_moveit_config
   - [README](./crane_plus_moveit_config/README.md)
   - CRANE+ V2の`moveit2`設定ファイルです

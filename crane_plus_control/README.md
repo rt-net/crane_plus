@@ -73,7 +73,7 @@ CRANE+ V2に搭載されているサーボモータ[Dynamixel AX-12A](https://em
 `crane_plus_control.launch.py`を実行すると、`Controller Manager`ノードが起動し、
 以下のコントローラが読み込まれます。
 
-- crane_plus_joint_state_controller (`joint_state_controller/JointStateController`)
+- crane_plus_joint_state_broadcaster (`joint_state_broadcaster/JointStateBroadcaster`)
 - crane_plus_arm_controller (`joint_trajectory_controller/JointTrajectoryController`)
 - crane_plus_gripper_controller (`joint_trajectory_controller/JointTrajectoryController`)
 
@@ -99,8 +99,8 @@ controller_manager:
       type: joint_trajectory_controller/JointTrajectoryController
     crane_plus_gripper_controller:
       type: joint_trajectory_controller/JointTrajectoryController
-    joint_state_controller:
-      type: joint_state_controller/JointStateController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
 ```
 
 ### 制御周期

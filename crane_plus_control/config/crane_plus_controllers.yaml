@@ -6,8 +6,8 @@ controller_manager:
       type: joint_trajectory_controller/JointTrajectoryController
     crane_plus_gripper_controller:
       type: joint_trajectory_controller/JointTrajectoryController
-    joint_state_controller:
-      type: joint_state_controller/JointStateController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
 
 crane_plus_arm_controller:
   ros__parameters:

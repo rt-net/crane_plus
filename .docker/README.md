@@ -7,10 +7,10 @@ https://github.com/rt-net/crane_plus/pkgs/container/crane_plus
 をアップロードしています。
 tagにはROSのディストリビューションを指定してください。
 
-foxyディストリビューションのイメージをダウンロードする場合は次のコマンドを実行します。
+Humbleディストリビューションのイメージをダウンロードする場合は次のコマンドを実行します。
 
 ```sh
-$ docker pull ghcr.io/rt-net/crane_plus:foxy
+$ docker pull ghcr.io/rt-net/crane_plus:humble
 ```
 
 ### ノードの起動
@@ -32,6 +32,7 @@ rockerのオプションには、
 $ sudo apt install python3-rocker
 
 $ rocker --x11 --net=host --privileged \
+    --volume /dev/shm:/dev/shm \
     -- ghcr.io/rt-net/crane_plus:$ROS_DISTRO \
     ros2 launch crane_plus_examples demo.launch.py
 ```
@@ -55,6 +56,7 @@ $ rocker --x11 --net=host --privileged \
 
 # ノードを起動
 $ rocker --x11 --net=host --privileged \
+    --volume /dev/shm:/dev/shm \
     --volume ~/crane_ws:/root/overlay_ws \
     -- ghcr.io/rt-net/crane_plus:$ROS_DISTRO \
     ros2 launch crane_plus_examples demo.launch.py
@@ -65,9 +67,9 @@ $ rocker --x11 --net=host --privileged \
 `./build_source.sh $ROS_DISTRO`を実行してイメージを作成します。
 
 ```sh
-# foxyディストリビューションのイメージを作成する
+# humbleディストリビューションのイメージを作成する
 $ cd crane_plus/.docker
-$ ./build_source.sh foxy
+$ ./build_source.sh humble
 ...
-Successfully tagged crane_plus:foxy
+Successfully tagged crane_plus:humble
 ```
