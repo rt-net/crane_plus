@@ -31,7 +31,7 @@ ROS 2 package suite of CRANE+ V2.
 - Linux OS
   - Ubuntu 22.04
 - ROS
-  - [Humble Hawksbill](https://index.ros.org/doc/ros2/Installation/Humble/)
+  - [Humble Hawksbill](https://docs.ros.org/en/humble/Installation.html)
 
 ## Installation
 
