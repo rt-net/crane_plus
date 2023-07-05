@@ -29,7 +29,7 @@ ROS 2 package suite of CRANE+ V2.
   - [Product Introduction](https://rt-net.jp/products/cranev2/)
   - [Web Shop](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1&products_id=3626&language=ja)
 - Linux OS
-  - Ubuntu 20.04
+  - Ubuntu 22.04
 - ROS
   - [Humble Hawksbill](https://index.ros.org/doc/ros2/Installation/Humble/)
 
