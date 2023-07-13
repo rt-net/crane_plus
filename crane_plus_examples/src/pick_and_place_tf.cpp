@@ -143,8 +143,6 @@ private:
     // 掴む準備をする
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
 
-    // ハンドを開く
-    control_gripper(GRIPPER_OPEN);
 
     // 把持対象物に正対する
     control_arm(0.0, 0.0, 0.17, 0, 90, theta);
