@@ -65,7 +65,7 @@ private:
     if (camera_info_) {
       // 赤い物体を検出するようにHSVの範囲を設定
       // 周囲の明るさ等の動作環境に合わせて調整
-      const int low_h_1 = 0, high_h_1 = 20;
+      const int LOW_H_1 = 0, HIGH_H_1 = 20;
       const int low_h_2 = 160, high_h_2 = 179;
       const int low_s = 100, high_s = 255;
       const int low_v = 50, high_v = 255;
