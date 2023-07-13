@@ -132,9 +132,8 @@ private:
     const double GRIPPER_OPEN = angles::from_degrees(-30.0);
     const double GRIPPER_CLOSE = angles::from_degrees(10.0);
 
-    // 何かを掴んでいた時のためにハンドを開閉
+    // 何かを掴んでいた時のためにハンドを開く
     control_gripper(GRIPPER_OPEN);
-    control_gripper(GRIPPER_DEFAULT);
 
     // ロボット座標系（2D）の原点から見た把持対象物への角度を計算
     double x = target_position.x();
