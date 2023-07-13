@@ -136,7 +136,7 @@ private:
         const cv::Point3d ray = camera_model.projectPixelTo3dRay(rect_point);
 
         // カメラの高さを0.44[m]として把持対象物の位置を計算
-        const double camera_height = 0.44;
+        const double CAMERA_HEIGHT = 0.44;
         cv::Point3d ray_after(ray.x * camera_height, ray.y * camera_height, ray.z * camera_height);
 
         // 把持対象物の位置をTFに配信
