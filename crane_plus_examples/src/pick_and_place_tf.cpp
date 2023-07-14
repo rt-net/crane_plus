@@ -66,8 +66,8 @@ public:
     moveit_msgs::msg::JointConstraint joint_constraint;
     joint_constraint.joint_name = "crane_plus_joint1";
     joint_constraint.position = 0.0;
-    joint_constraint.tolerance_above = angles::from_degrees(120);
-    joint_constraint.tolerance_below = angles::from_degrees(120);
+    joint_constraint.tolerance_above = angles::from_degrees(90);
+    joint_constraint.tolerance_below = angles::from_degrees(90);
     joint_constraint.weight = 1.0;
     constraints.joint_constraints.push_back(joint_constraint);
 
@@ -139,23 +139,24 @@ private:
     // ロボット座標系（2D）の原点から見た把持対象物への角度を計算
     double x = target_position.x();
     double y = target_position.y();
-    double theta = std::atan2(y, x) * 180.0 / 3.1415926535;
+    double theta_rad = std::atan2(y, x);
+    double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
     // 掴む準備をする
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
 
 
     // 把持対象物に正対する
-    control_arm(0.0, 0.0, 0.17, 0, 90, theta);
+    control_arm(0.0, 0.0, 0.17, 0, 90, theta_deg);
 
     // 掴みに行く
-    control_arm(x, y, 0.14, 0, 180, theta);
+    const double GRIPPER_OFFSET = 0.13; // 単位はメートル
+    double gripper_offset_x = GRIPPER_OFFSET * std::cos(theta_rad);
+    double gripper_offset_y = GRIPPER_OFFSET * std::sin(theta_rad);
+    control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg);
 
     // ハンドを閉じる
     control_gripper(GRIPPER_CLOSE);
-
-    // 持ち上げる
-    control_arm(x, y, 0.17, 0, 180, theta);
 
     // 移動する
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
