@@ -177,11 +177,11 @@ Arguments (pass arguments as '<name>:=<value>'):
 
 ### color_detection
 
-赤色の物体をカメラで検出して、その物体を掴むコード例です。
+特定の色の物体を検出して掴むコード例です。
 
-検出された物体の位置情報はtfのフレームとして配信されます。
+デフォルトでは赤い物体の位置をtfのフレームとして配信します。
 tfの`frame_id`は`target_0`です。
-色検出にはOpenCVを使用しています。
+色検出には[OpenCV](https://docs.opencv.org/4.x/db/d8e/tutorial_threshold.html)を使用しています。
 
 次のコマンドを実行します。
 

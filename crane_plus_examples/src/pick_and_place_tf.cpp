@@ -74,7 +74,8 @@ public:
     move_group_arm_->setPathConstraints(constraints);
 
     // 待機姿勢
-    control_arm(0.0, 0.0, 0.17, 0, 90, 0);
+    move_group_arm_->setNamedTarget("vertical");
+    move_group_arm_->move();
 
     tf_buffer_ =
       std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -103,7 +104,7 @@ private:
     }
 
     rclcpp::Time now = this->get_clock()->now();
-    const std::chrono::nanoseconds FILTERING_TIME = 1s;
+    const std::chrono::nanoseconds FILTERING_TIME = 2s;
     const std::chrono::nanoseconds STOP_TIME_THRESHOLD = 3s;
     const float DISTANCE_THRESHOLD = 0.01;
     tf2::Stamped<tf2::Transform> tf;
@@ -111,7 +112,7 @@ private:
     const auto TF_ELAPSED_TIME = now.nanoseconds() - tf.stamp_.time_since_epoch().count();
     const auto TF_STOP_TIME = now.nanoseconds() - tf_past_.stamp_.time_since_epoch().count();
 
-    // 現在時刻から1秒以内に受け取ったtfを使用
+    // 現在時刻から2秒以内に受け取ったtfを使用
     if (TF_ELAPSED_TIME < FILTERING_TIME.count()) {
       double tf_diff = (tf_past_.getOrigin() - tf.getOrigin()).length();
       // 把持対象の位置が停止していることを判定
@@ -169,7 +170,8 @@ private:
     control_arm(0.13, 0.0, 0.10, 0, 90, 0);
 
     // 待機姿勢に戻る
-    control_arm(0.0, 0.0, 0.17, 0, 90, 0);
+    move_group_arm_->setNamedTarget("vertical");
+    move_group_arm_->move();
 
     // ハンドを閉じる
     control_gripper(GRIPPER_DEFAULT);
