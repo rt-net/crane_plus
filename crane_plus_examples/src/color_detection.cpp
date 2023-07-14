@@ -138,13 +138,13 @@ private:
         // カメラの高さを0.44[m]として把持対象物の位置を計算
         const double CAMERA_HEIGHT = 0.46;
         cv::Point3d object_position(
-	  ray.x * CAMERA_HEIGHT,
-	  ray.y * CAMERA_HEIGHT,
-	  ray.z * CAMERA_HEIGHT);
+          ray.x * CAMERA_HEIGHT,
+          ray.y * CAMERA_HEIGHT,
+          ray.z * CAMERA_HEIGHT);
 
         // 把持対象物の位置をTFに配信
         geometry_msgs::msg::TransformStamped t;
-	t.header = msg->header;
+        t.header = msg->header;
         t.child_frame_id = "target_0";
         t.transform.translation.x = object_position.x;
         t.transform.translation.y = object_position.y;
