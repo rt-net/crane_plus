@@ -150,7 +150,7 @@ private:
     control_arm(0.0, 0.0, 0.17, 0, 90, theta_deg);
 
     // 掴みに行く
-    const double GRIPPER_OFFSET = 0.13; // 単位はメートル
+    const double GRIPPER_OFFSET = 0.13;
     double gripper_offset_x = GRIPPER_OFFSET * std::cos(theta_rad);
     double gripper_offset_y = GRIPPER_OFFSET * std::sin(theta_rad);
     control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg);
