@@ -65,10 +65,10 @@ private:
     if (camera_info_) {
       // 赤い物体を検出するようにHSVの範囲を設定
       // 周囲の明るさ等の動作環境に合わせて調整
-      const int low_h_1 = 0, high_h_1 = 20;
-      const int low_h_2 = 160, high_h_2 = 179;
-      const int low_s = 100, high_s = 255;
-      const int low_v = 50, high_v = 255;
+      const int LOW_H_1 = 0, HIGH_H_1 = 20;
+      const int LOW_H_2 = 160, HIGH_H_2 = 179;
+      const int LOW_S = 100, HIGH_S = 255;
+      const int LOW_V = 50, HIGH_V = 255;
 
       // ウェブカメラの画像を受け取る
       auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
@@ -84,13 +84,13 @@ private:
       // 画像の二値化
       cv::inRange(
         cv_img->image,
-        cv::Scalar(low_h_1, low_s, low_v),
-        cv::Scalar(high_h_1, high_s, high_v),
+        cv::Scalar(LOW_H_1, LOW_S, LOW_V),
+        cv::Scalar(HIGH_H_1, HIGH_S, HIGH_V),
         img_mask_1);
       cv::inRange(
         cv_img->image,
-        cv::Scalar(low_h_2, low_s, low_v),
-        cv::Scalar(high_h_2, high_s, high_v),
+        cv::Scalar(LOW_H_2, LOW_S, LOW_V),
+        cv::Scalar(HIGH_H_2, HIGH_S, HIGH_V),
         img_mask_2);
 
       // マスク画像の合成
@@ -136,17 +136,19 @@ private:
         const cv::Point3d ray = camera_model.projectPixelTo3dRay(rect_point);
 
         // カメラの高さを0.44[m]として把持対象物の位置を計算
-        const double camera_height = 0.44;
-        cv::Point3d ray_after(ray.x * camera_height, ray.y * camera_height, ray.z * camera_height);
+        const double CAMERA_HEIGHT = 0.46;
+        cv::Point3d object_position(
+          ray.x * CAMERA_HEIGHT,
+          ray.y * CAMERA_HEIGHT,
+          ray.z * CAMERA_HEIGHT);
 
         // 把持対象物の位置をTFに配信
         geometry_msgs::msg::TransformStamped t;
-        t.header.stamp = this->get_clock()->now();
-        t.header.frame_id = "camera_color_optical_frame";
+        t.header = msg->header;
         t.child_frame_id = "target_0";
-        t.transform.translation.x = ray_after.x;
-        t.transform.translation.y = ray_after.y;
-        t.transform.translation.z = ray_after.z;
+        t.transform.translation.x = object_position.x;
+        t.transform.translation.y = object_position.y;
+        t.transform.translation.z = object_position.z;
         tf_broadcaster_->sendTransform(t);
       }
 

@@ -66,15 +66,22 @@ public:
     moveit_msgs::msg::JointConstraint joint_constraint;
     joint_constraint.joint_name = "crane_plus_joint1";
     joint_constraint.position = 0.0;
-    joint_constraint.tolerance_above = angles::from_degrees(120);
-    joint_constraint.tolerance_below = angles::from_degrees(120);
+    joint_constraint.tolerance_above = angles::from_degrees(100);
+    joint_constraint.tolerance_below = angles::from_degrees(100);
+    joint_constraint.weight = 1.0;
+    constraints.joint_constraints.push_back(joint_constraint);
+
+    joint_constraint.joint_name = "crane_plus_joint3";
+    joint_constraint.position = 0.0;
+    joint_constraint.tolerance_above = angles::from_degrees(0);
+    joint_constraint.tolerance_below = angles::from_degrees(180);
     joint_constraint.weight = 1.0;
     constraints.joint_constraints.push_back(joint_constraint);
 
     move_group_arm_->setPathConstraints(constraints);
 
     // 待機姿勢
-    control_arm(0.0, 0.0, 0.17, 0, 90, 0);
+    control_arm(0.0, 0.0, 0.17, 0, 0, 0);
 
     tf_buffer_ =
       std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -103,7 +110,7 @@ private:
     }
 
     rclcpp::Time now = this->get_clock()->now();
-    const std::chrono::nanoseconds FILTERING_TIME = 1s;
+    const std::chrono::nanoseconds FILTERING_TIME = 2s;
     const std::chrono::nanoseconds STOP_TIME_THRESHOLD = 3s;
     const float DISTANCE_THRESHOLD = 0.01;
     tf2::Stamped<tf2::Transform> tf;
@@ -111,7 +118,7 @@ private:
     const auto TF_ELAPSED_TIME = now.nanoseconds() - tf.stamp_.time_since_epoch().count();
     const auto TF_STOP_TIME = now.nanoseconds() - tf_past_.stamp_.time_since_epoch().count();
 
-    // 現在時刻から1秒以内に受け取ったtfを使用
+    // 現在時刻から2秒以内に受け取ったtfを使用
     if (TF_ELAPSED_TIME < FILTERING_TIME.count()) {
       double tf_diff = (tf_past_.getOrigin() - tf.getOrigin()).length();
       // 把持対象の位置が停止していることを判定
@@ -132,47 +139,41 @@ private:
     const double GRIPPER_OPEN = angles::from_degrees(-30.0);
     const double GRIPPER_CLOSE = angles::from_degrees(10.0);
 
-    // 何かを掴んでいた時のためにハンドを開閉
+    // 何かを掴んでいた時のためにハンドを開く
     control_gripper(GRIPPER_OPEN);
-    control_gripper(GRIPPER_DEFAULT);
 
     // ロボット座標系（2D）の原点から見た把持対象物への角度を計算
     double x = target_position.x();
     double y = target_position.y();
-    double theta = std::atan2(y, x) * 180.0 / 3.1415926535;
-
-    // 掴む準備をする
-    control_arm(0.0, 0.0, 0.17, 0, 90, 0);
-
-    // ハンドを開く
-    control_gripper(GRIPPER_OPEN);
+    double theta_rad = std::atan2(y, x);
+    double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
     // 把持対象物に正対する
-    control_arm(0.0, 0.0, 0.17, 0, 90, theta);
+    control_arm(0.0, 0.0, 0.17, 0, 90, theta_deg);
 
     // 掴みに行く
-    control_arm(x, y, 0.14, 0, 180, theta);
+    const double GRIPPER_OFFSET = 0.13;
+    double gripper_offset_x = GRIPPER_OFFSET * std::cos(theta_rad);
+    double gripper_offset_y = GRIPPER_OFFSET * std::sin(theta_rad);
+    control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg);
 
     // ハンドを閉じる
     control_gripper(GRIPPER_CLOSE);
-
-    // 持ち上げる
-    control_arm(x, y, 0.17, 0, 180, theta);
 
     // 移動する
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
 
     // 下ろす
-    control_arm(0.15, 0.0, 0.06, 0, 90, 0);
+    control_arm(0.0, -0.15, 0.06, 0, 90, -90);
 
     // ハンドを開く
     control_gripper(GRIPPER_OPEN);
 
     // 少しだけハンドを持ち上げる
-    control_arm(0.13, 0.0, 0.10, 0, 90, 0);
+    control_arm(0.0, -0.15, 0.10, 0, 90, -90);
 
     // 待機姿勢に戻る
-    control_arm(0.0, 0.0, 0.17, 0, 90, 0);
+    control_arm(0.0, 0.0, 0.17, 0, 0, 0);
 
     // ハンドを閉じる
     control_gripper(GRIPPER_DEFAULT);
