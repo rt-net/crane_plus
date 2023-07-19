@@ -148,10 +148,6 @@ private:
     double theta_rad = std::atan2(y, x);
     double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
-    // 掴む準備をする
-    //control_arm(0.0, 0.0, 0.17, 0, 90, 0);
-
-
     // 把持対象物に正対する
     control_arm(0.0, 0.0, 0.17, 0, 90, theta_deg);
 
