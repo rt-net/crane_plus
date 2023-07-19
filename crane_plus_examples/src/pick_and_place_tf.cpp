@@ -71,11 +71,17 @@ public:
     joint_constraint.weight = 1.0;
     constraints.joint_constraints.push_back(joint_constraint);
 
+    joint_constraint.joint_name = "crane_plus_joint3";
+    joint_constraint.position = 0.0;
+    joint_constraint.tolerance_above = angles::from_degrees(0);
+    joint_constraint.tolerance_below = angles::from_degrees(180);
+    joint_constraint.weight = 1.0;
+    constraints.joint_constraints.push_back(joint_constraint);
+
     move_group_arm_->setPathConstraints(constraints);
 
     // 待機姿勢
-    move_group_arm_->setNamedTarget("vertical");
-    move_group_arm_->move();
+    control_arm(0.0, 0.0, 0.17, 0, 0, 0);
 
     tf_buffer_ =
       std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -171,8 +177,7 @@ private:
     control_arm(0.13, 0.0, 0.10, 0, 90, 0);
 
     // 待機姿勢に戻る
-    move_group_arm_->setNamedTarget("vertical");
-    move_group_arm_->move();
+    control_arm(0.0, 0.0, 0.17, 0, 0, 0);
 
     // ハンドを閉じる
     control_gripper(GRIPPER_DEFAULT);
