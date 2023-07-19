@@ -66,8 +66,8 @@ public:
     moveit_msgs::msg::JointConstraint joint_constraint;
     joint_constraint.joint_name = "crane_plus_joint1";
     joint_constraint.position = 0.0;
-    joint_constraint.tolerance_above = angles::from_degrees(90);
-    joint_constraint.tolerance_below = angles::from_degrees(90);
+    joint_constraint.tolerance_above = angles::from_degrees(100);
+    joint_constraint.tolerance_below = angles::from_degrees(100);
     joint_constraint.weight = 1.0;
     constraints.joint_constraints.push_back(joint_constraint);
 
@@ -168,13 +168,13 @@ private:
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
 
     // 下ろす
-    control_arm(0.15, 0.0, 0.06, 0, 90, 0);
+    control_arm(0.0, -0.15, 0.06, 0, 90, -90);
 
     // ハンドを開く
     control_gripper(GRIPPER_OPEN);
 
     // 少しだけハンドを持ち上げる
-    control_arm(0.13, 0.0, 0.10, 0, 90, 0);
+    control_arm(0.0, -0.15, 0.10, 0, 90, -90);
 
     // 待機姿勢に戻る
     control_arm(0.0, 0.0, 0.17, 0, 0, 0);
