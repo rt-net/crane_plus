@@ -175,6 +175,26 @@ Arguments (pass arguments as '<name>:=<value>'):
         (default: 'color_detection')
 ```
 
+### aruco_detection
+
+モノに取り付けたArUcoマーカをカメラで検出し、マーカ位置に合わせて掴むコード例です。
+マーカは[aruco_markers.pdf](https://github.com/rt-net/crane_x7_ros/blob/humble-devel/crane_x7_examples/aruco_markers.pdf)をA4紙に印刷して、一辺50mmの立方体に取り付けて使用します。
+
+検出されたマーカの位置姿勢はtfのフレームとして配信されます。
+tfの`frame_id`はマーカIDごとに異なりID0のマーカの`frame_id`は`target_0`になります。
+掴む対象は`target_0`に設定されています。
+マーカ検出には[OpenCV](https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html)を使用しています。
+
+次のコマンドを実行します。
+
+```bash
+ros2 launch crane_plus_examples camera_example.launch.py example:='aruco_detection'
+```
+
+#### Videos
+
+[back to example list](#examples)
+
 ### color_detection
 
 特定の色の物体を検出して掴むコード例です。
@@ -190,5 +210,7 @@ ros2 launch crane_plus_examples camera_example.launch.py example:='color_detecti
 ```
 
 #### Videos
+
+[back to example list](#examples)
 
 ---
