@@ -89,8 +89,7 @@ private:
 
           // tfの配信
           geometry_msgs::msg::TransformStamped t;
-          t.header.stamp = this->get_clock()->now();
-          t.header.frame_id = "camera_color_optical_frame";
+	  t.header = msg->header;
           t.child_frame_id = "target_" + std::to_string(ids[i]);
           t.transform.translation.x = tvecs[i][0];
           t.transform.translation.y = tvecs[i][1];
