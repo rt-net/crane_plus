@@ -4,6 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 251
@@ -396,7 +397,7 @@ Visualization Manager:
       Zoom Factor: 1
     - Class: rviz_default_plugins/TF
       Enabled: true
-      Frame Timeout: 15
+      Frame Timeout: 1
       Frames:
         All Enabled: false
         base_link:
@@ -429,6 +430,8 @@ Visualization Manager:
           Value: false
         crane_plus_link_hand:
           Value: false
+        target_0:
+          Value: true
         world:
           Value: false
       Marker Scale: 1
@@ -443,7 +446,8 @@ Visualization Manager:
               camera_link:
                 camera_color_frame:
                   camera_color_optical_frame:
-                    {}
+                    target_0:
+                      {}
               camera_stand_p1:
                 {}
               camera_stand_p2:
