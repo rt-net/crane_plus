@@ -178,7 +178,7 @@ Arguments (pass arguments as '<name>:=<value>'):
 ### aruco_detection
 
 モノに取り付けたArUcoマーカをカメラで検出し、マーカ位置に合わせて掴むコード例です。
-マーカは[aruco_markers.pdf](https://github.com/rt-net/crane_x7_ros/blob/humble-devel/crane_x7_examples/aruco_markers.pdf)をA4紙に印刷して、一辺50mmの立方体に取り付けて使用します。
+マーカは[aruco_markers.pdf](./aruco_markers.pdf)をA4紙に印刷して、一辺50mmの立方体に取り付けて使用します。
 
 検出されたマーカの位置姿勢はtfのフレームとして配信されます。
 tfの`frame_id`はマーカIDごとに異なりID0のマーカの`frame_id`は`target_0`になります。
