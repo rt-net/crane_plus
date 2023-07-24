@@ -162,6 +162,7 @@ Webカメラ搭載モデルのカメラを使用したサンプルコードで�
 `demo.launch`を実行している状態で、
 各サンプルを実行できます。
 
+- [aruco\_detection](#aruco_detection)
 - [color\_detection](#color_detection)
 
 実行できるサンプルの一覧は、`camera_example.launch.py`にオプション`-s`を付けて実行することで確認できます。
