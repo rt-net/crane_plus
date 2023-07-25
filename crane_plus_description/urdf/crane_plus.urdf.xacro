@@ -14,6 +14,7 @@
 
   <xacro:arg name="use_gazebo" default="false" />
   <xacro:arg name="use_ignition" default="false" />
+  <xacro:arg name="use_camera" default="false" />
   <xacro:arg name="port_name" default="/dev/ttyUSB0" />
   <xacro:arg name="baudrate" default="1000000" />
   <xacro:arg name="timeout_seconds" default="5.0" />
@@ -87,7 +88,8 @@
     joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
     joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
     joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
-    joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}" >
+    joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"
+    use_camera="$(arg use_camera)">
     <origin xyz="0 0 0"/>
   </xacro:crane_plus>
 
