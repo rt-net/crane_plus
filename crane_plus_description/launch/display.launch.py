@@ -16,11 +16,20 @@
 from ament_index_python.packages import get_package_share_directory
 from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    declare_use_camera = DeclareLaunchArgument(
+            'use_camera',
+            default_value='false',
+            description='Set true to attach the camera model.'
+    )
+
     description_loader = RobotDescriptionLoader()
+    description_loader.use_camera = LaunchConfiguration('use_camera')
 
     rsp = Node(package='robot_state_publisher',
                executable='robot_state_publisher',
@@ -40,4 +49,9 @@ def generate_launch_description():
                      output='log',
                      arguments=['-d', rviz_config_file])
 
-    return LaunchDescription([rsp, jsp, rviz_node])
+    ld = LaunchDescription()
+    ld.add_action(declare_use_camera)
+    ld.add_action(rsp)
+    ld.add_action(jsp)
+    ld.add_action(rviz_node)
+    return ld

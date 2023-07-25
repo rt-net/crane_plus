@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot name="camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="sensor_camera" params="parent">
+
+    <link name="camera_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.05 0.05 0.05" />
+        </geometry>
+        <material name="Black" />
+      </visual>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+      <origin xyz="0.103 0.1025 0.46" rpy="0 0 0" />
+      <parent link="${parent}" />
+      <child link="camera_link" />
+    </joint>
+
+    <link name="camera_color_frame" />
+
+    <joint name="camera_color_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="camera_link" />
+      <child link="camera_color_frame" />
+    </joint>
+
+    <link name="camera_color_optical_frame" />
+
+    <joint name="camera_color_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(90)}" />
+      <parent link="camera_color_frame" />
+      <child link="camera_color_optical_frame" />
+    </joint>
+
+  </xacro:macro>
+</robot>

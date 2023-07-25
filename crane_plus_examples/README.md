@@ -23,11 +23,22 @@ USB通信ポートの設定については`crane_plus_control`の
 
 ### 3. move_groupとcontrollerを起動する
 
+#### 標準のCRANE+ V2を使用する場合
+
 次のコマンドでmove_group (`crane_plus_moveit_config`)と
 controller (`crane_plus_control`)を起動します。
 
 ```sh
 $ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
+```
+
+#### Webカメラ搭載モデルを使用する場合
+
+Webカメラ搭載モデルの場合は、次のコマンドを実行してください。
+```video_device```は使用するWebカメラを指定してください。
+
+```sh
+$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0 use_camera:=true video_device:=/dev/video0
 ```
 
 ## 準備（Ignition Gazeboを使う場合）
@@ -138,6 +149,68 @@ $ ros2 launch crane_plus_examples example.launch.py example:='pick_and_place'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/pick_and_place.gif width=500px />
+
+[back to example list](#examples)
+
+---
+
+## Camera Examples
+
+Webカメラ搭載モデルのカメラを使用したサンプルコードです。
+
+[「Webカメラ搭載モデルを使用する場合」](#Webカメラ搭載モデルを使用する場合)の手順に従って、
+`demo.launch`を実行している状態で、
+各サンプルを実行できます。
+
+- [aruco\_detection](#aruco_detection)
+- [color\_detection](#color_detection)
+
+実行できるサンプルの一覧は、`camera_example.launch.py`にオプション`-s`を付けて実行することで確認できます。
+
+```sh
+$ ros2 launch crane_plus_examples camera_example.launch.py -s
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'example':
+        Set an example executable name: [color_detection]
+        (default: 'color_detection')
+```
+
+### aruco_detection
+
+モノに取り付けたArUcoマーカをカメラで検出し、マーカ位置に合わせて掴むコード例です。
+マーカは[aruco_markers.pdf](./aruco_markers.pdf)をA4紙に印刷して、一辺50mmの立方体に取り付けて使用します。
+
+検出されたマーカの位置姿勢はtfのフレームとして配信されます。
+tfの`frame_id`はマーカIDごとに異なりID0のマーカの`frame_id`は`target_0`になります。
+掴む対象は`target_0`に設定されています。
+マーカ検出には[OpenCV](https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html)を使用しています。
+
+次のコマンドを実行します。
+
+```bash
+ros2 launch crane_plus_examples camera_example.launch.py example:='aruco_detection'
+```
+
+#### Videos
+
+[back to example list](#examples)
+
+### color_detection
+
+特定の色の物体を検出して掴むコード例です。
+
+デフォルトでは赤い物体の位置をtfのフレームとして配信します。
+tfの`frame_id`は`target_0`です。
+色検出には[OpenCV](https://docs.opencv.org/4.x/db/d8e/tutorial_threshold.html)を使用しています。
+
+次のコマンドを実行します。
+
+```sh
+ros2 launch crane_plus_examples camera_example.launch.py example:='color_detection'
+```
+
+#### Videos
 
 [back to example list](#examples)
 
