@@ -45,7 +45,7 @@ $ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0 use_cam
 =======
 ![crane_plus_ignition](https://rt-net.github.io/images/crane-plus/crane_plus_ignition.png)
 
-### 1. move_groupとIgnition Gazeboを起動する
+### 1. move_groupとGazeboを起動する
 
 次のコマンドでmove_group (`crane_plus_moveit_config`)とGazeboを起動します。
 
