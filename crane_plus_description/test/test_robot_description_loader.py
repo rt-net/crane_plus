@@ -59,3 +59,10 @@ def test_use_ignition():
     rdl.use_gazebo = 'true'
     rdl.use_ignition = 'true'
     assert 'ign_ros2_control/IgnitionSystem' in exec_load(rdl)
+
+
+def test_use_camera():
+    # use_cameraが変更されて、xacroにcameraがセットされることを期待
+    rdl = RobotDescriptionLoader()
+    rdl.use_camera = 'true'
+    assert 'camera_link' in exec_load(rdl)
