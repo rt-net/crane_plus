@@ -155,8 +155,7 @@ private:
     const double GRIPPER_OFFSET = 0.13;
     double gripper_offset_x = GRIPPER_OFFSET * std::cos(theta_rad);
     double gripper_offset_y = GRIPPER_OFFSET * std::sin(theta_rad);
-    if(control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg) != 1)
-    {
+    if(control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg) != 1) {
       // 軌道生成に失敗した時はpick_and_placeを中断して待機姿勢に戻る
       control_arm(0.0, 0.0, 0.17, 0, 0, 0);
       return;
