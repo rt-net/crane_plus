@@ -206,8 +206,8 @@ private:
     target_pose.orientation = tf2::toMsg(q);
     move_group_arm_->setPoseTarget(target_pose);
     // アーム動作の成否を取得
-    moveit::core::MoveItErrorCode result = move_group_arm_->move();
-    return result.val == moveit::core::MoveItErrorCode::SUCCESS;
+    moveit::planning_interface::MoveItErrorCode result = move_group_arm_->move();
+    return result.val == moveit::planning_interface::MoveItErrorCode::SUCCESS;
   }
 
   std::shared_ptr<MoveGroupInterface> move_group_arm_;
