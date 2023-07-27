@@ -155,7 +155,11 @@ private:
     const double GRIPPER_OFFSET = 0.13;
     double gripper_offset_x = GRIPPER_OFFSET * std::cos(theta_rad);
     double gripper_offset_y = GRIPPER_OFFSET * std::sin(theta_rad);
-    control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg);
+    if (!control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg)) {
+      // アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
+      control_arm(0.0, 0.0, 0.17, 0, 0, 0);
+      return;
+    }
 
     // ハンドを閉じる
     control_gripper(GRIPPER_CLOSE);
@@ -189,7 +193,7 @@ private:
   }
 
   // アーム制御
-  void control_arm(
+  bool control_arm(
     const double x, const double y, const double z,
     const double roll, const double pitch, const double yaw)
   {
@@ -201,7 +205,9 @@ private:
     q.setRPY(angles::from_degrees(roll), angles::from_degrees(pitch), angles::from_degrees(yaw));
     target_pose.orientation = tf2::toMsg(q);
     move_group_arm_->setPoseTarget(target_pose);
-    move_group_arm_->move();
+    // アーム動作の成否を取得
+    moveit::core::MoveItErrorCode result = move_group_arm_->move();
+    return result.val == moveit::core::MoveItErrorCode::SUCCESS;
   }
 
   std::shared_ptr<MoveGroupInterface> move_group_arm_;
