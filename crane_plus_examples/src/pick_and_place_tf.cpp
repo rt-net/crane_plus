@@ -207,11 +207,7 @@ private:
     move_group_arm_->setPoseTarget(target_pose);
     // アーム動作の成否を取得
     moveit::core::MoveItErrorCode result = move_group_arm_->move();
-    if (result.val == moveit::core::MoveItErrorCode::SUCCESS) {
-      return true;
-    } else {
-      return false;
-    }
+    return result.val == moveit::core::MoveItErrorCode::SUCCESS;
   }
 
   std::shared_ptr<MoveGroupInterface> move_group_arm_;
