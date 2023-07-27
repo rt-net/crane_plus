@@ -159,7 +159,7 @@ private:
         x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90,
         theta_deg) != moveit::core::MoveItErrorCode::SUCCESS)
     {
-      // 軌道生成に失敗した時はpick_and_placeを中断して待機姿勢に戻る
+      // アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
       control_arm(0.0, 0.0, 0.17, 0, 0, 0);
       return;
     }
