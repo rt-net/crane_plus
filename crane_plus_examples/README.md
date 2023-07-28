@@ -59,7 +59,7 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 Gazeboでサンプルプログラムを実行する場合は`use_sim_time`オプションを付けます。
 
 ```sh
-ros2 launch crane_plus_examples example.launch.py example:='gripper_control' use_sim_time:='true'
+$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control' use_sim_time:='true'
 ```
 
 ## Examples
