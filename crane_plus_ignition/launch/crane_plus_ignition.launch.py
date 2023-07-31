@@ -21,6 +21,7 @@ from launch.actions import ExecuteProcess
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
+from launch_ros.actions import SetParameter
 
 
 def generate_launch_description():
@@ -80,11 +81,20 @@ def generate_launch_description():
                 output='screen',
             )
 
+    bridge = Node(
+                package='ros_ign_bridge',
+                executable='parameter_bridge',
+                arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
+                output='screen'
+            )
+
     return LaunchDescription([
+        SetParameter(name='use_sim_time', value=True),
         ign_gazebo,
         move_group,
         ignition_spawn_entity,
         spawn_joint_state_controller,
         spawn_arm_controller,
-        spawn_gripper_controller
+        spawn_gripper_controller,
+        bridge
     ])
