@@ -60,6 +60,7 @@ Ignition Gazeboでサンプルプログラムを実行する場合は`use_sim_ti
 
 ```sh
 $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control' use_sim_time:='true'
+```
 
 ## Examples
 
