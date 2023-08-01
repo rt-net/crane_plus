@@ -2,6 +2,11 @@
 Changelog for package crane_plus
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Feature/support humble (`#58 <https://github.com/rt-net/crane_plus/issues/58>`_)
+* Contributors: Shota Aoki, YusukeKato
+
 1.1.0 (2022-08-16)
 ------------------
 * Update author tags (`#49 <https://github.com/rt-net/crane_plus/issues/49>`_)
