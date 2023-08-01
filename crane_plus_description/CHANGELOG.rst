@@ -2,8 +2,8 @@
 Changelog for package crane_plus_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.0 (2023-08-01)
+------------------
 * カメラサンプルのHumble対応 (`#64 <https://github.com/rt-net/crane_plus/issues/64>`_)
 * Feature/support humble (`#58 <https://github.com/rt-net/crane_plus/issues/58>`_)
 * Contributors: Kuwamai, Shota Aoki, YusukeKato

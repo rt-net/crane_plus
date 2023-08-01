@@ -2,8 +2,8 @@
 Changelog for package crane_plus_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.0 (2023-08-01)
+------------------
 * 軌道生成の失敗時にpick_and_placeを中断する機能を追加 (`#65 <https://github.com/rt-net/crane_plus/issues/65>`_)
 * カメラサンプルのHumble対応 (`#64 <https://github.com/rt-net/crane_plus/issues/64>`_)
 * Feature/support humble (`#58 <https://github.com/rt-net/crane_plus/issues/58>`_)

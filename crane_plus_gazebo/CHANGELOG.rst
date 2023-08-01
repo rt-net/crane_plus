@@ -2,8 +2,8 @@
 Changelog for package crane_plus_gazebo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.0 (2023-08-01)
+------------------
 * Gazeboカメラ位置の調整 (`#67 <https://github.com/rt-net/crane_plus/issues/67>`_)
 * Feature/support humble (`#58 <https://github.com/rt-net/crane_plus/issues/58>`_)
 * Contributors: Shota Aoki, YusukeKato
