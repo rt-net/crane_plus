@@ -200,6 +200,7 @@ ros2 launch crane_plus_examples camera_example.launch.py example:='aruco_detecti
 ```
 
 #### Videos
+[![crane_plus_aruco_detection_demo](https://rt-net.github.io/images/crane-plus/aruco_detection.gif)](https://youtu.be/m9dus6LCocc)
 
 [back to example list](#examples)
 
@@ -218,6 +219,7 @@ ros2 launch crane_plus_examples camera_example.launch.py example:='color_detecti
 ```
 
 #### Videos
+[![crane_plus_color_detection_demo](https://rt-net.github.io/images/crane-plus/color_detection.gif)](https://youtu.be/Kn0eWA7sALY)
 
 [back to example list](#examples)
 
