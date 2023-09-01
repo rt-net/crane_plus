@@ -183,6 +183,8 @@ Arguments (pass arguments as '<name>:=<value>'):
         (default: 'color_detection')
 ```
 
+---
+
 ### aruco_detection
 
 モノに取り付けたArUcoマーカをカメラで検出し、マーカ位置に合わせて掴むコード例です。
@@ -203,6 +205,8 @@ ros2 launch crane_plus_examples camera_example.launch.py example:='aruco_detecti
 [![crane_plus_aruco_detection_demo](https://rt-net.github.io/images/crane-plus/aruco_detection.gif)](https://youtu.be/m9dus6LCocc)
 
 [back to example list](#examples)
+
+---
 
 ### color_detection
 
