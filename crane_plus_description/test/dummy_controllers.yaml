@@ -1,0 +1,35 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    crane_plus_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    crane_plus_gripper_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+crane_plus_arm_controller:
+  ros__parameters:
+    joints:
+      - crane_plus_joint1
+      - crane_plus_joint2
+      - crane_plus_joint3
+      - crane_plus_joint4
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+
+crane_plus_gripper_controller:
+  ros__parameters:
+    joints:
+      - crane_plus_joint_hand
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position

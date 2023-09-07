@@ -27,19 +27,21 @@
             name_link_4
             name_link_hand
             use_ignition
+            config_package
+            config_file_path
             ">
 
     <gazebo>
       <xacro:if value="${use_ignition}">
         <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-          <parameters>$(find crane_plus_control)/config/crane_plus_controllers.yaml</parameters>
+          <parameters>$(find ${config_package})/${config_file_path}</parameters>
         </plugin>
       </xacro:if>
 
       <xacro:unless value="${use_ignition}">
         <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
           <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
-          <parameters>$(find crane_plus_control)/config/crane_plus_controllers.yaml</parameters>
+          <parameters>$(find ${config_package})/${config_file_path}</parameters>
         </plugin>
       </xacro:unless>
     </gazebo>
