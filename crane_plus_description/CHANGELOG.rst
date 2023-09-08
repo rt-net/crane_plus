@@ -2,6 +2,11 @@
 Changelog for package crane_plus_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-09-08)
+------------------
+* テスト実行時はダミーのパラメータファイルを読み込めるようにdescription_loaderを修正 (`#73 <https://github.com/rt-net/crane_plus/issues/73>`_)
+* Contributors: YusukeKato
+
 2.0.0 (2023-08-01)
 ------------------
 * カメラサンプルのHumble対応 (`#64 <https://github.com/rt-net/crane_plus/issues/64>`_)

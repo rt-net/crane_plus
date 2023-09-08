@@ -2,6 +2,11 @@
 Changelog for package crane_plus_gazebo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-09-08)
+------------------
+* テスト実行時はダミーのパラメータファイルを読み込めるようにdescription_loaderを修正 (`#73 <https://github.com/rt-net/crane_plus/issues/73>`_)
+* Contributors: YusukeKato
+
 2.0.0 (2023-08-01)
 ------------------
 * Gazeboカメラ位置の調整 (`#67 <https://github.com/rt-net/crane_plus/issues/67>`_)

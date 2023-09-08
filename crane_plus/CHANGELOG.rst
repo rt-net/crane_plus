@@ -2,6 +2,9 @@
 Changelog for package crane_plus
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-09-08)
+------------------
+
 2.0.0 (2023-08-01)
 ------------------
 * Feature/support humble (`#58 <https://github.com/rt-net/crane_plus/issues/58>`_)

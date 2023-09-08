@@ -29,6 +29,8 @@ class RobotDescriptionLoader():
         self.use_gazebo = 'false'
         self.use_ignition = 'false'
         self.use_camera = 'false'
+        self.gz_control_config_package = ''
+        self.gz_control_config_file_path = ''
 
     def load(self):
         return Command([
@@ -37,5 +39,7 @@ class RobotDescriptionLoader():
                 ' port_name:=', self.port_name,
                 ' use_gazebo:=', self.use_gazebo,
                 ' use_ignition:=', self.use_ignition,
-                ' use_camera:=', self.use_camera
+                ' use_camera:=', self.use_camera,
+                ' gz_control_config_package:=', self.gz_control_config_package,
+                ' gz_control_config_file_path:=', self.gz_control_config_file_path
                 ])
