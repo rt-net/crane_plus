@@ -2,8 +2,8 @@
 Changelog for package crane_plus_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.1 (2023-09-08)
+------------------
 * READMEにカメラサンプルデモのGIFを追加 (`#70 <https://github.com/rt-net/crane_plus/issues/70>`_)
 * Contributors: YusukeKato
 
