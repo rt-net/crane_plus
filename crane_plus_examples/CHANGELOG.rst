@@ -2,6 +2,11 @@
 Changelog for package crane_plus_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-09-08)
+------------------
+* READMEにカメラサンプルデモのGIFを追加 (`#70 <https://github.com/rt-net/crane_plus/issues/70>`_)
+* Contributors: YusukeKato
+
 2.0.0 (2023-08-01)
 ------------------
 * 軌道生成の失敗時にpick_and_placeを中断する機能を追加 (`#65 <https://github.com/rt-net/crane_plus/issues/65>`_)
