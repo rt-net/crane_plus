@@ -22,6 +22,8 @@
   <xacro:arg name="read_loads" default="0" />
   <xacro:arg name="read_voltages" default="0" />
   <xacro:arg name="read_temperatures" default="0" />
+  <xacro:arg name="gz_control_config_package" default="" />
+  <xacro:arg name="gz_control_config_file_path" default="" />
 
   <!-- Link to provide the location reference for the arm -->
   <link name="base_link"/>
@@ -128,7 +130,9 @@
       name_link_3="${NAME_LINK_3}"
       name_link_4="${NAME_LINK_4}"
       name_link_hand="${NAME_LINK_HAND}"
-      use_ignition="$(arg use_ignition)" />
+      use_ignition="$(arg use_ignition)"
+      config_package="$(arg gz_control_config_package)" 
+      config_file_path="$(arg gz_control_config_file_path)" />
 
     <xacro:crane_plus_gazebo_ros2_control_settings 
       name="crane_plus"
