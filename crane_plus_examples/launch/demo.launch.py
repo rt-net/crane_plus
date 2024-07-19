@@ -30,7 +30,6 @@ def generate_launch_description():
         default_value='/dev/ttyUSB0',
         description='Set port name.'
     )
-
     declare_use_camera = DeclareLaunchArgument(
         'use_camera',
         default_value='false',
@@ -97,7 +96,7 @@ def generate_launch_description():
         declare_use_camera,
         declare_video_device,
         move_group,
-        move_group_camera,
+        # move_group_camera,
         control_node,
-        usb_cam_node
+        # usb_cam_node
     ])
