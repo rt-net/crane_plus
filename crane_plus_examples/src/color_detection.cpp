@@ -29,9 +29,7 @@
 #include "tf2_ros/transform_broadcaster.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-// #include "cv_bridge/cv_bridge.h"
 #include "cv_bridge/cv_bridge.hpp"
-// #include "image_geometry/pinhole_camera_model.h"
 #include "image_geometry/pinhole_camera_model.hpp"
 using std::placeholders::_1;
 

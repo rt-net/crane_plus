@@ -96,7 +96,5 @@ def generate_launch_description():
         declare_use_camera,
         declare_video_device,
         move_group,
-        # move_group_camera,
         control_node,
-        # usb_cam_node
     ])

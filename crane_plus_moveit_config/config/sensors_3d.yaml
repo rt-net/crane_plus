@@ -21,3 +21,4 @@ kinect_depthimage:
   queue_size: 5
   sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
   shadow_threshold: 0.2
+  

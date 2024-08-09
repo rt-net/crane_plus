@@ -11,30 +11,26 @@ joint_limits:
   crane_plus_joint1:
     has_velocity_limits: true
     max_velocity: 2.0
-    # has_acceleration_limits: false
     has_acceleration_limits: true
     max_acceleration: 1.0
   crane_plus_joint2:
     has_velocity_limits: true
     max_velocity: 2.0
-    # has_acceleration_limits: false
     has_acceleration_limits: true
     max_acceleration: 1.0
   crane_plus_joint3:
     has_velocity_limits: true
     max_velocity: 2.0
-    # has_acceleration_limits: false
     has_acceleration_limits: true
     max_acceleration: 1.0
   crane_plus_joint4:
     has_velocity_limits: true
     max_velocity: 2.0
-    # has_acceleration_limits: false
     has_acceleration_limits: true
     max_acceleration: 1.0
   crane_plus_joint_hand:
     has_velocity_limits: true
     max_velocity: 2.0
-    # has_acceleration_limits: false
     has_acceleration_limits: true
     max_acceleration: 1.0
+    
