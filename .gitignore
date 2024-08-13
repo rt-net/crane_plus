@@ -61,6 +61,14 @@ target/
 
 # unnecessary
 crane_plus_moveit_config/.setup_assistant
+crane_plus_moveit_config/launch/demo.launch.py
+crane_plus_moveit_config/launch/move_group.launch.py
+crane_plus_moveit_config/launch/rsp.launch.py
+crane_plus_moveit_config/launch/setup_assistant.launch.py
+crane_plus_moveit_config/launch/spawn_controllers.launch.py
+crane_plus_moveit_config/launch/static_virtual_joint_tfs.launch.py
+crane_plus_moveit_config/launch/warehouse_db.launch.py
+crane_plus_moveit_config/launch/moveit_rviz.launch.py 
 install/
 log/
-crane_plus_examples/scripts/
+crane_plus_examples/scripts
