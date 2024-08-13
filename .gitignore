@@ -58,3 +58,9 @@ target/
 .pytest_cache
 
 .vscode
+
+# unnecessary
+crane_plus_moveit_config/.setup_assistant
+install/
+log/
+crane_plus_examples/scripts/
