@@ -42,6 +42,7 @@
   <xacro:property name="NAME_LINK_3" value="crane_plus_link3"/>
   <xacro:property name="NAME_LINK_4" value="crane_plus_link4"/>
   <xacro:property name="NAME_LINK_HAND" value="crane_plus_link_hand"/>
+  <xacro:property name="NAME_LINK_ENDTIP" value="crane_plus_link_endtip"/>
 
   <xacro:property name="NAME_JOINT_BASE" value="crane_plus_joint_base"/>
   <xacro:property name="NAME_JOINT_1" value="crane_plus_joint1"/>
@@ -49,6 +50,7 @@
   <xacro:property name="NAME_JOINT_3" value="crane_plus_joint3"/>
   <xacro:property name="NAME_JOINT_4" value="crane_plus_joint4"/>
   <xacro:property name="NAME_JOINT_HAND" value="crane_plus_joint_hand"/>
+  <xacro:property name="NAME_JOINT_ENDTIP" value="crane_plus_joint_endtip"/>
 
   <xacro:property name="M_PI" value="3.14159"/>
   <xacro:property name="TO_RADIAN" value="${M_PI / 180.0}"/>
@@ -73,12 +75,14 @@
     name_link_3="${NAME_LINK_3}"
     name_link_4="${NAME_LINK_4}"
     name_link_hand="${NAME_LINK_HAND}"
+    name_link_endtip="${NAME_LINK_ENDTIP}"
     name_joint_base="${NAME_JOINT_BASE}"
     name_joint_1="${NAME_JOINT_1}"
     name_joint_2="${NAME_JOINT_2}"
     name_joint_3="${NAME_JOINT_3}"
     name_joint_4="${NAME_JOINT_4}"
     name_joint_hand="${NAME_JOINT_HAND}"
+    name_joint_endtip="${NAME_JOINT_ENDTIP}"
 
     joints_vlimit="${JOINT_VELOCITY_LIMIT}"
     joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"

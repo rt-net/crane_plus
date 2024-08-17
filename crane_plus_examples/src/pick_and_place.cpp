@@ -76,19 +76,22 @@ int main(int argc, char ** argv)
   geometry_msgs::msg::Pose target_pose;
   tf2::Quaternion q;
   target_pose.position.x = 0.0;
-  target_pose.position.y = -0.09;
+  target_pose.position.y = -0.18;
   target_pose.position.z = 0.17;
+  q.setRPY(to_radians(0), to_radians(0), to_radians(-90));
+  target_pose.orientation = tf2::toMsg(q);
+  move_group_arm.setPoseTarget(target_pose);
+  move_group_arm.move();
+
+  target_pose.position.x = 0.0;
+  target_pose.position.y = -0.09;
+  target_pose.position.z = 0.08;
   q.setRPY(to_radians(0), to_radians(90), to_radians(-90));
   target_pose.orientation = tf2::toMsg(q);
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
-  q.setRPY(to_radians(0), to_radians(180), to_radians(-90));
-  target_pose.orientation = tf2::toMsg(q);
-  move_group_arm.setPoseTarget(target_pose);
-  move_group_arm.move();
-
-  target_pose.position.z = 0.14;
+  target_pose.position.z = 0.05;
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
@@ -97,7 +100,7 @@ int main(int argc, char ** argv)
   move_group_gripper.setJointValueTarget(gripper_joint_values);
   move_group_gripper.move();
 
-  target_pose.position.z = 0.17;
+  target_pose.position.z = 0.08;
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
@@ -105,10 +108,10 @@ int main(int argc, char ** argv)
   move_group_arm.setNamedTarget("home");
   move_group_arm.move();
 
-  target_pose.position.x = 0.15;
+  target_pose.position.x = 0.24;
   target_pose.position.y = 0.0;
   target_pose.position.z = 0.06;
-  q.setRPY(to_radians(0), to_radians(90), to_radians(0));
+  q.setRPY(to_radians(0), to_radians(0), to_radians(0));
   target_pose.orientation = tf2::toMsg(q);
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();

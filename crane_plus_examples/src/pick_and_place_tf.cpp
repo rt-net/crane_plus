@@ -81,7 +81,7 @@ public:
     move_group_arm_->setPathConstraints(constraints);
 
     // 待機姿勢
-    control_arm(0.0, 0.0, 0.17, 0, 0, 0);
+    control_arm(0.0, 0.0, 0.26, 0, -90, 0);
 
     tf_buffer_ =
       std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -149,15 +149,15 @@ private:
     double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
     // 把持対象物に正対する
-    control_arm(0.0, 0.0, 0.17, 0, 90, theta_deg);
+    control_arm(0.09 * std::cos(theta_rad), 0.09 * std::sin(theta_rad), 0.17, 0, 0, theta_deg);
 
     // 掴みに行く
-    const double GRIPPER_OFFSET = 0.13;
+    const double GRIPPER_OFFSET = 0.04;
     double gripper_offset_x = GRIPPER_OFFSET * std::cos(theta_rad);
     double gripper_offset_y = GRIPPER_OFFSET * std::sin(theta_rad);
-    if (!control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg)) {
+    if (!control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 0, theta_deg)) {
       // アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
-      control_arm(0.0, 0.0, 0.17, 0, 0, 0);
+      control_arm(0, 0, 0.26, 0, -90, 0);
       return;
     }
 
@@ -165,19 +165,19 @@ private:
     control_gripper(GRIPPER_CLOSE);
 
     // 移動する
-    control_arm(0.0, 0.0, 0.17, 0, 90, 0);
+    control_arm(0.09, 0.0, 0.17, 0, 0, 0);
 
     // 下ろす
-    control_arm(0.0, -0.15, 0.06, 0, 90, -90);
+    control_arm(0.0, -0.24, 0.06, 0, 0, -90);
 
     // ハンドを開く
     control_gripper(GRIPPER_OPEN);
 
     // 少しだけハンドを持ち上げる
-    control_arm(0.0, -0.15, 0.10, 0, 90, -90);
+    control_arm(0.0, -0.24, 0.10, 0, 0, -90);
 
     // 待機姿勢に戻る
-    control_arm(0.0, 0.0, 0.17, 0, 0, 0);
+    control_arm(0.0, 0.0, 0.26, 0, -90, 0);
 
     // ハンドを閉じる
     control_gripper(GRIPPER_DEFAULT);
