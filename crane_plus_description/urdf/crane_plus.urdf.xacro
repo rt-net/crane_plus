@@ -82,7 +82,7 @@
     name_joint_3="${NAME_JOINT_3}"
     name_joint_4="${NAME_JOINT_4}"
     name_joint_hand="${NAME_JOINT_HAND}"
-    name_joint_endtip="${NAME_JOINT_ENDTIP}"
+    name_joint_tcp="${NAME_JOINT_TCP}"
 
     joints_vlimit="${JOINT_VELOCITY_LIMIT}"
     joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
