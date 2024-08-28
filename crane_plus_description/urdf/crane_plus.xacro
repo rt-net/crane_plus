@@ -300,7 +300,7 @@
       </inertial>
     </link>
 
-    <!-- endtip for MoveIt -->
+    <!-- Tool Center Point for MoveIt -->
     <joint name="${name_joint_endtip}" type="fixed">
       <origin xyz="0 0 0.090" rpy="0 ${-M_PI/2} 0"/>
       <parent link="${name_link_4}"/>
