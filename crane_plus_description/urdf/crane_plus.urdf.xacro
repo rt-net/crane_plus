@@ -50,7 +50,7 @@
   <xacro:property name="NAME_JOINT_3" value="crane_plus_joint3"/>
   <xacro:property name="NAME_JOINT_4" value="crane_plus_joint4"/>
   <xacro:property name="NAME_JOINT_HAND" value="crane_plus_joint_hand"/>
-  <xacro:property name="NAME_JOINT_ENDTIP" value="crane_plus_joint_endtip"/>
+  <xacro:property name="NAME_JOINT_TCP" value="crane_plus_joint_tcp"/>
 
   <xacro:property name="M_PI" value="3.14159"/>
   <xacro:property name="TO_RADIAN" value="${M_PI / 180.0}"/>
