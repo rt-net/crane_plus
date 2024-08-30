@@ -30,7 +30,9 @@ set(executable_list
   pose_groupstate
   joint_values
   pick_and_place
+  pick_and_place_tcp
   pick_and_place_tf
+  pick_and_place_tf_tcp
   color_detection
   aruco_detection
 )
