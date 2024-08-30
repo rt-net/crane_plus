@@ -53,7 +53,7 @@
               name_joint_3
               name_joint_4
               name_joint_hand
-              name_joint_endtip
+              name_joint_tcp
               joints_vlimit
               joint_1_lower_limit
               joint_1_upper_limit
@@ -301,14 +301,13 @@
     </link>
 
     <!-- Tool Center Point for MoveIt -->
-    <joint name="${name_joint_endtip}" type="fixed">
+    <joint name="${name_joint_tcp}" type="fixed">
       <origin xyz="0 0 0.090" rpy="0 ${-M_PI/2} 0"/>
       <parent link="${name_link_4}"/>
-      <child link="${name_link_endtip}"/>
+      <child link="${name_link_tcp}"/>
     </joint>
 
-    <link name="${name_link_endtip}">
-    </link>
+    <link name="${name_link_tcp}"/>
 
     <!-- camera -->
     <xacro:if value="$(arg use_camera)">
