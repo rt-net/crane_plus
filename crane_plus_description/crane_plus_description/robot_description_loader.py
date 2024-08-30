@@ -31,6 +31,8 @@ class RobotDescriptionLoader():
         self.use_camera = 'false'
         self.gz_control_config_package = ''
         self.gz_control_config_file_path = ''
+        self.tcp_offset_xyz = '0 0 0'
+        self.tcp_offset_rpy = '0 0 0'
 
     def load(self):
         return Command([
@@ -41,5 +43,7 @@ class RobotDescriptionLoader():
                 ' use_ignition:=', self.use_ignition,
                 ' use_camera:=', self.use_camera,
                 ' gz_control_config_package:=', self.gz_control_config_package,
-                ' gz_control_config_file_path:=', self.gz_control_config_file_path
+                ' gz_control_config_file_path:=', self.gz_control_config_file_path,
+                ' tcp_offset_xyz:=', f"'{self.tcp_offset_xyz}'",
+                ' tcp_offset_rpy:=', f"'{self.tcp_offset_rpy}'",
                 ])

@@ -66,6 +66,8 @@
               joint_hand_lower_limit
               joint_hand_upper_limit
               use_camera
+              tcp_offset_xyz
+              tcp_offset_rpy
               *origin">
 
     <joint name="${name_joint_base}" type="fixed">
@@ -302,7 +304,7 @@
 
     <!-- Tool Center Point for MoveIt -->
     <joint name="${name_joint_tcp}" type="fixed">
-      <origin xyz="0 0 0.090" rpy="0 ${-M_PI/2} 0"/>
+      <origin xyz="${tcp_offset_xyz}" rpy="${tcp_offset_rpy}"/>
       <parent link="${name_link_4}"/>
       <child link="${name_link_tcp}"/>
     </joint>

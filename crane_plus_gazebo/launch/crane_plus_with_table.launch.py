@@ -56,6 +56,8 @@ def generate_launch_description():
     description_loader.use_ignition = 'true'
     description_loader.gz_control_config_package = 'crane_plus_control'
     description_loader.gz_control_config_file_path = 'config/crane_plus_controllers.yaml'
+    description_loader.tcp_offset_xyz = '0 0 0.09'
+    description_loader.tcp_offset_rpy = '0 -1.57 0'
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(

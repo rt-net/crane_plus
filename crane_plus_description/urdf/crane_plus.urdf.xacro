@@ -24,6 +24,8 @@
   <xacro:arg name="read_temperatures" default="0" />
   <xacro:arg name="gz_control_config_package" default="" />
   <xacro:arg name="gz_control_config_file_path" default="" />
+  <xacro:arg name="tcp_offset_xyz" default="0 0 0" />
+  <xacro:arg name="tcp_offset_rpy" default="0 0 0" />
 
   <!-- Link to provide the location reference for the arm -->
   <link name="base_link"/>
@@ -95,7 +97,9 @@
     joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
     joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
     joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"
-    use_camera="$(arg use_camera)">
+    use_camera="$(arg use_camera)"
+    tcp_offset_xyz="$(arg tcp_offset_xyz)"
+    tcp_offset_rpy="$(arg tcp_offset_rpy)">
     <origin xyz="0 0 0"/>
   </xacro:crane_plus>
 
