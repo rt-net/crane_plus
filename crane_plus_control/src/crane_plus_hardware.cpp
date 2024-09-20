@@ -205,7 +205,6 @@ return_type CranePlusHardware::read(
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"),
       driver_->get_last_error_log().c_str());
-    return return_type::ERROR;
   } else {
     for (uint i = 0; i < hw_position_states_.size(); ++i) {
       hw_position_states_[i] = joint_positions[i];
@@ -271,7 +270,6 @@ return_type CranePlusHardware::write(
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"),
       driver_->get_last_error_log().c_str());
-    return return_type::ERROR;
   }
 
   prev_comm_timestamp_ = steady_clock_.now();
