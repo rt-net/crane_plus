@@ -15,6 +15,7 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
+from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -24,38 +25,44 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 
 def generate_launch_description():
+    # declare_loaded_description = DeclareLaunchArgument(
+    #     "loaded_description",
+    #     default_value="",
+    #     description="Set robot_description text.  \
+    #                  It is recommended to use RobotDescriptionLoader() in crane_plus_description.",
+    # )
     ld = LaunchDescription()
-    declare_loaded_description = DeclareLaunchArgument(
-        "loaded_description",
-        default_value="",
-        description="Set robot_description text.  \
-                     It is recommended to use RobotDescriptionLoader() in crane_plus_description.",
+    description_loader = RobotDescriptionLoader()
+    ld.add_action(
+        DeclareLaunchArgument(
+            'loaded_description',
+            default_value=description_loader.load(),
+            description="Set robot_description text.  \
+                      It is recommended to use RobotDescriptionLoader() in crane_plus_description."
+        )
     )
-
+    
     moveit_config = (
         MoveItConfigsBuilder("crane_plus")
         .planning_scene_monitor(
             publish_robot_description=True,
             publish_robot_description_semantic=True,
         )
-        .robot_description(
-            file_path=os.path.join(
-                get_package_share_directory("crane_plus_description"),
-                "urdf",
-                "crane_plus.urdf.xacro",
-            ),
-            mappings={},
-        )
-        .robot_description_semantic(
-            file_path="config/crane_plus.srdf",
-            mappings={"model": "crane_plus"},
-        )
-        .joint_limits(file_path="config/joint_limits.yaml")
-        .trajectory_execution(
-            file_path="config/controllers.yaml", moveit_manage_controllers=True
-        )
+        # .robot_description(
+        #     file_path=os.path.join(
+        #         get_package_share_directory("crane_plus_description"),
+        #         "urdf",
+        #         "crane_plus.urdf.xacro",
+        #     ),
+        #     mappings={},
+        # )
+        # .robot_description_semantic(
+        #     file_path="config/crane_plus.srdf",
+        #     mappings={"model": "crane_plus"},
+        # )
+        # .joint_limits(file_path="config/joint_limits.yaml")
+        .trajectory_execution(file_path="config/controllers.yaml")
         .planning_pipelines(pipelines=["ompl"])
-        .robot_description_kinematics(file_path="config/kinematics.yaml")
         .moveit_cpp(
             file_path=get_package_share_directory("crane_plus_examples_py")
             + "/config/crane_plus_moveit_py_examples.yaml"
@@ -70,40 +77,37 @@ def generate_launch_description():
     moveit_config.move_group_capabilities = {"capabilities": ""}
 
     declare_example_name = DeclareLaunchArgument(
-        "example",
-        default_value="gripper_control",
+        'example',
+        default_value='gripper_control',
         description=(
-            "Set an example executable name: "
-            "[gripper_control, pose_groupstate, joint_values, pick_and_place]"
+            'Set an example executable name: '
+            '[gripper_control, pose_groupstate, joint_values, pick_and_place, pick_and_place_tf]'
         ),
     )
 
-    declare_use_sim_time = DeclareLaunchArgument(
-        "use_sim_time",
-        default_value="false",
-        description=("Set true when using the gazebo simulator."),
-    )
+    # declare_use_sim_time = DeclareLaunchArgument(
+    #     "use_sim_time",
+    #     default_value="false",
+    #     description=("Set true when using the gazebo simulator."),
+    # )
 
-    use_sim_time_name = SetParameter(
-        name="use_sim_time", value=LaunchConfiguration("use_sim_time")
-    )
+    # use_sim_time_name = SetParameter(
+    #     name="use_sim_time", value=LaunchConfiguration("use_sim_time")
+    # )
 
     example_node = Node(
         name=[LaunchConfiguration("example"), "_node"],
-        package="crane_plus_examples",
+        package="crane_plus_examples_py",
         executable=LaunchConfiguration("example"),
         output="screen",
-        parameters=[
-            moveit_config.robot_description,
-            moveit_config.robot_description_semantic,
-            moveit_config.robot_description_kinematics,
-        ],
+        parameters=[moveit_config.to_dict()],
     )
-
-    ld.add_action(declare_loaded_description)
+    
+    # ld = LaunchDescription([SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time'))])
+    # ld.add_action(declare_use_sim_time)
+    # ld.add_action(use_sim_time_name)
+    # ld.add_action(declare_loaded_description)
     ld.add_action(declare_example_name)
-    ld.add_action(declare_use_sim_time)
-    ld.add_action(use_sim_time_name)
     ld.add_action(example_node)
 
     return ld
