@@ -23,7 +23,7 @@ from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-from utils import plan_and_execute
+from crane_plus_examples_py.utils import plan_and_execute
 
 
 def main(args=None):

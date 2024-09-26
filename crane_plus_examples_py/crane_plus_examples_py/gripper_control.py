@@ -24,13 +24,13 @@ from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-from utils import plan_and_execute
+
+from crane_plus_examples_py.utils import plan_and_execute
 
 
 def main(args=None):
     # ros2の初期化
     rclpy.init(args=args)
-
     # ロガー生成
     logger = get_logger("gripper_control")
 
@@ -48,11 +48,12 @@ def main(args=None):
         crane_plus,
         "ompl_rrtc",
     )
-    plan_request_params.max_acceleration_scaling_factor(1.0)  # Set 0.0 ~ 1.0
-    plan_request_params.max_velocity_scaling_factor(1.0)  # Set 0.0 ~ 1.0
+
+    plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+    plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
     # グリッパーを+30[deg]の位置に動かす
-    robot_state.set_joint_group_positions("gripper", [math.radians(30.0)])
+    robot_state.set_joint_group_positions("gripper", [math.radians(30)])
     crane_plus_gripper.set_start_state_to_current_state()
     crane_plus_gripper.set_goal_state(robot_state=robot_state)
     plan_and_execute(
@@ -62,7 +63,7 @@ def main(args=None):
         single_plan_parameters=plan_request_params,
     )
     # グリッパーを-30[deg]の位置に動かす
-    robot_state.set_joint_group_positions("gripper", [math.radians(-30.0)])
+    robot_state.set_joint_group_positions("gripper", [math.radians(-30)])
     crane_plus_gripper.set_start_state_to_current_state()
     crane_plus_gripper.set_goal_state(robot_state=robot_state)
     plan_and_execute(
@@ -81,6 +82,7 @@ def main(args=None):
         logger,
         single_plan_parameters=plan_request_params,
     )
+    
     # MoveItPyの終了
     crane_plus.shutdown()
 
