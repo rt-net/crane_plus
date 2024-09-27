@@ -49,6 +49,7 @@ def main(args=None):
         "ompl_rrtc",
     )
 
+    # 速度＆加速度のスケーリングファクタを設定
     plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
     plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
