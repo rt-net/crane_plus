@@ -26,11 +26,8 @@ from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-from utils import plan_and_execute, euler_to_quaternion
 
-
-def to_radians(deg_angle):
-    return deg_angle * math.pi / 180.0
+from crane_plus_examples_py.utils import plan_and_execute, euler_to_quaternion
 
 
 def main(args=None):
@@ -56,16 +53,16 @@ def main(args=None):
         crane_plus,
         "ompl_rrtc",
     )
-    arm_plan_request_params.max_acceleration_scaling_factor = 0.1  # Set 0.0 ~ 1.0
-    arm_plan_request_params.max_velocity_scaling_factor = 0.1  # Set 0.0 ~ 1.0
+    arm_plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+    arm_plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
     # gripperのパラメータ設定用
     gripper_plan_request_params = PlanRequestParameters(
         crane_plus,
         "ompl_rrtc",
     )
-    gripper_plan_request_params.max_acceleration_scaling_factor = 0.1  # Set 0.0 ~ 1.0
-    gripper_plan_request_params.max_velocity_scaling_factor = 0.1  # Set 0.0 ~ 1.0
+    gripper_plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+    gripper_plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
     # gripperの開閉角度
     GRIPPER_DEFAULT = 0.0
@@ -117,15 +114,18 @@ def main(args=None):
 
     # armが掴みに行く位置を指定して動かす
     pose_goal = PoseStamped()
-    pose_goal.header.frame_id = "base_link"
+    pose_goal.header.frame_id = "world"
+    # pose_goal.header.frame_id = "base_link"
+    # pose_goal.header.frame_id = "crane_plus_base"
     pose_goal.pose.position.x = 0.0
     pose_goal.pose.position.y = -0.09
     pose_goal.pose.position.z = 0.17
-    q = euler_to_quaternion(to_radians(0), to_radians(90), to_radians(-90))
+    q = euler_to_quaternion(math.radians(0), math.radians(90), math.radians(-90))
     pose_goal.pose.orientation.x = q[0]
     pose_goal.pose.orientation.y = q[1]
     pose_goal.pose.orientation.z = q[2]
     pose_goal.pose.orientation.w = q[3]
+    
     crane_plus_arm.set_start_state_to_current_state()
     crane_plus_arm.set_goal_state(
         pose_stamped_msg=pose_goal, pose_link="crane_plus_link4"
@@ -138,7 +138,7 @@ def main(args=None):
     )
 
     # armの姿勢を変える(Y軸反転)
-    q = euler_to_quaternion(to_radians(0), to_radians(180), to_radians(-90))
+    q = euler_to_quaternion(math.radians(0), math.radians(180), math.radians(-90))
     pose_goal.pose.orientation.x = q[0]
     pose_goal.pose.orientation.y = q[1]
     pose_goal.pose.orientation.z = q[2]
@@ -206,7 +206,7 @@ def main(args=None):
     pose_goal.pose.position.x = 0.15
     pose_goal.pose.position.y = 0.0
     pose_goal.pose.position.z = 0.06
-    q = euler_to_quaternion(to_radians(0), to_radians(90), to_radians(0))
+    q = euler_to_quaternion(math.radians(0), math.radians(90), math.radians(0))
     pose_goal.pose.orientation.x = q[0]
     pose_goal.pose.orientation.y = q[1]
     pose_goal.pose.orientation.z = q[2]
@@ -264,6 +264,7 @@ def main(args=None):
         logger,
         single_plan_parameters=gripper_plan_request_params,
     )
+    
     # MoveItPyの終了
     crane_plus.shutdown()
 
