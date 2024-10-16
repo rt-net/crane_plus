@@ -22,6 +22,7 @@ from moveit_msgs.msg import Constraints, JointConstraint
 import rclpy
 from rclpy.time import Time
 from rclpy.node import Node
+from rclpy.logging import get_logger
 import tf2_ros
 from tf2_ros import TransformStamped, TransformListener
 from tf2_ros.buffer import Buffer
@@ -33,17 +34,17 @@ from moveit.planning import (
     PlanRequestParameters,
 )
 
-from utils import plan_and_execute, euler_to_quaternion
+from crane_plus_examples_py.utils import plan_and_execute, euler_to_quaternion
 
 
 class PickAndPlaceTf(Node):
     def __init__(self, crane_plus):
         super().__init__("pick_and_place_tf_node")
+        self.logger = get_logger("pick_and_place_tf")
         self.tf_past = TransformStamped()
         self.crane_plus = crane_plus
         self.crane_plus_arm = crane_plus.get_planning_component("arm")
         self.crane_plus_gripper = crane_plus.get_planning_component("gripper")
-        
         # instantiate a RobotState instance using the current robot model
         self.robot_model = crane_plus.get_robot_model()
         self.robot_state = RobotState(self.robot_model)
@@ -71,7 +72,8 @@ class PickAndPlaceTf(Node):
         plan_and_execute(
             self.crane_plus,
             self.crane_plus_arm,
-            logger=None,
+            # logger=None,
+            self.logger,
             single_plan_parameters=self.arm_plan_request_params,
         )
         
@@ -201,7 +203,8 @@ class PickAndPlaceTf(Node):
         plan_and_execute(
             self.crane_plus,
             self.crane_plus_gripper,
-            logger=None,
+            # logger=None,
+            self.logger,
             single_plan_parameters=self.gripper_plan_request_params,
         )
         
@@ -224,7 +227,8 @@ class PickAndPlaceTf(Node):
         result = plan_and_execute(
             self.crane_plus,
             self.crane_plus_arm,
-            logger=None,
+            # logger=None,
+            self.logger,
             single_plan_parameters=self.arm_plan_request_params,
         )
         return result

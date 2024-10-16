@@ -35,34 +35,41 @@ def generate_launch_description():
     description_loader = RobotDescriptionLoader()
     ld.add_action(
         DeclareLaunchArgument(
-            'loaded_description',
+            "loaded_description",
             default_value=description_loader.load(),
             description="Set robot_description text.  \
-                      It is recommended to use RobotDescriptionLoader() in crane_plus_description."
+                      It is recommended to use RobotDescriptionLoader() in crane_plus_description.",
         )
     )
-    
+
     moveit_config = (
         MoveItConfigsBuilder("crane_plus")
         .planning_scene_monitor(
             publish_robot_description=True,
             publish_robot_description_semantic=True,
         )
-        # .robot_description(
-        #     file_path=os.path.join(
-        #         get_package_share_directory("crane_plus_description"),
-        #         "urdf",
-        #         "crane_plus.urdf.xacro",
-        #     ),
-        #     mappings={},
-        # )
+        .robot_description(
+            file_path=os.path.join(
+                get_package_share_directory("crane_plus_description"),
+                "urdf",
+                "crane_plus.urdf.xacro",
+            ),
+            mappings={},
+        )
+        .robot_description_kinematics(
+            file_path=get_package_share_directory("crane_plus_moveit_config")
+            + "/config/kinematics.yaml"
+        )
         # .robot_description_semantic(
-        #     file_path="config/crane_plus.srdf",
+        #     file_path="config/crsane_plus.srdf",
         #     mappings={"model": "crane_plus"},
         # )
         # .joint_limits(file_path="config/joint_limits.yaml")
-        .trajectory_execution(file_path="config/controllers.yaml")
-        .planning_pipelines(pipelines=["ompl"])
+        .trajectory_execution(
+            file_path=get_package_share_directory("crane_plus_moveit_config")
+            + "/config/controllers.yaml"
+        )
+        # .planning_pipelines(pipelines=["ompl"])
         .moveit_cpp(
             file_path=get_package_share_directory("crane_plus_examples_py")
             + "/config/crane_plus_moveit_py_examples.yaml"
@@ -77,11 +84,11 @@ def generate_launch_description():
     moveit_config.move_group_capabilities = {"capabilities": ""}
 
     declare_example_name = DeclareLaunchArgument(
-        'example',
-        default_value='gripper_control',
+        "example",
+        default_value="gripper_control",
         description=(
-            'Set an example executable name: '
-            '[gripper_control, pose_groupstate, joint_values, pick_and_place, pick_and_place_tf]'
+            "Set an example executable name: "
+            "[gripper_control, pose_groupstate, joint_values, pick_and_place, pick_and_place_tf]"
         ),
     )
 
@@ -102,7 +109,7 @@ def generate_launch_description():
         output="screen",
         parameters=[moveit_config.to_dict()],
     )
-    
+
     # ld = LaunchDescription([SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time'))])
     # ld.add_action(declare_use_sim_time)
     # ld.add_action(use_sim_time_name)

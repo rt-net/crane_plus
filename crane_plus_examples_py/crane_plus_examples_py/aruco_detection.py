@@ -26,7 +26,7 @@ from cv2 import aruco
 from cv_bridge import CvBridge
 import tf2_ros
 
-from utils import rotation_matrix_to_quaternion
+from crane_plus_examples_py.utils import rotation_matrix_to_quaternion
 
 
 class ImageSubscriber(Node):
