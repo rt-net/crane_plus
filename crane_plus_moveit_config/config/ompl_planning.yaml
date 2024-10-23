@@ -145,6 +145,7 @@ planner_configs:
 
 arm:
   planner_configs:
+    - APSConfigDefault
     - SBLkConfigDefault
     - ESTkConfigDefault
     - LBKPIECEkConfigDefault
@@ -171,6 +172,7 @@ arm:
     - TrajOptDefault
 gripper:
   planner_configs:
+    - APSConfigDefault
     - SBLkConfigDefault
     - ESTkConfigDefault
     - LBKPIECEkConfigDefault
