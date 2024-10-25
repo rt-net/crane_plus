@@ -28,10 +28,10 @@ class ImageSubscriber(Node):
     def __init__(self):
         super().__init__("color_detection")
         self.image_subscription = self.create_subscription(
-            Image, "image_raw", self.listener_callback, 10
+            Image, "image_raw", self.image_callback, 10
         )
         self.camera_info_subscription = self.create_subscription(
-            CameraInfo, "camera_info", self.listener_callback, 10
+            CameraInfo, "camera_info", self.camera_info_callback, 10
         )
         self.image_thresholded_publisher = self.create_publisher(Image, 'image_thresholded',  10)
         self.tf_broadcaster = tf2_ros.TransformBroadcaster()
