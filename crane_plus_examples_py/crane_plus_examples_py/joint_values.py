@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from crane_plus_examples_py.utils import plan_and_execute
 import math
+
+from crane_plus_examples_py.utils import plan_and_execute
 
 # moveit python library
 from moveit.core.robot_state import RobotState

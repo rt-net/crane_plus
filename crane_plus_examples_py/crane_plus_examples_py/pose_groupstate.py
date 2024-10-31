@@ -12,17 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import rclpy
-
-# generic ros libraries
-from rclpy.logging import get_logger
+from crane_plus_examples_py.utils import plan_and_execute
 
 # moveit python library
 from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-from crane_plus_examples_py.utils import plan_and_execute
+import rclpy
+from rclpy.logging import get_logger
 
 
 def main(args=None):
@@ -30,26 +28,26 @@ def main(args=None):
     rclpy.init(args=args)
 
     # ロガー生成
-    logger = get_logger("pose_groupstate")
+    logger = get_logger('pose_groupstate')
 
     # MoveItPy初期化
-    crane_plus = MoveItPy(node_name="moveit_py")
-    crane_plus_arm = crane_plus.get_planning_component("arm")
-    logger.info("MoveItPy instance created")
+    crane_plus = MoveItPy(node_name='moveit_py')
+    crane_plus_arm = crane_plus.get_planning_component('arm')
+    logger.info('MoveItPy instance created')
 
     # planningのパラメータ設定
     plan_request_params = PlanRequestParameters(
         crane_plus,
-        "ompl_rrtc",
+        'ompl_rrtc',
     )
     
     # 速度＆加速度のスケーリングファクタを設定
     plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
     plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
-    # 現在の位置から"home"ポジションに動かす
+    # 現在の位置から'home'ポジションに動かす
     crane_plus_arm.set_start_state_to_current_state()
-    crane_plus_arm.set_goal_state(configuration_name="home")
+    crane_plus_arm.set_goal_state(configuration_name='home')
     plan_and_execute(
         crane_plus,
         crane_plus_arm,
@@ -57,9 +55,9 @@ def main(args=None):
         single_plan_parameters=plan_request_params,
     )
 
-    # 現在の位置から"vertical"ポジションに動かす
+    # 現在の位置から'vertical'ポジションに動かす
     crane_plus_arm.set_start_state_to_current_state()
-    crane_plus_arm.set_goal_state(configuration_name="vertical")
+    crane_plus_arm.set_goal_state(configuration_name='vertical')
     plan_and_execute(
         crane_plus,
         crane_plus_arm,
@@ -67,9 +65,9 @@ def main(args=None):
         single_plan_parameters=plan_request_params,
     )
 
-    # 現在の位置から"home"ポジションに動かす
+    # 現在の位置から'home'ポジションに動かす
     crane_plus_arm.set_start_state_to_current_state()
-    crane_plus_arm.set_goal_state(configuration_name="home")
+    crane_plus_arm.set_goal_state(configuration_name='home')
     plan_and_execute(
         crane_plus,
         crane_plus_arm,

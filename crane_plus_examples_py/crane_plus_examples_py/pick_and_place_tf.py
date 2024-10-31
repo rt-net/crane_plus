@@ -12,11 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from crane_plus_examples_py.utils import plan_and_execute, euler_to_quaternion
 import datetime
+
+from crane_plus_examples_py.utils import plan_and_execute, euler_to_quaternion
+
 from geometry_msgs.msg import Pose
+
 import math
+
 import numpy as np
+
 # moveit python library
 from moveit.core.robot_state import RobotState
 from moveit_msgs.msg import Constraints, JointConstraint
@@ -51,16 +56,22 @@ class PickAndPlaceTf(Node):
             self.crane_plus,
             'ompl_rrtc',
         )
-        self.arm_plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
-        self.arm_plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+        # Set 0.0 ~ 1.0
+        self.arm_plan_request_params.max_velocity_scaling_factor = 1.0
+
+        # Set 0.0 ~ 1.0
+        self.arm_plan_request_params.max_acceleration_scaling_factor = 1.0
 
         # gripperのパラメータ設定用
         self.gripper_plan_request_params = PlanRequestParameters(
             self.crane_plus,
             'ompl_rrtc',
         )
-        self.gripper_plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
-        self.gripper_plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+        # Set 0.0 ~ 1.0
+        self.gripper_plan_request_params.max_velocity_scaling_factor = 1.0
+
+        # Set 0.0 ~ 1.0
+        self.gripper_plan_request_params.max_acceleration_scaling_factor = 1.0
 
         # SRDFに定義されている'home'の姿勢にする
         self.crane_plus_arm.set_start_state_to_current_state()

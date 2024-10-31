@@ -24,14 +24,16 @@ from sensor_msgs.msg import CameraInfo, Image
 
 class ImageSubscriber(Node):
     def __init__(self):
-        super().__init__("color_detection")
+        super().__init__('color_detection')
         self.image_subscription = self.create_subscription(
-            Image, "image_raw", self.image_callback, 10
+            Image, 'image_raw', self.image_callback, 10
         )
         self.camera_info_subscription = self.create_subscription(
-            CameraInfo, "camera_info", self.camera_info_callback, 10
+            CameraInfo, 'camera_info', self.camera_info_callback, 10
         )
-        self.image_thresholded_publisher = self.create_publisher(Image, 'image_thresholded',  10)
+        self.image_thresholded_publisher = self.create_publisher(
+            Image, 'image_thresholded',  10
+            )
         self.tf_broadcaster = tf2_ros.TransformBroadcaster()
         self.camera_info = None
         self.bridge = CvBridge()
@@ -50,25 +52,35 @@ class ImageSubscriber(Node):
             HIGH_V = 255
 
             # ウェブカメラの画像を受け取る
-            cv_img = self.bridge.imgmsg_to_cv2(msg, desired_encoding=msg.encoding)
+            cv_img = self.bridge.imgmsg_to_cv2(
+                msg, desired_encoding=msg.encoding
+                )
 
             # 画像をRGBからHSVに変換（取得したカメラ画像にフォーマットを合わせる）
             cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2HSV)
 
             # 画像の二値化
-            img_mask_1 = cv2.inRange(cv_img, (LOW_H_1, LOW_S, LOW_V), (HIGH_H_1, HIGH_S, HIGH_V))
-            img_mask_2 = cv2.inRange(cv_img, (LOW_H_2, LOW_S, LOW_V), (HIGH_H_2, HIGH_S, HIGH_V))
+            img_mask_1 = cv2.inRange(
+                cv_img, (LOW_H_1, LOW_S, LOW_V), (HIGH_H_1, HIGH_S, HIGH_V)
+                )
+            img_mask_2 = cv2.inRange(
+                cv_img, (LOW_H_2, LOW_S, LOW_V), (HIGH_H_2, HIGH_S, HIGH_V)
+                )
 
             # マスク画像の合成
             img_thresholded = cv2.bitwise_or(img_mask_1, img_mask_2)
 
             # ノイズ除去の処理
             kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-            img_thresholded = cv2.morphologyEx(img_thresholded, cv2.MORPH_OPEN, kernel)
+            img_thresholded = cv2.morphologyEx(
+                img_thresholded, cv2.MORPH_OPEN, kernel
+                )
 
             # 穴埋めの処理
             kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-            img_thresholded = cv2.morphologyEx(img_thresholded, cv2.MORPH_CLOSE, kernel)
+            img_thresholded = cv2.morphologyEx(
+                img_thresholded, cv2.MORPH_CLOSE, kernel
+                )
 
             # 画像の検出領域におけるモーメントを計算
             moment = cv2.moments(img_thresholded)
@@ -106,14 +118,16 @@ class ImageSubscriber(Node):
                 # 把持対象物の位置をTFに配信
                 t = TransformStamped()
                 t.header = msg.header
-                t.child_frame_id = "target_0"
+                t.child_frame_id = 'target_0'
                 t.transform.translation.x = object_position['x']
                 t.transform.translation.y = object_position['y']
                 t.transform.translation.z = object_position['z']
                 self.tf_broadcaster.sendTransform(t)
 
             # 閾値による二値化画像を配信
-            img_thresholded_msg = self.bridge.cv2_to_imgmsg(img_thresholded, encoding="mono8")   
+            img_thresholded_msg = self.bridge.cv2_to_imgmsg(
+                img_thresholded, encoding='mono8'
+                )
             self.image_thresholded_publisher.publish(img_thresholded_msg)
 
     def camera_info_callback(self, msg):
