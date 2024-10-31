@@ -12,11 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from crane_plus_examples_py.utils import plan_and_execute
 import math
-import rclpy
-
-# generic ros libraries
-from rclpy.logging import get_logger
 
 # moveit python library
 from moveit.core.robot_state import RobotState
@@ -24,20 +21,21 @@ from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-
-from crane_plus_examples_py.utils import plan_and_execute
+import rclpy
+from rclpy.logging import get_logger
 
 
 def main(args=None):
     # ros2の初期化
     rclpy.init(args=args)
+
     # ロガー生成
-    logger = get_logger("gripper_control")
+    logger = get_logger('gripper_control')
 
     # MoveItPy初期化
-    crane_plus = MoveItPy(node_name="moveit_py")
-    crane_plus_gripper = crane_plus.get_planning_component("gripper")
-    logger.info("MoveItPy instance created")
+    crane_plus = MoveItPy(node_name='moveit_py')
+    crane_plus_gripper = crane_plus.get_planning_component('gripper')
+    logger.info('MoveItPy instance created')
 
     # instantiate a RobotState instance using the current robot model
     robot_model = crane_plus.get_robot_model()
@@ -46,7 +44,7 @@ def main(args=None):
     # planningのパラメータ設定
     plan_request_params = PlanRequestParameters(
         crane_plus,
-        "ompl_rrtc",
+        'ompl_rrtc',
     )
 
     # 速度＆加速度のスケーリングファクタを設定
@@ -54,7 +52,7 @@ def main(args=None):
     plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
     # グリッパーを+30[deg]の位置に動かす
-    robot_state.set_joint_group_positions("gripper", [math.radians(30)])
+    robot_state.set_joint_group_positions('gripper', [math.radians(30)])
     crane_plus_gripper.set_start_state_to_current_state()
     crane_plus_gripper.set_goal_state(robot_state=robot_state)
     plan_and_execute(
@@ -63,8 +61,9 @@ def main(args=None):
         logger,
         single_plan_parameters=plan_request_params,
     )
+
     # グリッパーを-30[deg]の位置に動かす
-    robot_state.set_joint_group_positions("gripper", [math.radians(-30)])
+    robot_state.set_joint_group_positions('gripper', [math.radians(-30)])
     crane_plus_gripper.set_start_state_to_current_state()
     crane_plus_gripper.set_goal_state(robot_state=robot_state)
     plan_and_execute(
@@ -73,8 +72,9 @@ def main(args=None):
         logger,
         single_plan_parameters=plan_request_params,
     )
+
     # グリッパーを0[deg]の位置に動かす
-    robot_state.set_joint_group_positions("gripper", [0.0])
+    robot_state.set_joint_group_positions('gripper', [0.0])
     crane_plus_gripper.set_start_state_to_current_state()
     crane_plus_gripper.set_goal_state(robot_state=robot_state)
     plan_and_execute(
@@ -83,7 +83,7 @@ def main(args=None):
         logger,
         single_plan_parameters=plan_request_params,
     )
-    
+
     # MoveItPyの終了
     crane_plus.shutdown()
 
