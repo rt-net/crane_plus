@@ -17,12 +17,12 @@ import math
 from crane_plus_examples_py.utils import plan_and_execute
 
 # moveit python library
+from moveit.core.kinematic_constraints import construct_joint_constraint
 from moveit.core.robot_state import RobotState
 from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-from moveit.core.kinematic_constraints import construct_joint_constraint
 import rclpy
 from rclpy.logging import get_logger
 
@@ -91,5 +91,5 @@ def main(args=None):
     rclpy.shutdown()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

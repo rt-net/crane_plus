@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from crane_plus_examples_py.utils import plan_and_execute, euler_to_quaternion
+from crane_plus_examples_py.utils import euler_to_quaternion, plan_and_execute
 from geometry_msgs.msg import PoseStamped
+
 import math
 
 # moveit python library
@@ -66,7 +67,7 @@ def main(args=None):
     gripper_plan_request_params.max_acceleration_scaling_factor = 1.0
 
     # Set 0.0 ~ 1.0
-    gripper_plan_request_params.max_velocity_scaling_factor = 1.0  
+    gripper_plan_request_params.max_velocity_scaling_factor = 1.0
 
     # gripperの開閉角度
     GRIPPER_DEFAULT = 0.0
@@ -275,5 +276,5 @@ def main(args=None):
     rclpy.shutdown()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

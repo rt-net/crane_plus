@@ -13,8 +13,11 @@
 # limitations under the License.
 
 import numpy as np
+
 from rclpy.logging import get_logger
+
 import time
+
 import quaternion
 
 
@@ -35,15 +38,12 @@ def plan_and_execute(
         plan_result = planning_component.plan(
             multi_plan_parameters=multi_plan_parameters
         )
-        logger.info('plan_result >>>>> multi', once=True)
     elif single_plan_parameters is not None:
         plan_result = planning_component.plan(
             single_plan_parameters=single_plan_parameters
         )
-        logger.info('plan_result >>>>> single', once=True)
     else:
         plan_result = planning_component.plan()
-        logger.info('plan_result >>>>> none', once=True)
 
     # execute the plan
     result = None

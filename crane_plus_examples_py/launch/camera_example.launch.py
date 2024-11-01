@@ -15,7 +15,6 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -25,41 +24,41 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 def generate_launch_description():
     moveit_config = (
-        MoveItConfigsBuilder("crane_plus")
+        MoveItConfigsBuilder('crane_plus')
         .planning_scene_monitor(
             publish_robot_description=True,
             publish_robot_description_semantic=True,
         )
         .robot_description(
             file_path=os.path.join(
-                get_package_share_directory("crane_plus_description"),
-                "urdf",
-                "crane_plus.urdf.xacro",
+                get_package_share_directory('crane_plus_description'),
+                'urdf',
+                'crane_plus.urdf.xacro',
             ),
             mappings={},
         )
         .robot_description_semantic(
-            file_path="config/crane_plus.srdf",
-            mappings={"model": "crane_plus"},
+            file_path='config/crane_plus.srdf',
+            mappings={'model': 'crane_plus'},
         )
-        .joint_limits(file_path="config/joint_limits.yaml")
+        .joint_limits(file_path='config/joint_limits.yaml')
         .trajectory_execution(
-            file_path="config/controllers.yaml", moveit_manage_controllers=True
+            file_path='config/controllers.yaml', moveit_manage_controllers=True
         )
-        .planning_pipelines(pipelines=["ompl"])
-        .robot_description_kinematics(file_path="config/kinematics.yaml")
+        .planning_pipelines(pipelines=['ompl'])
+        .robot_description_kinematics(file_path='config/kinematics.yaml')
         .moveit_cpp(
-            file_path=get_package_share_directory("crane_plus_examples_py")
-            + "/config/crane_plus_moveit_py_examples.yaml"
+            file_path=get_package_share_directory('crane_plus_examples_py')
+            + '/config/crane_plus_moveit_py_examples.yaml'
         )
         .to_moveit_configs()
     )
 
     moveit_config.robot_description = {
-        "robot_description": LaunchConfiguration("loaded_description")
+        'robot_description': LaunchConfiguration('loaded_description')
     }
 
-    moveit_config.move_group_capabilities = {"capabilities": ""}
+    moveit_config.move_group_capabilities = {'capabilities': ''}
 
     declare_example_name = DeclareLaunchArgument(
         'example', default_value='color_detection',
@@ -69,21 +68,21 @@ def generate_launch_description():
 
     picking_node = Node(
         name='pick_and_place_tf',
-        package="crane_plus_examples_py",
+        package='crane_plus_examples_py',
         executable='pick_and_place_tf',
-        output="screen",
+        output='screen',
         parameters=[
             moveit_config.robot_description,
             moveit_config.robot_description_semantic,
             moveit_config.robot_description_kinematics,
         ],
     )
-    
+
     detection_node = Node(
-        name=[LaunchConfiguration("example"), "_node"],
-        package="crane_plus_examples_py",
-        executable=LaunchConfiguration("example"),
-        output="screen"
+        name=[LaunchConfiguration('example'), '_node'],
+        package='crane_plus_examples_py',
+        executable=LaunchConfiguration('example'),
+        output='screen'
     )
 
     ld = LaunchDescription()
