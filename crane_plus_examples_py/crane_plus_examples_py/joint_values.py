@@ -52,7 +52,7 @@ def main(args=None):
     plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
     # armの関節のjoint1〜4を順番に45[deg]ずつ動かす
-    joint_names = ['crane_plus_joint1', 'crane_plus_joint2', 
+    joint_names = ['crane_plus_joint1', 'crane_plus_joint2',
                    'crane_plus_joint3', 'crane_plus_joint4']
     target_joint_value = math.radians(45)
     for joint_name in joint_names:

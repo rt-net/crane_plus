@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import time
+
 import numpy as np
 
 from rclpy.logging import get_logger
-
-import time
 
 import quaternion
 
@@ -30,7 +30,7 @@ def plan_and_execute(
     multi_plan_parameters=None,
     sleep_time=0.0,
 ):
-    """Helper function to plan and execute a motion."""
+    """Plan and execute a motion."""
     # plan to goal
     logger = get_logger('plan_and_execute')
     logger.info('Planning trajectory')

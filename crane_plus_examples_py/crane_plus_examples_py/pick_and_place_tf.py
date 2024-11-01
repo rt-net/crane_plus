@@ -140,7 +140,7 @@ class PickAndPlaceTf(Node):
         else:
             TF_STOP_TIME = now.nanoseconds
 
-        # 現在時刻から2秒以内に受け取ったtfを使用 
+        # 現在時刻から2秒以内に受け取ったtfを使用
         if TF_ELAPSED_TIME < FILTERING_TIME.total_seconds() * 1e9:
             tf_diff = np.sqrt((self.tf_past.transform.translation.x
                                - tf_msg.transform.translation.x) ** 2
