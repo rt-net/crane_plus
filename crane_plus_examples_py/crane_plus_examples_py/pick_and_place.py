@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from crane_plus_examples_py.utils import euler_to_quaternion, plan_and_execute
-from geometry_msgs.msg import PoseStamped
-
 import math
+
+from geometry_msgs.msg import PoseStamped
 
 # moveit python library
 from moveit.core.robot_state import RobotState
@@ -25,6 +24,8 @@ from moveit.planning import (
 )
 import rclpy
 from rclpy.logging import get_logger
+
+from crane_plus_examples_py.utils import euler_to_quaternion, plan_and_execute
 
 
 def main(args=None):

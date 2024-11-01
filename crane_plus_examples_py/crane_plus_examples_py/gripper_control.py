@@ -21,9 +21,9 @@ from moveit.planning import (
     PlanRequestParameters,
 )
 import rclpy
-from rclpy.logging import get_logger
 
 from crane_plus_examples_py.utils import plan_and_execute
+from rclpy.logging import get_logger
 
 
 def main(args=None):

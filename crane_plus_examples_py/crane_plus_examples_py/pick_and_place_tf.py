@@ -19,11 +19,11 @@ from geometry_msgs.msg import Pose
 
 # moveit python library
 from moveit.core.robot_state import RobotState
-from moveit_msgs.msg import Constraints, JointConstraint
 from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
+from moveit_msgs.msg import Constraints, JointConstraint
 
 import numpy as np
 
