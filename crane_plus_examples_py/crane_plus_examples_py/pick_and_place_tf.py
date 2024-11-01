@@ -13,9 +13,6 @@
 # limitations under the License.
 
 import datetime
-
-from crane_plus_examples_py.utils import euler_to_quaternion, plan_and_execute
-
 import math
 
 from geometry_msgs.msg import Pose
@@ -37,6 +34,8 @@ from rclpy.time import Time
 import tf2_ros
 from tf2_ros import TransformListener, TransformStamped
 from tf2_ros.buffer import Buffer
+
+from crane_plus_examples_py.utils import euler_to_quaternion, plan_and_execute
 
 
 class PickAndPlaceTf(Node):

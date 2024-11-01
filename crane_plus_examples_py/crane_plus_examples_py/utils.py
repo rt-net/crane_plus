@@ -13,12 +13,10 @@
 # limitations under the License.
 
 import time
-
 import numpy as np
+import quaternion
 
 from rclpy.logging import get_logger
-
-import quaternion
 
 
 # plan and execute
