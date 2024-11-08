@@ -18,101 +18,87 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-import yaml
 from moveit_configs_utils import MoveItConfigsBuilder
+from moveit_configs_utils.launch_utils import DeclareBooleanLaunchArg
 from moveit_configs_utils.launches import generate_move_group_launch
 from moveit_configs_utils.launches import generate_moveit_rviz_launch
-from moveit_configs_utils.launches import generate_static_virtual_joint_tfs_launch
 from moveit_configs_utils.launches import generate_rsp_launch
-from moveit_configs_utils.launch_utils import DeclareBooleanLaunchArg
-
-def load_file(package_name, file_path):
-    package_path = get_package_share_directory(package_name)
-    absolute_file_path = os.path.join(package_path, file_path)
-
-    try:
-        with open(absolute_file_path, "r") as file:
-            return file.read()
-    except (
-        EnvironmentError
-    ):  # parent of IOError, OSError *and* WindowsError where available
-        return None
-
-
-def load_yaml(package_name, file_path):
-    package_path = get_package_share_directory(package_name)
-    absolute_file_path = os.path.join(package_path, file_path)
-
-    try:
-        with open(absolute_file_path, "r") as file:
-            return yaml.safe_load(file)
-    except (
-        EnvironmentError
-    ):  # parent of IOError, OSError *and* WindowsError where available
-        return None
+from moveit_configs_utils.launches  \
+    import generate_static_virtual_joint_tfs_launch
 
 
 def generate_launch_description():
     ld = LaunchDescription()
 
     declare_loaded_description = DeclareLaunchArgument(
-        "loaded_description",
-        default_value="",
-        description="Set robot_description text.  \
-                     It is recommended to use RobotDescriptionLoader() in crane_plus_description.",
+        'loaded_description',
+        default_value='',
+        description='Set robot_description text.  \
+                     It is recommended to use RobotDescriptionLoader() in  \
+                        crane_plus_description.',
     )
 
     ld.add_action(declare_loaded_description)
 
-    ld.add_action(DeclareBooleanLaunchArg("debug", default_value=False))
-    
+    ld.add_action(DeclareBooleanLaunchArg('debug', default_value=False))
+
     ld.add_action(
         DeclareLaunchArgument(
-            "rviz_config",
-            default_value=get_package_share_directory("crane_plus_moveit_config")
-            + "/config/moveit.rviz",
-            description="Set the path to rviz configuration file.",
+            'rviz_config',
+            default_value=get_package_share_directory(
+                'crane_plus_moveit_config'
+            )
+            + '/config/moveit.rviz',
+            description='Set the path to rviz configuration file.',
         )
     )
 
+    declare_rviz_config_file = DeclareLaunchArgument(
+        'rviz_config_file',
+        default_value=get_package_share_directory('crane_plus_moveit_config')
+        + '/launch/run_move_group.rviz',
+        description='Set the path to rviz configuration file.'
+    )
+
+    ld.add_action(declare_rviz_config_file)
+
     moveit_config = (
-        MoveItConfigsBuilder("crane_plus")
+        MoveItConfigsBuilder('crane_plus')
         .planning_scene_monitor(
             publish_robot_description=True,
             publish_robot_description_semantic=True,
         )
         .robot_description(
             file_path=os.path.join(
-                get_package_share_directory("crane_plus_description"),
-                "urdf",
-                "crane_plus.urdf.xacro",
+                get_package_share_directory('crane_plus_description'),
+                'urdf',
+                'crane_plus.urdf.xacro',
             ),
             mappings={},
         )
         .robot_description_semantic(
-            file_path="config/crane_plus.srdf",
-            mappings={"model": "crane_plus"},
+            file_path='config/crane_plus.srdf',
+            mappings={'model': 'crane_plus'},
         )
-        .joint_limits(file_path="config/joint_limits.yaml")
+        .joint_limits(file_path='config/joint_limits.yaml')
         .trajectory_execution(
-            file_path="config/controllers.yaml", moveit_manage_controllers=True
+            file_path='config/controllers.yaml', moveit_manage_controllers=True
         )
-        .planning_pipelines(pipelines=["ompl"])
-        .robot_description_kinematics(file_path="config/kinematics.yaml")
+        .planning_pipelines(pipelines=['ompl'])
+        .robot_description_kinematics(file_path='config/kinematics.yaml')
         .to_moveit_configs()
     )
 
     moveit_config.robot_description = {
-        "robot_description": LaunchConfiguration("loaded_description")
+        'robot_description': LaunchConfiguration('loaded_description')
     }
 
     moveit_config.move_group_capabilities = {
-        "capabilities": ""
+        'capabilities': ''
     }
 
     # Move group
     ld.add_entity(generate_move_group_launch(moveit_config))
-
     # RViz
     ld.add_entity(generate_moveit_rviz_launch(moveit_config))
 

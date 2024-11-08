@@ -10,13 +10,8 @@
   <author email="kuwagata@rt-net.jp">Atsushi Kuwagata</author>
   <author email="mizoguchi@rt-net.jp">Nozomi Mizoguchi</author>
 
-  <url type="website">http://moveit.ros.org/</url>
-  <url type="bugtracker">https://github.com/moveit/moveit2/issues</url>
-  <url type="repository">https://github.com/moveit/moveit2</url>
-
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend>moveit_ros_move_group</exec_depend>
   <exec_depend>moveit_kinematics</exec_depend>
   <exec_depend>moveit_planners</exec_depend>
   <exec_depend>moveit_simple_controller_manager</exec_depend>
@@ -35,11 +30,11 @@
   <exec_depend>rviz2</exec_depend>
   <exec_depend>rviz_common</exec_depend>
   <exec_depend>rviz_default_plugins</exec_depend>
-  <exec_depend>tf2_ros</exec_depend>
+
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
- 
+
   <export>
       <build_type>ament_cmake</build_type>
   </export>
