@@ -15,7 +15,7 @@
 import datetime
 import math
 
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import PoseStamped
 
 # moveit python library
 from moveit.core.robot_state import RobotState
@@ -117,6 +117,7 @@ class PickAndPlaceTf(Node):
 
     def on_timer(self):
         # target_0のtf位置姿勢を取得
+        tf_msg = TransformStamped()
         try:
             tf_msg = self.tf_buffer.lookup_transform(
                 'base_link', 'target_0', Time())
@@ -219,16 +220,18 @@ class PickAndPlaceTf(Node):
 
     # アーム制御
     def _control_arm(self, x, y, z, roll, pitch, yaw):
-        target_pose = Pose()
-        target_pose.position.x = x
-        target_pose.position.y = y
-        target_pose.position.z = z
+        # target_pose = Pose()
+        target_pose = PoseStamped()
+        target_pose.header.frame_id = 'crane_plus_base'
+        target_pose.pose.position.x = x
+        target_pose.pose.position.y = y
+        target_pose.pose.position.z = z
         q = euler_to_quaternion(math.radians(roll), math.radians(pitch),
                                 math.radians(yaw))
-        target_pose.orientation.x = q[0]
-        target_pose.orientation.y = q[1]
-        target_pose.orientation.z = q[2]
-        target_pose.orientation.w = q[3]
+        target_pose.pose.orientation.x = q[0]
+        target_pose.pose.orientation.y = q[1]
+        target_pose.pose.orientation.z = q[2]
+        target_pose.pose.orientation.w = q[3]
         self.crane_plus_arm.set_start_state_to_current_state()
         self.crane_plus_arm.set_goal_state(
             pose_stamped_msg=target_pose, pose_link='crane_plus_link4'

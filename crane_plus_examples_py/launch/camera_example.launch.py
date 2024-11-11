@@ -15,6 +15,7 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
+from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -23,8 +24,7 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 
 def generate_launch_description():
-    ld = LaunchDescription()
-
+    
     # declare_loaded_description = DeclareLaunchArgument(
     #     'loaded_description',
     #     default_value='',
@@ -33,6 +33,16 @@ def generate_launch_description():
     #                     crane_plus_description.',
     # )
 
+    ld = LaunchDescription()
+    description_loader = RobotDescriptionLoader()
+    ld.add_action(
+        DeclareLaunchArgument(
+            'loaded_description',
+            default_value=description_loader.load(),
+            description='Set robot_description text.  \
+                      It is recommended to use RobotDescriptionLoader() in crane_plus_description.',
+        )
+    )
     # ld.add_action(declare_loaded_description)
 
     moveit_config = (
@@ -79,7 +89,7 @@ def generate_launch_description():
     declare_example_name = DeclareLaunchArgument(
         'example', default_value='color_detection',
         description=('Set an example executable name: '
-                     '[color_detection]')
+                     '[aruco_detection, color_detection]')
     )
 
     picking_node = Node(
@@ -88,9 +98,10 @@ def generate_launch_description():
         executable='pick_and_place_tf',
         output='screen',
         parameters=[
-            moveit_config.robot_description,
-            moveit_config.robot_description_semantic,
-            moveit_config.robot_description_kinematics,
+            # moveit_config.robot_description,
+            # moveit_config.robot_description_semantic,
+            # moveit_config.robot_description_kinematics,
+            moveit_config.to_dict()
         ],
     )
 
@@ -98,7 +109,8 @@ def generate_launch_description():
         name=[LaunchConfiguration('example'), '_node'],
         package='crane_plus_examples_py',
         executable=LaunchConfiguration('example'),
-        output='screen'
+        output='screen',
+        parameters=[moveit_config.to_dict()],
     )
 
     # ld = LaunchDescription()
