@@ -23,6 +23,18 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 
 def generate_launch_description():
+    ld = LaunchDescription()
+
+    # declare_loaded_description = DeclareLaunchArgument(
+    #     'loaded_description',
+    #     default_value='',
+    #     description='Set robot_description text.  \
+    #                  It is recommended to use RobotDescriptionLoader() in  \
+    #                     crane_plus_description.',
+    # )
+
+    # ld.add_action(declare_loaded_description)
+
     moveit_config = (
         MoveItConfigsBuilder('crane_plus')
         .planning_scene_monitor(
@@ -37,16 +49,20 @@ def generate_launch_description():
             ),
             mappings={},
         )
-        .robot_description_semantic(
-            file_path='config/crane_plus.srdf',
-            mappings={'model': 'crane_plus'},
+        .robot_description_kinematics(
+            file_path=get_package_share_directory('crane_plus_moveit_config')
+            + '/config/kinematics.yaml'
         )
-        .joint_limits(file_path='config/joint_limits.yaml')
+        # .robot_description_semantic(
+        #     file_path='config/crsane_plus.srdf',
+        #     mappings={'model': 'crane_plus'},
+        # )
+        # .joint_limits(file_path='config/joint_limits.yaml')
         .trajectory_execution(
-            file_path='config/controllers.yaml', moveit_manage_controllers=True
+            file_path=get_package_share_directory('crane_plus_moveit_config')
+            + '/config/controllers.yaml'
         )
-        .planning_pipelines(pipelines=['ompl'])
-        .robot_description_kinematics(file_path='config/kinematics.yaml')
+        # .planning_pipelines(pipelines=['ompl'])
         .moveit_cpp(
             file_path=get_package_share_directory('crane_plus_examples_py')
             + '/config/crane_plus_moveit_py_examples.yaml'
@@ -78,15 +94,15 @@ def generate_launch_description():
         ],
     )
 
-    detection_node = Node(
+    example_node = Node(
         name=[LaunchConfiguration('example'), '_node'],
         package='crane_plus_examples_py',
         executable=LaunchConfiguration('example'),
         output='screen'
     )
 
-    ld = LaunchDescription()
-    ld.add_action(detection_node)
+    # ld = LaunchDescription()
+    ld.add_action(example_node)
     ld.add_action(picking_node)
     ld.add_action(declare_example_name)
 
