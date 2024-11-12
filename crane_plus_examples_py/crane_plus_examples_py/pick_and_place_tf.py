@@ -79,7 +79,6 @@ class PickAndPlaceTf(Node):
         plan_and_execute(
             self.crane_plus,
             self.crane_plus_arm,
-            # logger=None,
             self.logger,
             single_plan_parameters=self.arm_plan_request_params,
         )
@@ -213,14 +212,12 @@ class PickAndPlaceTf(Node):
         plan_and_execute(
             self.crane_plus,
             self.crane_plus_gripper,
-            # logger=None,
             self.logger,
             single_plan_parameters=self.gripper_plan_request_params,
         )
 
     # アーム制御
     def _control_arm(self, x, y, z, roll, pitch, yaw):
-        # target_pose = Pose()
         target_pose = PoseStamped()
         target_pose.header.frame_id = 'crane_plus_base'
         target_pose.pose.position.x = x
