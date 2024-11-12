@@ -15,12 +15,13 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from crane_plus_description.robot_description_loader import RobotDescriptionLoader
+from crane_plus_description.robot_description_loader \
+    import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from launch_ros.actions import SetParameter
+# from launch_ros.actions import SetParameter
 from moveit_configs_utils import MoveItConfigsBuilder
 
 
@@ -89,7 +90,8 @@ def generate_launch_description():
         default_value='gripper_control',
         description=(
             'Set an example executable name: '
-            '[gripper_control, pose_groupstate, joint_values, pick_and_place, pick_and_place_tf]'
+            '[gripper_control, pose_groupstate, \
+            joint_values, pick_and_place, pick_and_place_tf]'
         ),
     )
 

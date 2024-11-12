@@ -27,6 +27,8 @@ from moveit_msgs.msg import Constraints, JointConstraint
 
 import numpy as np
 
+from crane_plus_examples_py.utils import euler_to_quaternion, plan_and_execute
+
 import rclpy
 from rclpy.logging import get_logger
 from rclpy.node import Node
@@ -34,8 +36,6 @@ from rclpy.time import Time
 import tf2_ros
 from tf2_ros import TransformListener, TransformStamped
 from tf2_ros.buffer import Buffer
-
-from crane_plus_examples_py.utils import euler_to_quaternion, plan_and_execute
 
 
 class PickAndPlaceTf(Node):

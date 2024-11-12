@@ -20,10 +20,11 @@ from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-import rclpy
 
 from crane_plus_examples_py.utils import plan_and_execute
+
 from rclpy.logging import get_logger
+import rclpy
 
 
 def main(args=None):
