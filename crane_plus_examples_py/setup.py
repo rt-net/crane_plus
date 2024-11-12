@@ -1,5 +1,6 @@
 from glob import glob
 import os
+
 from setuptools import find_packages, setup
 
 package_name = 'crane_plus_examples_py'
