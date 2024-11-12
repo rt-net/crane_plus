@@ -29,7 +29,6 @@ import rclpy
 from rclpy.logging import get_logger
 
 
-
 def main(args=None):
     # ros2の初期化
     rclpy.init(args=args)

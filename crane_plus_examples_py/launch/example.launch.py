@@ -30,7 +30,8 @@ def generate_launch_description():
     #     "loaded_description',
     #     default_value='',
     #     description='Set robot_description text.  \
-    #                  It is recommended to use RobotDescriptionLoader() in crane_plus_description.',
+    #                  It is recommended to use RobotDescriptionLoader() in \
+    #                   crane_plus_description.',
     # )
     ld = LaunchDescription()
     description_loader = RobotDescriptionLoader()
@@ -113,7 +114,8 @@ def generate_launch_description():
         parameters=[moveit_config.to_dict()],
     )
 
-    # ld = LaunchDescription([SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time'))])
+    # ld = LaunchDescription([SetParameter(
+    #       name='use_sim_time', value=LaunchConfiguration('use_sim_time'))])
     # ld.add_action(declare_use_sim_time)
     # ld.add_action(use_sim_time_name)
     # ld.add_action(declare_loaded_description)
