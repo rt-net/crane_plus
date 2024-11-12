@@ -15,7 +15,8 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from crane_plus_description.robot_description_loader import RobotDescriptionLoader
+from crane_plus_description.robot_description_loader \
+    import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -24,15 +25,6 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 
 def generate_launch_description():
-    
-    # declare_loaded_description = DeclareLaunchArgument(
-    #     'loaded_description',
-    #     default_value='',
-    #     description='Set robot_description text.  \
-    #                  It is recommended to use RobotDescriptionLoader() in  \
-    #                     crane_plus_description.',
-    # )
-
     ld = LaunchDescription()
     description_loader = RobotDescriptionLoader()
     ld.add_action(
@@ -40,10 +32,10 @@ def generate_launch_description():
             'loaded_description',
             default_value=description_loader.load(),
             description='Set robot_description text.  \
-                      It is recommended to use RobotDescriptionLoader() in crane_plus_description.',
+                      It is recommended to use RobotDescriptionLoader() \
+                          in crane_plus_description.',
         )
     )
-    # ld.add_action(declare_loaded_description)
 
     moveit_config = (
         MoveItConfigsBuilder('crane_plus')
