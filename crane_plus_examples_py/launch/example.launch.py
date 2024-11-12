@@ -38,7 +38,8 @@ def generate_launch_description():
             'loaded_description',
             default_value=description_loader.load(),
             description='Set robot_description text.  \
-                      It is recommended to use RobotDescriptionLoader() in crane_plus_description.',
+                      It is recommended to use RobotDescriptionLoader() \
+                          in crane_plus_description.',
         )
     )
 
