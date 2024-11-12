@@ -25,8 +25,6 @@ from moveit.planning import (
     PlanRequestParameters,
 )
 
-from crane_plus_examples_py.utils import euler_to_quaternion, plan_and_execute
-
 import rclpy
 from rclpy.logging import get_logger
 
