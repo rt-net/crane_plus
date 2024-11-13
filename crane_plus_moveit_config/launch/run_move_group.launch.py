@@ -19,7 +19,6 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from moveit_configs_utils import MoveItConfigsBuilder
-from moveit_configs_utils.launch_utils import DeclareBooleanLaunchArg
 from moveit_configs_utils.launches import generate_move_group_launch
 from moveit_configs_utils.launches import generate_moveit_rviz_launch
 from moveit_configs_utils.launches import generate_rsp_launch
@@ -42,8 +41,6 @@ def generate_launch_description():
         )
     )
 
-    ld.add_action(DeclareBooleanLaunchArg('debug', default_value=False))
-
     ld.add_action(
         DeclareLaunchArgument(
             'rviz_config',
@@ -54,15 +51,6 @@ def generate_launch_description():
             description='Set the path to rviz configuration file.',
         )
     )
-
-    declare_rviz_config_file = DeclareLaunchArgument(
-        'rviz_config_file',
-        default_value=get_package_share_directory('crane_plus_moveit_config')
-        + '/launch/run_move_group.rviz',
-        description='Set the path to rviz configuration file.'
-    )
-
-    ld.add_action(declare_rviz_config_file)
 
     moveit_config = (
         MoveItConfigsBuilder('crane_plus')
