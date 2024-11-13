@@ -99,6 +99,7 @@ def generate_launch_description():
 
     # Move group
     ld.add_entity(generate_move_group_launch(moveit_config))
+    
     # RViz
     ld.add_entity(generate_moveit_rviz_launch(moveit_config))
 
