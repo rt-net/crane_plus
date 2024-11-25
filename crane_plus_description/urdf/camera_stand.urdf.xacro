@@ -13,6 +13,13 @@
           <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.285" />
+        </geometry>
+      </collision>
     </link>
 
     <joint name="camera_stand_joint1" type="fixed">
@@ -31,6 +38,13 @@
           <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.44" />
+        </geometry>
+      </collision>
     </link>
 
     <joint name="camera_stand_joint2" type="fixed">
@@ -49,6 +63,13 @@
           <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.13" />
+        </geometry>
+      </collision>
     </link>
 
     <joint name="camera_stand_joint3" type="fixed">
@@ -67,6 +88,13 @@
           <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.05" />
+        </geometry>
+      </collision>
     </link>
 
     <joint name="camera_stand_joint4" type="fixed">
@@ -85,6 +113,13 @@
           <color rgba="0.8 0.8 0.8 1.0" />
         </material>
       </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.05" />
+        </geometry>
+      </collision>
     </link>
 
     <joint name="camera_stand_joint5" type="fixed">

@@ -17,14 +17,24 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
 from launch.actions import ExecuteProcess
 from launch.actions import IncludeLaunchDescription
+from launch.conditions import IfCondition
+from launch.conditions import UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch_ros.actions import SetParameter
+from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
+    declare_use_camera = DeclareLaunchArgument(
+        'use_camera',
+        default_value='false',
+        description='Use camera.'
+        )
+
     # PATHを追加で通さないとSTLファイルが読み込まれない
     env = {'IGN_GAZEBO_SYSTEM_PLUGIN_PATH': os.environ['LD_LIBRARY_PATH'],
            'IGN_GAZEBO_RESOURCE_PATH': os.path.dirname(
@@ -52,6 +62,7 @@ def generate_launch_description():
     )
 
     description_loader = RobotDescriptionLoader()
+    description_loader.use_camera = LaunchConfiguration('use_camera')
     description_loader.use_gazebo = 'true'
     description_loader.use_ignition = 'true'
     description_loader.gz_control_config_package = 'crane_plus_control'
@@ -62,7 +73,21 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([
                 get_package_share_directory('crane_plus_moveit_config'),
                 '/launch/run_move_group.launch.py']),
+            condition=UnlessCondition(LaunchConfiguration('use_camera')),
             launch_arguments={'loaded_description': description}.items()
+        )
+
+    rviz_config_file = get_package_share_directory(
+        'crane_plus_examples') + '/launch/camera_example.rviz'
+    move_group_camera = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                get_package_share_directory('crane_plus_moveit_config'),
+                '/launch/run_move_group.launch.py']),
+            condition=IfCondition(LaunchConfiguration('use_camera')),
+            launch_arguments={
+                'loaded_description': description,
+                'rviz_config_file': rviz_config_file
+            }.items()
         )
 
     spawn_joint_state_controller = ExecuteProcess(
@@ -86,15 +111,19 @@ def generate_launch_description():
     bridge = Node(
                 package='ros_gz_bridge',
                 executable='parameter_bridge',
-                arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
+                arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
+                           'image_raw@sensor_msgs/msg/Image[ignition.msgs.Image',
+                           'camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo'],
                 output='screen'
             )
 
     return LaunchDescription([
         SetParameter(name='use_sim_time', value=True),
+        declare_use_camera,
         ign_gazebo,
         gazebo_spawn_entity,
         move_group,
+        move_group_camera,
         spawn_joint_state_controller,
         spawn_arm_controller,
         spawn_gripper_controller,
