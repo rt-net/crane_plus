@@ -52,7 +52,7 @@ def test_use_gazebo():
     rdl.use_gazebo = 'true'
     rdl.gz_control_config_package = 'crane_plus_description'
     rdl.gz_control_config_file_path = 'test/dummy_controllers.yaml'
-    assert 'gazebo_ros2_control/GazeboSystem' in exec_load(rdl)
+    assert 'gz_ros2_control/GazeboSimSystem' in exec_load(rdl)
 
 
 def test_use_camera():
