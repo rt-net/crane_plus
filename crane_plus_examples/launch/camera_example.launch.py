@@ -20,6 +20,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.actions import SetParameter
 import yaml
 
 
@@ -61,6 +62,11 @@ def generate_launch_description():
                      '[color_detection]')
     )
 
+    declare_use_sim_time = DeclareLaunchArgument(
+        'use_sim_time', default_value='false',
+        description=('Set true when using the gazebo simulator.')
+    )
+
     picking_node = Node(name='pick_and_place_tf',
                         package='crane_plus_examples',
                         executable='pick_and_place_tf',
@@ -75,6 +81,8 @@ def generate_launch_description():
                           output='screen')
 
     return LaunchDescription([
+        declare_use_sim_time,
+        SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
         detection_node,
         picking_node,
         declare_example_name
