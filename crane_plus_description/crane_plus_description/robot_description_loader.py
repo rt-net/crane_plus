@@ -27,7 +27,6 @@ class RobotDescriptionLoader():
             'crane_plus.urdf.xacro')
         self.port_name = '/dev/ttyUSB0'
         self.use_gazebo = 'false'
-        self.use_ignition = 'false'
         self.use_camera = 'false'
         self.gz_control_config_package = ''
         self.gz_control_config_file_path = ''
@@ -38,7 +37,6 @@ class RobotDescriptionLoader():
                 self.robot_description_path,
                 ' port_name:=', self.port_name,
                 ' use_gazebo:=', self.use_gazebo,
-                ' use_ignition:=', self.use_ignition,
                 ' use_camera:=', self.use_camera,
                 ' gz_control_config_package:=', self.gz_control_config_package,
                 ' gz_control_config_file_path:=', self.gz_control_config_file_path
