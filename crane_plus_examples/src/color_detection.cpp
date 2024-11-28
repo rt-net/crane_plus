@@ -65,10 +65,10 @@ private:
     if (camera_info_) {
       // 赤い物体を検出するようにHSVの範囲を設定
       // 周囲の明るさ等の動作環境に合わせて調整
-      const int LOW_H_1 = 0, HIGH_H_1 = 20;
-      const int LOW_H_2 = 160, HIGH_H_2 = 179;
+      const int LOW_H_1 = 0, HIGH_H_1 = 10;
+      const int LOW_H_2 = 170, HIGH_H_2 = 179;
       const int LOW_S = 100, HIGH_S = 255;
-      const int LOW_V = 50, HIGH_V = 255;
+      const int LOW_V = 100, HIGH_V = 255;
 
       // ウェブカメラの画像を受け取る
       auto cv_img = cv_bridge::toCvShare(msg, msg->encoding);
