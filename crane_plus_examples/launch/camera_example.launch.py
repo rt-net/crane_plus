@@ -48,6 +48,7 @@ def load_yaml(package_name, file_path):
 
 def generate_launch_description():
     description_loader = RobotDescriptionLoader()
+    description_loader.use_camera = 'true'
 
     robot_description_semantic_config = load_file(
         'crane_plus_moveit_config', 'config/crane_plus.srdf')
