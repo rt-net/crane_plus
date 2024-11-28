@@ -35,17 +35,25 @@ def generate_launch_description():
         description='Use camera.'
         )
 
+    declare_world_name = DeclareLaunchArgument(
+        'world_name',
+        default_value=os.path.join(
+            get_package_share_directory('crane_plus_gazebo'), 'worlds', 'table.sdf'),
+        description='Set world name.'
+        )
+
     # PATHを追加で通さないとSTLファイルが読み込まれない
     env = {'IGN_GAZEBO_SYSTEM_PLUGIN_PATH': os.environ['LD_LIBRARY_PATH'],
            'IGN_GAZEBO_RESOURCE_PATH': os.path.dirname(
-               get_package_share_directory('crane_plus_description'))}
-    world_file = os.path.join(
-        get_package_share_directory('crane_plus_gazebo'), 'worlds', 'table.sdf')
+                get_package_share_directory('crane_plus_description')) + ':' +
+           os.path.join(get_package_share_directory('crane_plus_gazebo'), 'models'),
+           }
+
     gui_config = os.path.join(
         get_package_share_directory('crane_plus_gazebo'), 'gui', 'gui.config')
     # -r オプションで起動時にシミュレーションをスタートしないと、コントローラが起動しない
     ign_gazebo = ExecuteProcess(
-            cmd=['ign gazebo -r', world_file, '--gui-config', gui_config],
+            cmd=['ign gazebo -r', LaunchConfiguration('world_name'), '--gui-config', gui_config],
             output='screen',
             additional_env=env,
             shell=True
@@ -120,6 +128,7 @@ def generate_launch_description():
     return LaunchDescription([
         SetParameter(name='use_sim_time', value=True),
         declare_use_camera,
+        declare_world_name,
         ign_gazebo,
         gazebo_spawn_entity,
         move_group,
