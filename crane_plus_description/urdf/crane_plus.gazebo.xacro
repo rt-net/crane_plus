@@ -100,7 +100,7 @@
           <camera name="camera">
             <xacro:property name="camera_width" value="640"/>
             <xacro:property name="camera_height" value="480"/>
-            <xacro:property name="camera_hfov" value="${radians(120)}"/>
+            <xacro:property name="camera_hfov" value="${radians(70)}"/>
             <xacro:property name="camera_focal_length" value="${camera_width / (2 * tan(camera_hfov / 2))}"/>
             <horizontal_fov>${camera_hfov}</horizontal_fov>
             <image>
