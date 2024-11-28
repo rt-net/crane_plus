@@ -47,8 +47,14 @@ def load_yaml(package_name, file_path):
 
 
 def generate_launch_description():
+    declare_use_camera = DeclareLaunchArgument(
+        'use_camera',
+        default_value='true',
+        description='Use camera.'
+    )
+
     description_loader = RobotDescriptionLoader()
-    description_loader.use_camera = 'true'
+    description_loader.use_camera = LaunchConfiguration('use_camera')
 
     robot_description_semantic_config = load_file(
         'crane_plus_moveit_config', 'config/crane_plus.srdf')
@@ -82,6 +88,7 @@ def generate_launch_description():
                           output='screen')
 
     return LaunchDescription([
+        declare_use_camera,
         declare_use_sim_time,
         SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
         detection_node,
