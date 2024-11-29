@@ -52,7 +52,7 @@ def generate_launch_description():
             description='Set the path to rviz configuration file.',
         )
     )
-    
+
     rviz_config = LaunchConfiguration('rviz_config')
 
     moveit_config = (
