@@ -18,6 +18,7 @@ from crane_plus_description.robot_description_loader \
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 from moveit_configs_utils import MoveItConfigsBuilder
 from moveit_configs_utils.launches import generate_move_group_launch
 from moveit_configs_utils.launches import generate_moveit_rviz_launch
@@ -51,6 +52,8 @@ def generate_launch_description():
             description='Set the path to rviz configuration file.',
         )
     )
+    
+    rviz_config = LaunchConfiguration('rviz_config')
 
     moveit_config = (
         MoveItConfigsBuilder('crane_plus')
@@ -74,6 +77,12 @@ def generate_launch_description():
     ld.add_entity(generate_move_group_launch(moveit_config))
 
     # RViz
+    rviz_entities = generate_moveit_rviz_launch(moveit_config).entities
+    for entity in rviz_entities:
+        if isinstance(entity, Node):
+            entity.cmd.extend(['--ros-args', '--params-file', rviz_config])
+            ld.add_entity(entity)
+
     ld.add_entity(generate_moveit_rviz_launch(moveit_config))
 
     # Static TF
