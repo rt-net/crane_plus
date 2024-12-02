@@ -39,11 +39,5 @@
     <disable_collisions link1="crane_plus_link2" link2="crane_plus_link3" reason="Adjacent" />
     <disable_collisions link1="crane_plus_link3" link2="crane_plus_link4" reason="Adjacent" />
     <disable_collisions link1="crane_plus_link4" link2="crane_plus_link_hand" reason="Adjacent" />
-    <disable_collisions link1="crane_plus_base" link2="camera_stand_p1" reason="Adjacent" />
-    <disable_collisions link1="crane_plus_base" link2="camera_stand_p4" reason="Adjacent" />
-    <disable_collisions link1="camera_stand_p1" link2="camera_stand_p2" reason="Adjacent" />
-    <disable_collisions link1="camera_stand_p1" link2="camera_stand_p4" reason="Adjacent" />
-    <disable_collisions link1="camera_stand_p1" link2="camera_stand_p5" reason="Adjacent" />
-    <disable_collisions link1="camera_stand_p2" link2="camera_stand_p3" reason="Adjacent" />
 
 </robot>

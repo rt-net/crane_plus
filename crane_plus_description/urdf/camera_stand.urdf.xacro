@@ -7,7 +7,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <box size="0.02 0.02 0.285" />
+          <box size="0.02 0.285 0.02" />
         </geometry>
         <material name="grey">
           <color rgba="0.8 0.8 0.8 1.0" />
@@ -17,13 +17,13 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <box size="0.02 0.02 0.285" />
+          <box size="0.02 0.285 0.02" />
         </geometry>
       </collision>
     </link>
 
     <joint name="camera_stand_joint1" type="fixed">
-      <origin xyz="-0.05 0.08 0.01" rpy="${radians(90)} 0 0" />
+      <origin xyz="-0.052 0.08 0.01" rpy="0 0 0" />
       <parent link="${parent}" />
       <child link="camera_stand_p1" />
     </joint>
@@ -48,8 +48,8 @@
     </link>
 
     <joint name="camera_stand_joint2" type="fixed">
-      <origin xyz="-0.05 0.1025 0.24" rpy="0 0 0" />
-      <parent link="${parent}" />
+      <origin xyz="0 0.02253 0.23" rpy="0 0 0" />
+      <parent link="camera_stand_p1" />
       <child link="camera_stand_p2" />
     </joint>
 
@@ -57,7 +57,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <box size="0.02 0.02 0.13" />
+          <box size="0.13 0.02 0.02" />
         </geometry>
         <material name="grey">
           <color rgba="0.8 0.8 0.8 1.0" />
@@ -67,14 +67,14 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <box size="0.02 0.02 0.13" />
+          <box size="0.129 0.02 0.02" />
         </geometry>
       </collision>
     </link>
 
     <joint name="camera_stand_joint3" type="fixed">
-      <origin xyz="0.02 0.1025 0.45" rpy="0 ${radians(90)} 0" />
-      <parent link="${parent}" />
+      <origin xyz="0.075 0 0.21" rpy="0 0 0" />
+      <parent link="camera_stand_p2" />
       <child link="camera_stand_p3" />
     </joint>
 
@@ -82,7 +82,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <box size="0.02 0.02 0.05" />
+          <box size="0.055 0.02 0.02" />
         </geometry>
         <material name="grey">
           <color rgba="0.8 0.8 0.8 1.0" />
@@ -92,14 +92,14 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <box size="0.02 0.02 0.05" />
+          <box size="0.054 0.019 0.02" />
         </geometry>
       </collision>
     </link>
 
     <joint name="camera_stand_joint4" type="fixed">
-      <origin xyz="-0.015 -0.0525 0.01" rpy="0 ${radians(90)} 0" />
-      <parent link="${parent}" />
+      <origin xyz="0.0375 -0.1325 0" rpy="0 0 0" />
+      <parent link="camera_stand_p1" />
       <child link="camera_stand_p4" />
     </joint>
 
@@ -107,7 +107,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <box size="0.02 0.02 0.05" />
+          <box size="0.055 0.02 0.02" />
         </geometry>
         <material name="grey">
           <color rgba="0.8 0.8 0.8 1.0" />
@@ -117,14 +117,14 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <box size="0.02 0.02 0.05" />
+          <box size="0.054 0.02 0.02" />
         </geometry>
       </collision>
     </link>
 
     <joint name="camera_stand_joint5" type="fixed">
-      <origin xyz="-0.015 0.2125 0.01" rpy="0 ${radians(90)} 0" />
-      <parent link="${parent}" />
+      <origin xyz="0.0375 0.1325 0" rpy="0 0 0" />
+      <parent link="camera_stand_p1" />
       <child link="camera_stand_p5" />
     </joint>
 
