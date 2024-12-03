@@ -43,7 +43,7 @@
           model://aruco_cube_0
         </uri>
       </include>
-      <pose>0 -0.1 1.05 0 0 0</pose>
+      <pose>0.2 0.05 1.05 3.1415 0 0</pose>
     </model>
 
   </world>

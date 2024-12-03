@@ -53,6 +53,28 @@ $ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0 use_cam
 $ ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py
 ```
 
+#### Webカメラ搭載モデルを使用する場合
+
+Webカメラ搭載モデルの場合は、次のコマンドを実行してください。
+
+```sh
+$ ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py use_camera:=true
+```
+
+CRANE+ V2の前にArUcoマーカ付きのBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
+[aruco\_detection](#aruco_detection)サンプルを実行する際に使用することを想定しています。
+
+```sh
+$ ros2 launch crane_plus_gazebo crane_plus_with_aruco_cube.launch.py use_camera:=true
+```
+
+CRANE+ V2の前に赤いBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
+[color\_detection](#color_detection)サンプルを実行する際に使用すること想定しています。
+
+```sh
+$ ros2 launch crane_plus_gazebo crane_plus_with_red_cube.launch.py use_camera:=true
+```
+
 ## サンプルプログラムを実行する
 
 準備ができたらサンプルプログラムを実行します。
