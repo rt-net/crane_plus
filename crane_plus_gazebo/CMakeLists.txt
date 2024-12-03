@@ -7,6 +7,7 @@ install(DIRECTORY
   launch
   worlds
   gui
+  models
   DESTINATION share/${PROJECT_NAME}/
 )
 

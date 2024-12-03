@@ -155,7 +155,7 @@ private:
     const double GRIPPER_OFFSET = 0.13;
     double gripper_offset_x = GRIPPER_OFFSET * std::cos(theta_rad);
     double gripper_offset_y = GRIPPER_OFFSET * std::sin(theta_rad);
-    if (!control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg)) {
+    if (!control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.04, 0, 90, theta_deg)) {
       // アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
       control_arm(0.0, 0.0, 0.17, 0, 0, 0);
       return;
@@ -168,7 +168,7 @@ private:
     control_arm(0.0, 0.0, 0.17, 0, 90, 0);
 
     // 下ろす
-    control_arm(0.0, -0.15, 0.06, 0, 90, -90);
+    control_arm(0.0, -0.15, 0.05, 0, 90, -90);
 
     // ハンドを開く
     control_gripper(GRIPPER_OPEN);
