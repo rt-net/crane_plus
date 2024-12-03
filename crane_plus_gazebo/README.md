@@ -15,4 +15,22 @@ CRANE+ V2 の[Gazebo](https://gazebosim.org/home)
 $ ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py
 ```
 
+カメラ付きモデルを使用する場合は下記コマンドを実行します。
+
+```sh
+$ ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py use_camera:=true
+```
+
+CRANE+ V2の前にArUcoマーカ付きのBoxを置いたシミュレータ環境を使用する場合は下記コマンドを実行します。
+
+```sh
+$ ros2 launch crane_plus_gazebo crane_plus_with_aruco_cube.launch.py
+```
+
+CRANE+ V2の前に赤いBoxを置いたシミュレータ環境を使用する場合は下記コマンドを実行します。
+
+```sh
+$ ros2 launch crane_plus_gazebo crane_plus_with_red_cube.launch.py
+```
+
 ![crane_plus_ignition](https://rt-net.github.io/images/crane-plus/crane_plus_ignition.png)
