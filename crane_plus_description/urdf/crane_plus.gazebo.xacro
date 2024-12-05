@@ -27,7 +27,6 @@
             name_link_4
             name_link_hand
             use_camera
-            use_ignition
             config_package
             config_file_path
             ">
@@ -76,9 +75,9 @@
 
     <xacro:if value="$(arg use_camera)">
       <gazebo>
-        <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
-          <render_engine>ogre2</render_engine>
-        </plugin>
+          <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+          </plugin>
       </gazebo>
 
       <gazebo reference="camera_color_optical_frame">
