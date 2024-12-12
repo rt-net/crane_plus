@@ -48,10 +48,10 @@ def generate_launch_description():
     description_loader.use_camera = LaunchConfiguration('use_camera')
     description = description_loader.load()
 
-    rviz_config_file_move_group = get_package_share_directory(
+    rviz_config_moveit = get_package_share_directory(
         'crane_plus_moveit_config'
         ) + '/config/moveit.rviz'
-    rviz_config_file_camera = get_package_share_directory(
+    rviz_config_camera = get_package_share_directory(
         'crane_plus_examples'
         ) + '/launch/camera_example.rviz'
 
@@ -62,7 +62,7 @@ def generate_launch_description():
             condition=UnlessCondition(LaunchConfiguration('use_camera')),
             launch_arguments={
                 'loaded_description': description,
-                'rviz_config': rviz_config_file_move_group
+                'rviz_config': rviz_config_moveit
             }.items()
         )
 
@@ -73,7 +73,7 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('use_camera')),
             launch_arguments={
                 'loaded_description': description,
-                'rviz_config': rviz_config_file_camera
+                'rviz_config': rviz_config_camera
             }.items()
         )
 
