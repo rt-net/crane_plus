@@ -117,10 +117,8 @@ def generate_launch_description():
             )
 
     spawn_gripper_controller = ExecuteProcess(
-                cmd=[
-                    'ros2 run controller_manager spawner '
-                    'crane_plus_gripper_controller'
-                ],
+                cmd=['ros2 run controller_manager spawner '
+                     'crane_plus_gripper_controller'],
                 shell=True,
                 output='screen',
             )
