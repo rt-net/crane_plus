@@ -7,10 +7,10 @@ https://github.com/rt-net/crane_plus/pkgs/container/crane_plus
 をアップロードしています。
 tagにはROSのディストリビューションを指定してください。
 
-Humbleディストリビューションのイメージをダウンロードする場合は次のコマンドを実行します。
+Jazzyディストリビューションのイメージをダウンロードする場合は次のコマンドを実行します。
 
 ```sh
-$ docker pull ghcr.io/rt-net/crane_plus:humble
+$ docker pull ghcr.io/rt-net/crane_plus:jazzy
 ```
 
 ### ノードの起動
@@ -67,9 +67,9 @@ $ rocker --x11 --net=host --privileged \
 `./build_source.sh $ROS_DISTRO`を実行してイメージを作成します。
 
 ```sh
-# humbleディストリビューションのイメージを作成する
+# jazzyディストリビューションのイメージを作成する
 $ cd crane_plus/.docker
-$ ./build_source.sh humble
+$ ./build_source.sh jazzy
 ...
-Successfully tagged crane_plus:humble
+Successfully tagged crane_plus:jazzy
 ```
