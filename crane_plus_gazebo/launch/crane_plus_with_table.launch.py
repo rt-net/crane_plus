@@ -72,7 +72,7 @@ def generate_launch_description():
     gui_config = os.path.join(
         get_package_share_directory('crane_plus_gazebo'), 'gui', 'gui.config')
     # -r オプションで起動時にシミュレーションをスタートしないと、コントローラが起動しない
-    gz_gazebo = ExecuteProcess(
+    gz_sim = ExecuteProcess(
             cmd=['gz sim -r',
                  LaunchConfiguration('world_name'),
                  '--gui-config',
@@ -82,7 +82,7 @@ def generate_launch_description():
             shell=True
         )
 
-    gazebo_spawn_entity = Node(
+    gz_sim_spawn_entity = Node(
         package='ros_gz_sim',
         executable='create',
         output='screen',
@@ -147,8 +147,8 @@ def generate_launch_description():
         declare_rviz_config,
         declare_rviz_config_camera,
         declare_world_name,
-        gz_gazebo,
-        gazebo_spawn_entity,
+        gz_sim,
+        gz_sim_spawn_entity,
         move_group,
         spawn_joint_state_controller,
         spawn_arm_controller,
