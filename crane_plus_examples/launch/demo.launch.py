@@ -43,33 +43,38 @@ def generate_launch_description():
         description='Set video device.'
     )
 
+    declare_rviz_config = DeclareLaunchArgument(
+        'rviz_config',
+        default_value=get_package_share_directory(
+            'crane_plus_moveit_config'
+        ) + '/config/moveit.rviz',
+        description='Set the path to rviz configuration file.',
+        condition=UnlessCondition(LaunchConfiguration('use_camera')),
+    )
+
+    declare_rviz_config_camera = DeclareLaunchArgument(
+        'rviz_config',
+        default_value=get_package_share_directory(
+            'crane_plus_examples'
+        ) + '/launch/camera_example.rviz',
+        description='Set the path to rviz configuration file.',
+        condition=IfCondition(LaunchConfiguration('use_camera')),
+    )
+
     description_loader = RobotDescriptionLoader()
     description_loader.port_name = LaunchConfiguration('port_name')
     description_loader.use_camera = LaunchConfiguration('use_camera')
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
-                get_package_share_directory('crane_plus_moveit_config'),
-                '/launch/run_move_group.launch.py']),
-            condition=UnlessCondition(LaunchConfiguration('use_camera')),
-            launch_arguments={
-                'loaded_description': description
-            }.items()
-        )
-
-    rviz_config_file = get_package_share_directory(
-        'crane_plus_examples') + '/launch/camera_example.rviz'
-    move_group_camera = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
-                get_package_share_directory('crane_plus_moveit_config'),
-                '/launch/run_move_group.launch.py']),
-            condition=IfCondition(LaunchConfiguration('use_camera')),
-            launch_arguments={
-                'loaded_description': description,
-                'rviz_config_file': rviz_config_file
-            }.items()
-        )
+        PythonLaunchDescriptionSource([
+            get_package_share_directory('crane_plus_moveit_config'),
+            '/launch/run_move_group.launch.py']),
+        launch_arguments={
+            'loaded_description': description,
+            'rviz_config': LaunchConfiguration('rviz_config')
+        }.items()
+    )
 
     control_node = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
@@ -96,8 +101,9 @@ def generate_launch_description():
         declare_port_name,
         declare_use_camera,
         declare_video_device,
+        declare_rviz_config,
+        declare_rviz_config_camera,
         move_group,
-        move_group_camera,
         control_node,
         usb_cam_node
     ])

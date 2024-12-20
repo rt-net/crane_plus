@@ -1,4 +1,4 @@
-ARG ROS_DISTRO="humble"
+ARG ROS_DISTRO="jazzy"
 FROM osrf/ros:${ROS_DISTRO}-desktop
 ENV OVERLAY_WS /root/overlay_ws
 WORKDIR $OVERLAY_WS/src
@@ -30,12 +30,6 @@ RUN mkdir -p /root/.gazebo/models && \
     git remote add origin https://github.com/osrf/gazebo_models && \
     git pull origin master && \
     rm -rf .git
-
-# Download ignition model
-RUN ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/sun && \
-    ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/ground%20plane && \
-    ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/wood%20cube%205cm && \
-    ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/table
 
 # Edit entrypoint to source overlay setup file
 WORKDIR $OVERLAY_WS
