@@ -12,55 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 
-from ament_index_python.packages import get_package_share_directory
+from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from moveit_configs_utils import MoveItConfigsBuilder
-from moveit_configs_utils.launch_utils import DeclareBooleanLaunchArg
 from moveit_configs_utils.launches import generate_move_group_launch
 from moveit_configs_utils.launches import generate_moveit_rviz_launch
 from moveit_configs_utils.launches import generate_rsp_launch
-from moveit_configs_utils.launches  \
-    import generate_static_virtual_joint_tfs_launch
+from moveit_configs_utils.launches import generate_static_virtual_joint_tfs_launch
 
 
 def generate_launch_description():
     ld = LaunchDescription()
 
-    declare_loaded_description = DeclareLaunchArgument(
-        'loaded_description',
-        default_value='',
-        description='Set robot_description text.  \
-                     It is recommended to use RobotDescriptionLoader() in  \
-                        crane_plus_description.',
-    )
-
-    ld.add_action(declare_loaded_description)
-
-    ld.add_action(DeclareBooleanLaunchArg('debug', default_value=False))
+    description_loader = RobotDescriptionLoader()
 
     ld.add_action(
         DeclareLaunchArgument(
-            'rviz_config',
-            default_value=get_package_share_directory(
-                'crane_plus_moveit_config'
-            )
-            + '/config/moveit.rviz',
-            description='Set the path to rviz configuration file.',
+            'loaded_description',
+            default_value=description_loader.load(),
+            description='Set robot_description text.  \
+                      It is recommended to use RobotDescriptionLoader() \
+                          in crane_plus_description.',
         )
     )
-
-    declare_rviz_config_file = DeclareLaunchArgument(
-        'rviz_config_file',
-        default_value=get_package_share_directory('crane_plus_moveit_config')
-        + '/launch/run_move_group.rviz',
-        description='Set the path to rviz configuration file.'
-    )
-
-    ld.add_action(declare_rviz_config_file)
 
     moveit_config = (
         MoveItConfigsBuilder('crane_plus')
@@ -68,24 +45,7 @@ def generate_launch_description():
             publish_robot_description=True,
             publish_robot_description_semantic=True,
         )
-        .robot_description(
-            file_path=os.path.join(
-                get_package_share_directory('crane_plus_description'),
-                'urdf',
-                'crane_plus.urdf.xacro',
-            ),
-            mappings={},
-        )
-        .robot_description_semantic(
-            file_path='config/crane_plus.srdf',
-            mappings={'model': 'crane_plus'},
-        )
-        .joint_limits(file_path='config/joint_limits.yaml')
-        .trajectory_execution(
-            file_path='config/controllers.yaml', moveit_manage_controllers=True
-        )
         .planning_pipelines(pipelines=['ompl'])
-        .robot_description_kinematics(file_path='config/kinematics.yaml')
         .to_moveit_configs()
     )
 
@@ -99,6 +59,7 @@ def generate_launch_description():
 
     # Move group
     ld.add_entity(generate_move_group_launch(moveit_config))
+
     # RViz
     ld.add_entity(generate_moveit_rviz_launch(moveit_config))
 

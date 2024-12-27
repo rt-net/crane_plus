@@ -15,13 +15,13 @@ on:
 jobs:
   industrial_ci:
     strategy:
+      fail-fast: false
       matrix:
         env:
           - { ROS_DISTRO: jazzy, ROS_REPO: ros }
+          - { ROS_DISTRO: rolling, ROS_REPO: ros }
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set environment variable for pip
-        run: echo "PIP_BREAK_SYSTEM_PACKAGES=1" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
       - uses: "ros-industrial/industrial_ci@master"
         env: ${{ matrix.env }}

@@ -52,17 +52,7 @@ def test_use_gazebo():
     rdl.use_gazebo = 'true'
     rdl.gz_control_config_package = 'crane_plus_description'
     rdl.gz_control_config_file_path = 'test/dummy_controllers.yaml'
-    assert 'gazebo_ros2_control/GazeboSystem' in exec_load(rdl)
-
-
-def test_use_ignition():
-    # use_gazeboとuse_ignitionが変更され、xacroにign_ros2_controlがセットされることを期待
-    rdl = RobotDescriptionLoader()
-    rdl.use_gazebo = 'true'
-    rdl.use_ignition = 'true'
-    rdl.gz_control_config_package = 'crane_plus_description'
-    rdl.gz_control_config_file_path = 'test/dummy_controllers.yaml'
-    assert 'ign_ros2_control/IgnitionSystem' in exec_load(rdl)
+    assert 'gz_ros2_control/GazeboSimSystem' in exec_load(rdl)
 
 
 def test_use_camera():

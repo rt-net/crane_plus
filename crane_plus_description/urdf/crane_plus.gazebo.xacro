@@ -26,24 +26,15 @@
             name_link_3
             name_link_4
             name_link_hand
-            use_ignition
+            use_camera
             config_package
             config_file_path
             ">
 
     <gazebo>
-      <xacro:if value="${use_ignition}">
-        <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-          <parameters>$(find ${config_package})/${config_file_path}</parameters>
-        </plugin>
-      </xacro:if>
-
-      <xacro:unless value="${use_ignition}">
-        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-          <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
-          <parameters>$(find ${config_package})/${config_file_path}</parameters>
-        </plugin>
-      </xacro:unless>
+      <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find ${config_package})/${config_file_path}</parameters>
+      </plugin>
     </gazebo>
 
     <gazebo reference="${name_link_base}">
@@ -82,5 +73,54 @@
       <xacro:material_gazebo_white/>
     </gazebo>
 
+    <xacro:if value="$(arg use_camera)">
+      <gazebo>
+          <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+          </plugin>
+      </gazebo>
+
+      <gazebo reference="camera_color_optical_frame">
+        <sensor name="camera" type="camera">
+          <pose relative_to="camera_color_optical_frame">0 0 0 ${radians(90)} ${radians(-90)} 0</pose>
+          <update_rate>10</update_rate>
+          <always_on>true</always_on>
+          <topic>image_raw</topic>
+          <gz_frame_id>camera_color_optical_frame</gz_frame_id>
+          <camera name="camera">
+            <xacro:property name="camera_width" value="640"/>
+            <xacro:property name="camera_height" value="480"/>
+            <xacro:property name="camera_hfov" value="${radians(70)}"/>
+            <xacro:property name="camera_focal_length" value="${camera_width / (2 * tan(camera_hfov / 2))}"/>
+            <horizontal_fov>${camera_hfov}</horizontal_fov>
+            <image>
+              <width>${camera_width}</width>
+              <height>${camera_height}</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>10.0</far>
+            </clip>
+            <lens>
+              <intrinsics>
+                <fx>${camera_focal_length}</fx>
+                <fy>${camera_focal_length}</fy>
+                <cx>${(camera_width + 1) / 2}</cx>
+                <cy>${(camera_height + 1) / 2}</cy>
+                <s>1.0</s>
+              </intrinsics>
+              <projection>
+                <p_fx>${camera_focal_length}</p_fx>
+                <p_fy>${camera_focal_length}</p_fy>
+                <p_cx>${(camera_width + 1) / 2}</p_cx>
+                <p_cy>${(camera_height + 1) / 2}</p_cy>
+                <tx>0</tx>
+                <ty>0</ty>
+              </projection>
+            </lens>
+          </camera>
+        </sensor>
+      </gazebo>
+    </xacro:if>
   </xacro:macro>
 </robot>
