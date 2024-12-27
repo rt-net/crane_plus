@@ -205,9 +205,9 @@ return_type CranePlusHardware::read(
     RCLCPP_ERROR(
       rclcpp::get_logger("CranePlusHardware"),
       driver_->get_last_error_log().c_str());
-      // readに失敗しても通信は継続させる。
-      // 不確かなデータをセットしないようにOKを返す。
-      return return_type::OK;
+    // readに失敗しても通信は継続させる。
+    // 不確かなデータをセットしないようにOKを返す。
+    return return_type::OK;
   } else {
     for (uint i = 0; i < hw_position_states_.size(); ++i) {
       hw_position_states_[i] = joint_positions[i];
