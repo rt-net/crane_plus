@@ -14,8 +14,8 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>moveit</exec_depend>
   <exec_depend>moveit_py</exec_depend>
-  <exec_depend>python3-pip</exec_depend>
-  <exec_depend>python-numpy-quaternion-pip</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

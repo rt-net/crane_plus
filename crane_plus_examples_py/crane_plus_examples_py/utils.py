@@ -11,13 +11,9 @@
 
 import time
 
-import numpy as np
-import quaternion
-
 from rclpy.logging import get_logger
 
 
-# plan and execute
 def plan_and_execute(
     robot,
     planning_component,
@@ -26,17 +22,11 @@ def plan_and_execute(
     multi_plan_parameters=None,
     sleep_time=0.0,
 ):
-    # plan to goal
-    logger = get_logger('plan_and_execute')
     logger.info('Planning trajectory')
     if multi_plan_parameters is not None:
-        plan_result = planning_component.plan(
-            multi_plan_parameters=multi_plan_parameters
-        )
+        plan_result = planning_component.plan(multi_plan_parameters=multi_plan_parameters)
     elif single_plan_parameters is not None:
-        plan_result = planning_component.plan(
-            single_plan_parameters=single_plan_parameters
-        )
+        plan_result = planning_component.plan(single_plan_parameters=single_plan_parameters)
     else:
         plan_result = planning_component.plan()
 
@@ -48,31 +38,5 @@ def plan_and_execute(
         result = robot.execute(robot_trajectory, controllers=[])
     else:
         logger.error('Planning failed')
-        result = False
+
     time.sleep(sleep_time)
-    return result
-
-
-# euler --> quaternion
-def euler_to_quaternion(roll, pitch, yaw):
-    cy = np.cos(yaw * 0.5)
-    sy = np.sin(yaw * 0.5)
-    cr = np.cos(roll * 0.5)
-    sr = np.sin(roll * 0.5)
-    cp = np.cos(pitch * 0.5)
-    sp = np.sin(pitch * 0.5)
-
-    qw = cy * cr * cp + sy * sr * sp
-    qx = cy * sr * cp - sy * cr * sp
-    qy = cy * cr * sp + sy * sr * cp
-    qz = sy * cr * cp - cy * sr * sp
-
-    return [qx, qy, qz, qw]
-
-
-# rotation matrix --> quaternion
-def rotation_matrix_to_quaternion(rotation_matrix):
-    # numpy-quaternionを使用して回転行列からクォータニオンを計算
-    # 3x3の回転行列をnumpy.quaternionに変換する
-    q = quaternion.from_rotation_matrix(rotation_matrix)
-    return q
