@@ -38,5 +38,7 @@ def plan_and_execute(
         result = robot.execute(robot_trajectory, controllers=[])
     else:
         logger.error('Planning failed')
+        result = False
 
     time.sleep(sleep_time)
+    return result
