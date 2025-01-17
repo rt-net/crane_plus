@@ -28,6 +28,7 @@ class RobotDescriptionLoader():
         self.port_name = '/dev/ttyUSB0'
         self.use_gazebo = 'false'
         self.use_camera = 'false'
+        self.use_mock_components = 'false'
         self.gz_control_config_package = ''
         self.gz_control_config_file_path = ''
 
@@ -38,6 +39,7 @@ class RobotDescriptionLoader():
                 ' port_name:=', self.port_name,
                 ' use_gazebo:=', self.use_gazebo,
                 ' use_camera:=', self.use_camera,
+                ' use_mock_components:=', self.use_mock_components,
                 ' gz_control_config_package:=', self.gz_control_config_package,
                 ' gz_control_config_file_path:=', self.gz_control_config_file_path
                 ])

@@ -24,18 +24,24 @@
             read_velocities
             read_loads
             read_voltages
-            read_temperatures">
+            read_temperatures
+            use_mock_components">
 
     <ros2_control name="${name}" type="system">
       <hardware>
-        <plugin>crane_plus_hardware/CranePlusHardware</plugin>
-        <param name="port_name">${port_name}</param>
-        <param name="baudrate">${baudrate}</param>
-        <param name="timeout_seconds">${timeout_seconds}</param>
-        <param name="read_velocities">${read_velocities}</param>
-        <param name="read_loads">${read_loads}</param>
-        <param name="read_voltages">${read_voltages}</param>
-        <param name="read_temperatures">${read_temperatures}</param>
+        <xacro:if value="${use_mock_components}">
+          <plugin>mock_components/GenericSystem</plugin>
+        </xacro:if>
+        <xacro:unless value="${use_mock_components}">
+          <plugin>crane_plus_hardware/CranePlusHardware</plugin>
+          <param name="port_name">${port_name}</param>
+          <param name="baudrate">${baudrate}</param>
+          <param name="timeout_seconds">${timeout_seconds}</param>
+          <param name="read_velocities">${read_velocities}</param>
+          <param name="read_loads">${read_loads}</param>
+          <param name="read_voltages">${read_voltages}</param>
+          <param name="read_temperatures">${read_temperatures}</param>
+        </xacro:unless>
       </hardware>
 
       <joint name="${name_joint_1}">
