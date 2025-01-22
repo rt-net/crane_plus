@@ -19,6 +19,7 @@ from geometry_msgs.msg import TransformStamped
 import numpy as np
 import rclpy
 from rclpy.node import Node
+from scipy.spatial.transform import Rotation
 from sensor_msgs.msg import CameraInfo, Image
 import tf2_ros
 
@@ -35,34 +36,28 @@ class ImageSubscriber(Node):
         self.tf_broadcaster = tf2_ros.TransformBroadcaster()
 
         self.camera_info = None
-        self.bridge = CvBridge()
 
     def image_callback(self, msg):
         # 画像データをROSのメッセージからOpenCVの配列に変換
-        cv_img = self.bridge.imgmsg_to_cv2(msg, desired_encoding=msg.encoding)
+        bridge = CvBridge()
+        cv_img = bridge.imgmsg_to_cv2(msg, desired_encoding=msg.encoding)
         cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2BGR)
 
         if self.camera_info:
             # ArUcoマーカのデータセットを読み込む
             # DICT_6x6_50は6x6ビットのマーカが50個収録されたもの
             MARKER_DICT = aruco.getPredefinedDictionary(aruco.DICT_6X6_50)
-
-            # マーカーID
+            # マーカID
             ids = []
-
             # 画像座標系上のマーカ頂点位置
             corners = []
-
             # マーカの検出
             corners, ids, _ = aruco.detectMarkers(cv_img, MARKER_DICT)
-
             # マーカの検出数
             n_markers = len(ids)
-
             # カメラパラメータ
             CAMERA_MATRIX = np.array(self.camera_info['k']).reshape(3, 3)
             DIST_COEFFS = np.array(self.camera_info['d']).reshape(1, 5)
-
             # マーカ一辺の長さ 0.04 [m]
             MARKER_LENGTH = 0.04
 
@@ -79,14 +74,13 @@ class ImageSubscriber(Node):
                     t.transform.translation.x = tvecs[i][0][0]
                     t.transform.translation.y = tvecs[i][0][1]
                     t.transform.translation.z = tvecs[i][0][2]
-                    # 回転ベクトル→回転行列
-                    rotation_matrix, _ = cv2.Rodrigues(rvecs[i])
-                    # 回転行列からクォータニオンを求める
-                    q = rotation_matrix_to_quaternion(rotation_matrix)
-                    t.transform.rotation.x = q.x
-                    t.transform.rotation.y = q.y
-                    t.transform.rotation.z = q.z
-                    t.transform.rotation.w = q.w
+                    # 回転ベクトルをクォータニオンに変換
+                    marker_orientation_rot = Rotation.from_rotvec(rvecs)
+                    marker_orientation_quat = marker_orientation_rot.as_quat()
+                    t.transform.rotation.x = marker_orientation_quat[0]
+                    t.transform.rotation.y = marker_orientation_quat[1]
+                    t.transform.rotation.z = marker_orientation_quat[2]
+                    t.transform.rotation.w = marker_orientation_quat[3]
                     self.tf_broadcaster.sendTransform(t)
 
     def camera_info_callback(self, msg):
