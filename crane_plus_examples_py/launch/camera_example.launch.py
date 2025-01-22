@@ -49,8 +49,6 @@ def generate_launch_description():
         'robot_description': LaunchConfiguration('loaded_description')
     }
 
-    moveit_config.move_group_capabilities = {'capabilities': ''}
-
     declare_example_name = DeclareLaunchArgument(
         'example', default_value='color_detection',
         description=('Set an example executable name: '
