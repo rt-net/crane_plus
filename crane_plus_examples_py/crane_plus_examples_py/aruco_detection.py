@@ -36,11 +36,11 @@ class ImageSubscriber(Node):
         self.tf_broadcaster = tf2_ros.TransformBroadcaster()
 
         self.camera_info = None
+        self.bridge = CvBridge()
 
     def image_callback(self, msg):
         # 画像データをROSのメッセージからOpenCVの配列に変換
-        bridge = CvBridge()
-        cv_img = bridge.imgmsg_to_cv2(msg, desired_encoding=msg.encoding)
+        cv_img = self.bridge.imgmsg_to_cv2(msg, desired_encoding=msg.encoding)
         cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2BGR)
 
         if self.camera_info:

@@ -24,7 +24,7 @@ from moveit.planning import (
 
 import rclpy
 from rclpy.logging import get_logger
-from scipy.spatial.transform import Rotation as R
+from scipy.spatial.transform import Rotation
 
 
 def main(args=None):
@@ -64,18 +64,18 @@ def main(args=None):
     GRIPPER_CLOSE = math.radians(10.0)
 
     # 物体を掴む位置
-    rightward = R.from_euler('xyz', [0.0, 90.0, -90.0], degrees=True)
+    rightward = Rotation.from_euler('xyz', [0.0, 90.0, -90.0], degrees=True)
     quat = rightward.as_quat()
     PRE_GRASP_POSE = Pose(position=Point(x=0.0, y=-0.09, z=0.17),
                           orientation=Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3]))
 
-    downward = R.from_euler('xyz', [0.0, 180.0, -90.0], degrees=True)
+    downward = Rotation.from_euler('xyz', [0.0, 180.0, -90.0], degrees=True)
     quat = downward.as_quat()
     GRASP_POSE = Pose(position=Point(x=0.0, y=-0.09, z=0.14),
                       orientation=Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3]))
 
     # 物体を置く位置
-    forward = R.from_euler('xyz', [0.0, 90.0, 0.0], degrees=True)
+    forward = Rotation.from_euler('xyz', [0.0, 90.0, 0.0], degrees=True)
     quat = forward.as_quat()
     RELEASE_POSE = Pose(position=Point(x=0.15, y=0.0, z=0.06),
                         orientation=Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3]))

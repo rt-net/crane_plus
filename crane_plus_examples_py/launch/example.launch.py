@@ -32,7 +32,8 @@ def generate_launch_description():
                     in crane_plus_description.',
     )
 
-    moveit_config = (MoveItConfigsBuilder('crane_plus')
+    moveit_config = (
+        MoveItConfigsBuilder('crane_plus')
         .planning_scene_monitor(
             publish_robot_description=True,
             publish_robot_description_semantic=True,
@@ -51,10 +52,9 @@ def generate_launch_description():
     declare_example_name = DeclareLaunchArgument(
         'example',
         default_value='gripper_control',
-        description=('Set an example executable name: '
-                     '[gripper_control, pose_groupstate, \
-                     joint_values, pick_and_place]'
-        )
+        description='Set an example executable name: \
+                    [gripper_control, pose_groupstate, \
+                    joint_values, pick_and_place]'
     )
 
     declare_use_sim_time = DeclareLaunchArgument(
