@@ -11,8 +11,6 @@
 
 import time
 
-from rclpy.logging import get_logger
-
 
 def plan_and_execute(
     robot,

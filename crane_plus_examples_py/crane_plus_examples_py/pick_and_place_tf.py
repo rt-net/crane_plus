@@ -36,6 +36,7 @@ from rclpy.time import Time
 import tf2_ros
 from tf2_ros import TransformListener, TransformStamped
 from tf2_ros.buffer import Buffer
+from scipy.spatial.transform import Rotation
 
 
 class PickAndPlaceTf(Node):
@@ -223,12 +224,12 @@ class PickAndPlaceTf(Node):
         target_pose.pose.position.x = x
         target_pose.pose.position.y = y
         target_pose.pose.position.z = z
-        q = euler_to_quaternion(math.radians(roll), math.radians(pitch),
-                                math.radians(yaw))
-        target_pose.pose.orientation.x = q[0]
-        target_pose.pose.orientation.y = q[1]
-        target_pose.pose.orientation.z = q[2]
-        target_pose.pose.orientation.w = q[3]
+        rotation = Rotation.from_euler('xyz', [roll, pitch, yaw], degrees=True)
+        quat = rotation.as_quat()
+        target_pose.pose.orientation.x = quat[0]
+        target_pose.pose.orientation.y = quat[1]
+        target_pose.pose.orientation.z = quat[2]
+        target_pose.pose.orientation.w = quat[3]
         self.crane_plus_arm.set_start_state_to_current_state()
         self.crane_plus_arm.set_goal_state(
             pose_stamped_msg=target_pose, pose_link='crane_plus_link4'
