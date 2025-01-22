@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from crane_plus_examples_py.utils import rotation_matrix_to_quaternion
 import cv2
 from cv2 import aruco
 from cv_bridge import CvBridge
