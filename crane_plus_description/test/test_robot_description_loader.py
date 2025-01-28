@@ -62,3 +62,12 @@ def test_use_camera():
     rdl.gz_control_config_package = 'crane_plus_description'
     rdl.gz_control_config_file_path = 'test/dummy_controllers.yaml'
     assert 'camera_link' in exec_load(rdl)
+
+
+def test_mock_components():
+    # use_mock_componentsが変更されて、xacroにmock_componentsがセットされることを期待
+    rdl = RobotDescriptionLoader()
+    rdl.use_mock_components = 'true'
+    rdl.gz_control_config_package = 'crane_plus_description'
+    rdl.gz_control_config_file_path = 'test/dummy_controllers.yaml'
+    assert 'mock_components/GenericSystem' in exec_load(rdl)

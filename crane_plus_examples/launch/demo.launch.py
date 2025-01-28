@@ -43,6 +43,12 @@ def generate_launch_description():
         description='Set video device.'
     )
 
+    declare_use_mock_components = DeclareLaunchArgument(
+        'use_mock_components',
+        default_value='false',
+        description='Use mock_components or not.'
+    )
+
     declare_rviz_config = DeclareLaunchArgument(
         'rviz_config',
         default_value=get_package_share_directory(
@@ -64,6 +70,7 @@ def generate_launch_description():
     description_loader = RobotDescriptionLoader()
     description_loader.port_name = LaunchConfiguration('port_name')
     description_loader.use_camera = LaunchConfiguration('use_camera')
+    description_loader.use_mock_components = LaunchConfiguration('use_mock_components')
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
@@ -101,6 +108,7 @@ def generate_launch_description():
         declare_port_name,
         declare_use_camera,
         declare_video_device,
+        declare_use_mock_components,
         declare_rviz_config,
         declare_rviz_config_camera,
         move_group,
