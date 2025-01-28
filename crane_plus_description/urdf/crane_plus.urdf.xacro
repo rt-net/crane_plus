@@ -14,6 +14,7 @@
 
   <xacro:arg name="use_gazebo" default="false" />
   <xacro:arg name="use_camera" default="false" />
+  <xacro:arg name="use_mock_components" default="false" />
   <xacro:arg name="port_name" default="/dev/ttyUSB0" />
   <xacro:arg name="baudrate" default="1000000" />
   <xacro:arg name="timeout_seconds" default="5.0" />
@@ -118,7 +119,8 @@
       read_velocities="$(arg read_velocities)"
       read_loads="$(arg read_loads)"
       read_voltages="$(arg read_voltages)"
-      read_temperatures="$(arg read_temperatures)" />
+      read_temperatures="$(arg read_temperatures)"
+      use_mock_components="$(arg use_mock_components)" />
   </xacro:unless>
 
   <xacro:if value="$(arg use_gazebo)">

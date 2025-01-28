@@ -75,6 +75,19 @@ CRANE+ V2の前に赤いBoxを置いたシミュレータ環境を使用する�
 $ ros2 launch crane_plus_gazebo crane_plus_with_red_cube.launch.py use_camera:=true
 ```
 
+## 準備（Mock Componentsを使う場合）
+
+### 1. move_groupとcontrollerを起動する
+
+次のコマンドでmove_group (`crane_plus_moveit_config`)と
+controller (`crane_plus_control`)を起動します。
+
+```sh
+$ ros2 launch crane_plus_examples demo.launch.py use_mock_components:=true
+```
+
+Mock Componentsではカメラを使ったサンプルを実行することはできません。
+
 ## サンプルプログラムを実行する
 
 準備ができたらサンプルプログラムを実行します。
