@@ -6,7 +6,6 @@ Changelog for package crane_plus_moveit_config
 ------------------
 * Mock components対応 (`#86 <https://github.com/rt-net/crane_plus/issues/86>`_)
 * Jazzy対応 (`#78 <https://github.com/rt-net/crane_plus/issues/78>`_)
-* 2.0.1リリースのためにCHANGELOGとpackage.xmlを更新 (`#74 <https://github.com/rt-net/crane_plus/issues/74>`_)
 * Contributors: Kuwamai, YusukeKato, mizonon
 
 2.0.1 (2023-09-08)
