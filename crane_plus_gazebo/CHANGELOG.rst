@@ -2,8 +2,8 @@
 Changelog for package crane_plus_gazebo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+3.0.0 (2025-01-31)
+------------------
 * Jazzy対応 (`#78 <https://github.com/rt-net/crane_plus/issues/78>`_)
 * Gazebo環境にカメラを追加 (`#83 <https://github.com/rt-net/crane_plus/issues/83>`_)
 * テスト実行時はダミーのパラメータファイルを読み込めるようにdescription_loaderを修正 (`#73 <https://github.com/rt-net/crane_plus/issues/73>`_)

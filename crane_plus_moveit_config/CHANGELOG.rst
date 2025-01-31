@@ -2,8 +2,8 @@
 Changelog for package crane_plus_moveit_config
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+3.0.0 (2025-01-31)
+------------------
 * Mock components対応 (`#86 <https://github.com/rt-net/crane_plus/issues/86>`_)
 * Jazzy対応 (`#78 <https://github.com/rt-net/crane_plus/issues/78>`_)
 * 2.0.1リリースのためにCHANGELOGとpackage.xmlを更新 (`#74 <https://github.com/rt-net/crane_plus/issues/74>`_)
