@@ -2,6 +2,9 @@
 Changelog for package crane_plus_control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.0.1 (2023-09-08)
 ------------------
 
