@@ -2,6 +2,14 @@
 Changelog for package crane_plus_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.0 (2025-01-31)
+------------------
+* Mock components対応 (`#86 <https://github.com/rt-net/crane_plus/issues/86>`_)
+* Jazzy対応 (`#78 <https://github.com/rt-net/crane_plus/issues/78>`_)
+* Gazebo環境にカメラを追加 (`#83 <https://github.com/rt-net/crane_plus/issues/83>`_)
+* テスト実行時はダミーのパラメータファイルを読み込めるようにdescription_loaderを修正 (`#73 <https://github.com/rt-net/crane_plus/issues/73>`_)
+* Contributors: Kuwamai, YusukeKato, mizonon
+
 2.0.1 (2023-09-08)
 ------------------
 * テスト実行時はダミーのパラメータファイルを読み込めるようにdescription_loaderを修正 (`#73 <https://github.com/rt-net/crane_plus/issues/73>`_)
