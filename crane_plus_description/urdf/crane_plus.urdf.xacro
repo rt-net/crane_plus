@@ -20,17 +20,6 @@
   <xacro:arg name="gz_control_config_package" default="" />
   <xacro:arg name="gz_control_config_file_path" default="" />
 
-  <!-- Link to provide the location reference for the arm -->
-  <link name="base_link"/>
-
-  <!-- Used for fixing robot to Gazebo 'base_link' -->
-  <link name="world"/>                                
-
-  <joint name="base_link_to_world_joint" type="fixed">
-    <parent link="world"/>                            
-    <child link="base_link"/>                         
-  </joint>                                            
-
   <xacro:property name="NAME_LINK_BASE" value="crane_plus_base"/>
   <xacro:property name="NAME_LINK_1" value="crane_plus_link1"/>
   <xacro:property name="NAME_LINK_2" value="crane_plus_link2"/>
@@ -59,6 +48,15 @@
   <xacro:property name="JOINT_4_UPPER_LIMIT" value="${251.32 * TO_RADIAN - SERVO_HOME}"/>
   <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${109.38 * TO_RADIAN - SERVO_HOME}"/>
   <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${188.27 * TO_RADIAN - SERVO_HOME}"/>
+
+  <!-- Used for fixing robot 'base_link' to Gazebo 'world' -->
+  <link name="world"/>
+  <link name="base_link"/>
+
+  <joint name="base_link_to_world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
 
   <xacro:crane_plus
     parent="base_link"
