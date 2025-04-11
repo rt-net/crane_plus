@@ -19,6 +19,9 @@
   <xacro:arg name="read_temperatures" default="0" />
   <xacro:arg name="gz_control_config_package" default="" />
   <xacro:arg name="gz_control_config_file_path" default="" />
+  <xacro:property name="USE_CAMERA" value="$(arg use_camera)"/>
+  <xacro:property name="GZ_CONTROL_CONFIG_PACKAGE" value="$(arg gz_control_config_package)"/>
+  <xacro:property name="GZ_CONTROL_CONFIG_FILE_PATH" value="$(arg gz_control_config_file_path)"/>
 
   <xacro:property name="NAME_LINK_BASE" value="crane_plus_base"/>
   <xacro:property name="NAME_LINK_1" value="crane_plus_link1"/>
@@ -91,16 +94,7 @@
   </xacro:unless>
 
   <xacro:if value="$(arg use_gazebo)">
-    <xacro:gazebo_robot_settings
-      name_link_base="${NAME_LINK_BASE}"
-      name_link_1="${NAME_LINK_1}"
-      name_link_2="${NAME_LINK_2}"
-      name_link_3="${NAME_LINK_3}"
-      name_link_4="${NAME_LINK_4}"
-      name_link_hand="${NAME_LINK_HAND}"
-      use_camera="$(arg use_camera)"
-      config_package="$(arg gz_control_config_package)" 
-      config_file_path="$(arg gz_control_config_file_path)" />
+    <xacro:gazebo_robot_settings />
 
     <xacro:crane_plus_gazebo_ros2_control_settings 
       name="crane_plus"
