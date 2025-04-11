@@ -83,8 +83,8 @@
   </xacro:if>
 
   <xacro:if value="$(arg use_camera)">
-    <xacro:include filename="$(find crane_plus_description)/urdf/camera.urdf.xacro" />
-    <xacro:include filename="$(find crane_plus_description)/urdf/camera_stand.urdf.xacro" />
+    <xacro:include filename="$(find crane_plus_description)/urdf/camera.xacro" />
+    <xacro:include filename="$(find crane_plus_description)/urdf/camera_stand.xacro" />
     <xacro:sensor_camera parent="${NAME_LINK_BASE}" />
     <xacro:camera_stand parent="${NAME_LINK_BASE}" />
   </xacro:if>
