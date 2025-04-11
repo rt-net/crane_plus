@@ -2,13 +2,6 @@
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <material name="black">
-    <color rgba="0.2 0.2 0.2 1.0"/>
-  </material>
-  <material name="white">
-    <color rgba="0.95 0.95 0.95 1.0"/>
-  </material>
-
   <xacro:macro name="crane_plus" params="parent *origin">
 
     <joint name="${NAME_JOINT_BASE}" type="fixed">

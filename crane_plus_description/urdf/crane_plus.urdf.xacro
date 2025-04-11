@@ -31,6 +31,16 @@
   <xacro:property name="GZ_CONTROL_CONFIG_PACKAGE" value="$(arg gz_control_config_package)"/>
   <xacro:property name="GZ_CONTROL_CONFIG_FILE_PATH" value="$(arg gz_control_config_file_path)"/>
 
+  <material name="black">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="0.95 0.95 0.95 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.8 0.8 0.8 1.0" />
+  </material>
+
   <xacro:property name="NAME_LINK_BASE" value="crane_plus_base"/>
   <xacro:property name="NAME_LINK_1" value="crane_plus_link1"/>
   <xacro:property name="NAME_LINK_2" value="crane_plus_link2"/>
