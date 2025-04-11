@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
-<robot name="camera_stand_parts" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="camera_stand" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <material name="grey">
+    <color rgba="0.8 0.8 0.8 1.0" />
+  </material>
 
   <xacro:macro name="camera_stand" params="parent">
 
-    <link name="camera_stand_p1">
+    <link name="camera_stand_link1">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <box size="0.02 0.285 0.02" />
         </geometry>
-        <material name="grey">
-          <color rgba="0.8 0.8 0.8 1.0" />
-        </material>
+        <material name="grey" />
       </visual>
 
       <collision>
@@ -19,24 +21,23 @@
         <geometry>
           <box size="0.02 0.285 0.02" />
         </geometry>
+        <material name="grey" />
       </collision>
     </link>
 
     <joint name="camera_stand_joint1" type="fixed">
       <origin xyz="-0.052 0.08 0.01" rpy="0 0 0" />
       <parent link="${parent}" />
-      <child link="camera_stand_p1" />
+      <child link="camera_stand_link1" />
     </joint>
 
-    <link name="camera_stand_p2">
+    <link name="camera_stand_link2">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <box size="0.02 0.02 0.44" />
         </geometry>
-        <material name="grey">
-          <color rgba="0.8 0.8 0.8 1.0" />
-        </material>
+        <material name="grey" />
       </visual>
 
       <collision>
@@ -44,24 +45,23 @@
         <geometry>
           <box size="0.02 0.02 0.44" />
         </geometry>
+        <material name="grey" />
       </collision>
     </link>
 
     <joint name="camera_stand_joint2" type="fixed">
       <origin xyz="0 0.02253 0.23" rpy="0 0 0" />
-      <parent link="camera_stand_p1" />
-      <child link="camera_stand_p2" />
+      <parent link="camera_stand_link1" />
+      <child link="camera_stand_link2" />
     </joint>
 
-    <link name="camera_stand_p3">
+    <link name="camera_stand_link3">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <box size="0.13 0.02 0.02" />
         </geometry>
-        <material name="grey">
-          <color rgba="0.8 0.8 0.8 1.0" />
-        </material>
+        <material name="grey" />
       </visual>
 
       <collision>
@@ -69,24 +69,23 @@
         <geometry>
           <box size="0.129 0.02 0.02" />
         </geometry>
+        <material name="grey" />
       </collision>
     </link>
 
     <joint name="camera_stand_joint3" type="fixed">
       <origin xyz="0.075 0 0.21" rpy="0 0 0" />
-      <parent link="camera_stand_p2" />
-      <child link="camera_stand_p3" />
+      <parent link="camera_stand_link2" />
+      <child link="camera_stand_link3" />
     </joint>
 
-    <link name="camera_stand_p4">
+    <link name="camera_stand_link4">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <box size="0.055 0.02 0.02" />
         </geometry>
-        <material name="grey">
-          <color rgba="0.8 0.8 0.8 1.0" />
-        </material>
+        <material name="grey" />
       </visual>
 
       <collision>
@@ -94,24 +93,23 @@
         <geometry>
           <box size="0.054 0.019 0.02" />
         </geometry>
+        <material name="grey" />
       </collision>
     </link>
 
     <joint name="camera_stand_joint4" type="fixed">
       <origin xyz="0.0375 -0.1325 0" rpy="0 0 0" />
-      <parent link="camera_stand_p1" />
-      <child link="camera_stand_p4" />
+      <parent link="camera_stand_link1" />
+      <child link="camera_stand_link4" />
     </joint>
 
-    <link name="camera_stand_p5">
+    <link name="camera_stand_link5">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <box size="0.055 0.02 0.02" />
         </geometry>
-        <material name="grey">
-          <color rgba="0.8 0.8 0.8 1.0" />
-        </material>
+        <material name="grey" />
       </visual>
 
       <collision>
@@ -119,13 +117,14 @@
         <geometry>
           <box size="0.054 0.02 0.02" />
         </geometry>
+        <material name="grey" />
       </collision>
     </link>
 
     <joint name="camera_stand_joint5" type="fixed">
       <origin xyz="0.0375 0.1325 0" rpy="0 0 0" />
-      <parent link="camera_stand_p1" />
-      <child link="camera_stand_p5" />
+      <parent link="camera_stand_link1" />
+      <child link="camera_stand_link5" />
     </joint>
 
   </xacro:macro>
