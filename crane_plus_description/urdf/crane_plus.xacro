@@ -8,18 +8,6 @@
   <material name="white">
     <color rgba="0.95 0.95 0.95 1.0"/>
   </material>
-  <material name="silver">
-    <color rgba="0.75 0.75 0.75 1.0"/>
-  </material>
-  <material name="red">
-    <color rgba="1.0 0.3 0.3 1.0"/>
-  </material>
-  <material name="green">
-    <color rgba="0.3 1.0 0.3 1.0"/>
-  </material>
-  <material name="blue">
-    <color rgba="0.3 0.3 1.0 1.0"/>
-  </material>
 
   <xacro:property name="SCALE_MM" value="0.001"/>
   <xacro:property name="SCALE_CM" value="0.01"/>
