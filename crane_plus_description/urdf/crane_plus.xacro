@@ -9,9 +9,6 @@
     <color rgba="0.95 0.95 0.95 1.0"/>
   </material>
 
-  <xacro:property name="SCALE_MM" value="0.001"/>
-  <xacro:property name="SCALE_CM" value="0.01"/>
-
   <xacro:property name="MESH_LINK_BASE" value="crane_plus_description/meshes/visual/body_20201013.stl"/>
   <xacro:property name="MESH_LINK_1" value="crane_plus_description/meshes/visual/Link1_20201013.stl"/>
   <xacro:property name="MESH_LINK_2" value="crane_plus_description/meshes/visual/Link2_20201013.stl"/>
