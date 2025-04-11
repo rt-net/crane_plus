@@ -9,42 +9,15 @@
     <color rgba="0.95 0.95 0.95 1.0"/>
   </material>
 
-  <xacro:macro name="crane_plus"
-      params="parent
-              name_link_base
-              name_link_1
-              name_link_2
-              name_link_3
-              name_link_4
-              name_link_hand
-              name_joint_base
-              name_joint_1
-              name_joint_2
-              name_joint_3
-              name_joint_4
-              name_joint_hand
-              joints_elimit
-              joints_vlimit
-              joint_1_lower_limit
-              joint_1_upper_limit
-              joint_2_lower_limit
-              joint_2_upper_limit
-              joint_3_lower_limit
-              joint_3_upper_limit
-              joint_4_lower_limit
-              joint_4_upper_limit
-              joint_hand_lower_limit
-              joint_hand_upper_limit
-              use_camera
-              *origin">
+  <xacro:macro name="crane_plus" params="parent *origin">
 
-    <joint name="${name_joint_base}" type="fixed">
+    <joint name="${NAME_JOINT_BASE}" type="fixed">
       <xacro:insert_block name="origin"/>         
       <parent link="${parent}"/>                  
-      <child link="${name_link_base}"/>           
+      <child link="${NAME_LINK_BASE}"/>
     </joint>                                      
 
-    <link name="${name_link_base}">
+    <link name="${NAME_LINK_BASE}">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
@@ -68,21 +41,21 @@
       </inertial>
     </link>
 
-    <joint name="${name_joint_1}" type="revolute">
+    <joint name="${NAME_JOINT_1}" type="revolute">
       <origin xyz="0 0 0.0454" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit
-        effort="${joints_elimit}"
-        velocity="${joints_vlimit}"
-        lower="${joint_1_lower_limit}"
-        upper="${joint_1_upper_limit}"
+        effort="${JOINT_EFFORT_LIMIT}"
+        velocity="${JOINT_VELOCITY_LIMIT}"
+        lower="${JOINT_1_LOWER_LIMIT}"
+        upper="${JOINT_1_UPPER_LIMIT}"
         />
-      <parent link="${name_link_base}"/>
-      <child link="${name_link_1}"/>
+      <parent link="${NAME_LINK_BASE}"/>
+      <child link="${NAME_LINK_1}"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${name_link_1}">
+    <link name="${NAME_LINK_1}">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 ${M_PI}"/>
         <geometry>
@@ -106,21 +79,21 @@
       </inertial>
     </link>
 
-    <joint name="${name_joint_2}" type="revolute">
+    <joint name="${NAME_JOINT_2}" type="revolute">
       <origin xyz="0 0 0.026" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <limit
-        effort="${joints_elimit}"
-        velocity="${joints_vlimit}"
-        lower="${joint_2_lower_limit}"
-        upper="${joint_2_upper_limit}"
+        effort="${JOINT_EFFORT_LIMIT}"
+        velocity="${JOINT_VELOCITY_LIMIT}"
+        lower="${JOINT_2_LOWER_LIMIT}"
+        upper="${JOINT_2_UPPER_LIMIT}"
         />
-      <parent link="${name_link_1}"/>
-      <child link="${name_link_2}"/>
+      <parent link="${NAME_LINK_1}"/>
+      <child link="${NAME_LINK_2}"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${name_link_2}">
+    <link name="${NAME_LINK_2}">
       <visual>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
@@ -144,21 +117,21 @@
       </inertial>
     </link>
 
-    <joint name="${name_joint_3}" type="revolute">
+    <joint name="${NAME_JOINT_3}" type="revolute">
       <origin xyz="0 0 0.083" rpy="0 0 0"/>
       <axis xyz="0 -1 0"/>
       <limit
-        effort="${joints_elimit}"
-        velocity="${joints_vlimit}"
-        lower="${joint_3_lower_limit}"
-        upper="${joint_3_upper_limit}"
+        effort="${JOINT_EFFORT_LIMIT}"
+        velocity="${JOINT_VELOCITY_LIMIT}"
+        lower="${JOINT_3_LOWER_LIMIT}"
+        upper="${JOINT_3_UPPER_LIMIT}"
         />
-      <parent link="${name_link_2}"/>
-      <child link="${name_link_3}"/>
+      <parent link="${NAME_LINK_2}"/>
+      <child link="${NAME_LINK_3}"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${name_link_3}">
+    <link name="${NAME_LINK_3}">
       <visual>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
@@ -182,21 +155,21 @@
       </inertial>
     </link>
 
-    <joint name="${name_joint_4}" type="revolute">
+    <joint name="${NAME_JOINT_4}" type="revolute">
       <origin xyz="0 0 0.0935" rpy="0 0 0"/>
       <axis xyz="0 -1 0"/>
       <limit
-        effort="${joints_elimit}"
-        velocity="${joints_vlimit}"
-        lower="${joint_4_lower_limit}"
-        upper="${joint_4_upper_limit}"
+        effort="${JOINT_EFFORT_LIMIT}"
+        velocity="${JOINT_VELOCITY_LIMIT}"
+        lower="${JOINT_4_LOWER_LIMIT}"
+        upper="${JOINT_4_UPPER_LIMIT}"
         />
-      <parent link="${name_link_3}"/>
-      <child link="${name_link_4}"/>
+      <parent link="${NAME_LINK_3}"/>
+      <child link="${NAME_LINK_4}"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${name_link_4}">
+    <link name="${NAME_LINK_4}">
       <visual>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
@@ -220,21 +193,21 @@
       </inertial>
     </link>
 
-    <joint name="${name_joint_hand}" type="revolute">
+    <joint name="${NAME_JOINT_HAND}" type="revolute">
       <origin xyz="0 -0.0145 0.045" rpy="0 0 0"/>
       <axis xyz="-1 0 0"/>
       <limit
-        effort="${joints_elimit}"
-        velocity="${joints_vlimit}"
-        lower="${joint_hand_lower_limit}"
-        upper="${joint_hand_upper_limit}"
+        effort="${JOINT_EFFORT_LIMIT}"
+        velocity="${JOINT_VELOCITY_LIMIT}"
+        lower="${JOINT_HAND_LOWER_LIMIT}"
+        upper="${JOINT_HAND_UPPER_LIMIT}"
         />
-      <parent link="${name_link_4}"/>
-      <child link="${name_link_hand}"/>
+      <parent link="${NAME_LINK_4}"/>
+      <child link="${NAME_LINK_HAND}"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${name_link_hand}">
+    <link name="${NAME_LINK_HAND}">
       <visual>
         <origin xyz="0 0 0" rpy="0 -${M_PI/2} 0"/>
         <geometry>

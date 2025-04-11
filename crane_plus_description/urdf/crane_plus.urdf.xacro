@@ -58,35 +58,8 @@
     <child link="base_link"/>
   </joint>
 
-  <xacro:crane_plus
-    parent="base_link"
-    name_link_base="${NAME_LINK_BASE}"
-    name_link_1="${NAME_LINK_1}"
-    name_link_2="${NAME_LINK_2}"
-    name_link_3="${NAME_LINK_3}"
-    name_link_4="${NAME_LINK_4}"
-    name_link_hand="${NAME_LINK_HAND}"
-    name_joint_base="${NAME_JOINT_BASE}"
-    name_joint_1="${NAME_JOINT_1}"
-    name_joint_2="${NAME_JOINT_2}"
-    name_joint_3="${NAME_JOINT_3}"
-    name_joint_4="${NAME_JOINT_4}"
-    name_joint_hand="${NAME_JOINT_HAND}"
-
-    joints_elimit="${JOINT_EFFORT_LIMIT}"
-    joints_vlimit="${JOINT_VELOCITY_LIMIT}"
-    joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
-    joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
-    joint_2_lower_limit="${JOINT_2_LOWER_LIMIT}"
-    joint_2_upper_limit="${JOINT_2_UPPER_LIMIT}"
-    joint_3_lower_limit="${JOINT_3_LOWER_LIMIT}"
-    joint_3_upper_limit="${JOINT_3_UPPER_LIMIT}"
-    joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
-    joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
-    joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
-    joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"
-    use_camera="$(arg use_camera)">
-    <origin xyz="0 0 0"/>
+  <xacro:crane_plus parent="base_link">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </xacro:crane_plus>
 
   <xacro:unless value="$(arg use_gazebo)">
