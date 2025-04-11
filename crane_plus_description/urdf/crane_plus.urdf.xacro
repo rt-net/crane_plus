@@ -35,19 +35,19 @@
   <xacro:property name="NAME_JOINT_HAND" value="crane_plus_joint_hand"/>
 
   <xacro:property name="M_PI" value="3.14159"/>
-  <xacro:property name="TO_RADIAN" value="${M_PI / 180.0}"/>
-  <xacro:property name="SERVO_HOME" value="${TO_RADIAN * 150.0}"/>
+  <xacro:property name="SERVO_HOME" value="${radians(150.0)}"/>
+  <xacro:property name="JOINT_EFFORT_LIMIT" value="1.5"/>
   <xacro:property name="JOINT_VELOCITY_LIMIT" value="2.0"/>
-  <xacro:property name="JOINT_1_LOWER_LIMIT" value="${0.0 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_1_UPPER_LIMIT" value="${300.0 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${45.45 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${252.20 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${3.52 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${290.62 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${44.57 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${251.32 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${109.38 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${188.27 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_1_LOWER_LIMIT" value="${radians(0) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_1_UPPER_LIMIT" value="${radians(300) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${radians(46) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${radians(252) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${radians(4) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${radians(290) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${radians(45) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${radians(251) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${radians(110) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${radians(188) - SERVO_HOME}"/>
 
   <!-- Used for fixing robot 'base_link' to Gazebo 'world' -->
   <link name="world"/>
@@ -73,6 +73,7 @@
     name_joint_4="${NAME_JOINT_4}"
     name_joint_hand="${NAME_JOINT_HAND}"
 
+    joints_elimit="${JOINT_EFFORT_LIMIT}"
     joints_vlimit="${JOINT_VELOCITY_LIMIT}"
     joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
     joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
