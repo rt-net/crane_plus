@@ -74,14 +74,13 @@ def generate_launch_description():
         description=('Set true when using the gazebo simulator.')
     )
 
-    example_node = Node(
-        name=[LaunchConfiguration('example'), '_node'],
-        package='crane_plus_examples',
-        executable=LaunchConfiguration('example'),
-        output='screen',
-        parameters=[{'robot_description': description_loader.load()},
-                    robot_description_semantic,
-                    kinematics_yaml])
+    example_node = Node(name=[LaunchConfiguration('example'), '_node'],
+                        package='crane_plus_examples',
+                        executable=LaunchConfiguration('example'),
+                        output='screen',
+                        parameters=[{'robot_description': description_loader.load()},
+                                    robot_description_semantic,
+                                    kinematics_yaml])
 
     return LaunchDescription([
         declare_use_camera,

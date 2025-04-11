@@ -74,20 +74,18 @@ def generate_launch_description():
         description=('Set true when using the gazebo simulator.')
     )
 
-    picking_node = Node(
-        name='pick_and_place_tf',
-        package='crane_plus_examples',
-        executable='pick_and_place_tf',
-        output='screen',
-        parameters=[{'robot_description': description_loader.load()},
-                    robot_description_semantic,
-                    kinematics_yaml])
+    picking_node = Node(name='pick_and_place_tf',
+                        package='crane_plus_examples',
+                        executable='pick_and_place_tf',
+                        output='screen',
+                        parameters=[{'robot_description': description_loader.load()},
+                                    robot_description_semantic,
+                                    kinematics_yaml])
 
-    detection_node = Node(
-        name=[LaunchConfiguration('example'), '_node'],
-        package='crane_plus_examples',
-        executable=LaunchConfiguration('example'),
-        output='screen')
+    detection_node = Node(name=[LaunchConfiguration('example'), '_node'],
+                          package='crane_plus_examples',
+                          executable=LaunchConfiguration('example'),
+                          output='screen')
 
     return LaunchDescription([
         declare_use_camera,

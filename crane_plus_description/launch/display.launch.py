@@ -31,25 +31,23 @@ def generate_launch_description():
     description_loader = RobotDescriptionLoader()
     description_loader.use_camera = LaunchConfiguration('use_camera')
 
-    rsp = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        output='both',
-        parameters=[{'robot_description': description_loader.load()}])
-
+    rsp = Node(package='robot_state_publisher',
+               executable='robot_state_publisher',
+               output='both',
+               parameters=[{'robot_description': description_loader.load()}])
     jsp = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
-        output='screen')
+        output='screen',
+    )
 
     rviz_config_file = get_package_share_directory(
         'crane_plus_description') + '/launch/display.rviz'
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='log',
-        arguments=['-d', rviz_config_file])
+    rviz_node = Node(package='rviz2',
+                     executable='rviz2',
+                     name='rviz2',
+                     output='log',
+                     arguments=['-d', rviz_config_file])
 
     ld = LaunchDescription()
     ld.add_action(declare_use_camera)
