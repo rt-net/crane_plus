@@ -79,24 +79,7 @@
 
   <xacro:if value="$(arg use_gazebo)">
     <xacro:gazebo_robot_settings />
-
-    <xacro:crane_plus_gazebo_ros2_control_settings 
-      name="crane_plus"
-      name_joint_1="${NAME_JOINT_1}"
-      name_joint_2="${NAME_JOINT_2}"
-      name_joint_3="${NAME_JOINT_3}"
-      name_joint_4="${NAME_JOINT_4}"
-      name_joint_hand="${NAME_JOINT_HAND}"
-      joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
-      joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
-      joint_2_lower_limit="${JOINT_2_LOWER_LIMIT}"
-      joint_2_upper_limit="${JOINT_2_UPPER_LIMIT}"
-      joint_3_lower_limit="${JOINT_3_LOWER_LIMIT}"
-      joint_3_upper_limit="${JOINT_3_UPPER_LIMIT}"
-      joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
-      joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
-      joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
-      joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"/> 
+    <xacro:crane_plus_gazebo_ros2_control_settings /> 
   </xacro:if>
 
   <xacro:if value="$(arg use_camera)">
