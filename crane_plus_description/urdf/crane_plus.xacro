@@ -258,14 +258,6 @@
       </inertial>
     </link>
 
-    <!-- camera -->
-    <xacro:if value="$(arg use_camera)">
-      <xacro:include filename="$(find crane_plus_description)/urdf/camera.urdf.xacro" />
-      <xacro:include filename="$(find crane_plus_description)/urdf/camera_stand.urdf.xacro" />
-      <xacro:sensor_camera parent="${name_link_base}" />
-      <xacro:camera_stand parent="${name_link_base}" />
-    </xacro:if>
-
   </xacro:macro>
 </robot>
 
