@@ -61,14 +61,14 @@
   <xacro:property name="JOINT_VELOCITY_LIMIT" value="2.0"/>
   <xacro:property name="JOINT_1_LOWER_LIMIT" value="${radians(0) - SERVO_HOME}"/>
   <xacro:property name="JOINT_1_UPPER_LIMIT" value="${radians(300) - SERVO_HOME}"/>
-  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${radians(46) - SERVO_HOME}"/>
-  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${radians(252) - SERVO_HOME}"/>
-  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${radians(4) - SERVO_HOME}"/>
-  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${radians(290) - SERVO_HOME}"/>
-  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${radians(45) - SERVO_HOME}"/>
-  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${radians(251) - SERVO_HOME}"/>
-  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${radians(110) - SERVO_HOME}"/>
-  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${radians(188) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${radians(45) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${radians(253) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${radians(3) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${radians(291) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${radians(44) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${radians(252) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${radians(109) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${radians(189) - SERVO_HOME}"/>
 
   <!-- Used for fixing robot 'base_link' to Gazebo 'world' -->
   <link name="world"/>
