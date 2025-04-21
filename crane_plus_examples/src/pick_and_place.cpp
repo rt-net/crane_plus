@@ -58,7 +58,7 @@ int main(int argc, char ** argv)
   double GRIPPER_OPEN = to_radians(-30);
   double GRIPPER_CLOSE = to_radians(10);
 
-  // Set Goal Tolerance
+  // Set goal tolerance for the target pose to improve IK
   move_group_arm.setGoalPositionTolerance(1e-5);
   move_group_arm.setGoalOrientationTolerance(1e-4);
 
