@@ -14,7 +14,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/body_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/visual/body.stl" scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </visual>
@@ -22,7 +22,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/collision/body_collision_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/collision/body.stl" scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </collision>
@@ -52,7 +52,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/Link1_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/visual/link1.stl" scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </visual>
@@ -60,7 +60,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/collision/Link1_collision_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/collision/link1.stl" scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </collision>
@@ -90,7 +90,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/Link2_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/visual/link2.stl" scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </visual>
@@ -98,7 +98,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/collision/Link2_collision_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/collision/link2.stl" scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </collision>
@@ -128,7 +128,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/Link3_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/visual/link3.stl" scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </visual>
@@ -136,7 +136,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/collision/Link3_collision_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/collision/link3.stl" scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </collision>
@@ -166,7 +166,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/Link4_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/visual/link4.stl" scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </visual>
@@ -174,7 +174,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/collision/Link4_collision_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/collision/link4.stl" scale="1 1 1"/>
         </geometry>
         <material name="black"/>
       </collision>
@@ -204,7 +204,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 ${radians(-90)} 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/visual/Hand_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/visual/hand.stl" scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </visual>
@@ -212,7 +212,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 ${radians(-90)} 0"/>
         <geometry>
-          <mesh filename="package://crane_plus_description/meshes/collision/Hand_collision_20201013.stl" scale="1 1 1"/>
+          <mesh filename="package://crane_plus_description/meshes/collision/hand.stl" scale="1 1 1"/>
         </geometry>
         <material name="white"/>
       </collision>
