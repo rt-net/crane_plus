@@ -55,6 +55,10 @@ public:
     move_group_gripper_->setMaxVelocityScalingFactor(1.0);
     move_group_gripper_->setMaxAccelerationScalingFactor(1.0);
 
+    // IKの成功率を向上させるため、目標位置姿勢の許容範囲を小さく設定
+    move_group_arm_->setGoalPositionTolerance(1e-5);
+    move_group_arm_->setGoalOrientationTolerance(1e-4);
+
     // SRDFに定義されている"home"の姿勢にする
     move_group_arm_->setNamedTarget("home");
     move_group_arm_->move();

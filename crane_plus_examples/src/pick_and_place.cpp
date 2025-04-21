@@ -58,6 +58,10 @@ int main(int argc, char ** argv)
   double GRIPPER_OPEN = to_radians(-30);
   double GRIPPER_CLOSE = to_radians(10);
 
+  // Set goal tolerances to improve IK success rate
+  move_group_arm.setGoalPositionTolerance(1e-5);
+  move_group_arm.setGoalOrientationTolerance(1e-4);
+
   move_group_arm.setNamedTarget("vertical");
   move_group_arm.move();
 
