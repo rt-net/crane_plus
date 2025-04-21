@@ -55,7 +55,6 @@
   <xacro:property name="NAME_JOINT_4" value="crane_plus_joint4"/>
   <xacro:property name="NAME_JOINT_HAND" value="crane_plus_joint_hand"/>
 
-  <xacro:property name="M_PI" value="3.14159"/>
   <xacro:property name="SERVO_HOME" value="${radians(150.0)}"/>
   <xacro:property name="JOINT_EFFORT_LIMIT" value="1.5"/>
   <xacro:property name="JOINT_VELOCITY_LIMIT" value="2.0"/>
