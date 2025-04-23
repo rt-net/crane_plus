@@ -36,18 +36,17 @@ CRANE+ V2に搭載されているサーボモータはROBOTISのAX-12Aのため�
 この角度リミットに近い値をサーボモータに設定することを推奨します。
 
 ```xml
-  <xacro:property name="M_PI" value="3.14159"/>
-  <xacro:property name="TO_RADIAN" value="${M_PI / 180.0}"/>
-  <xacro:property name="SERVO_HOME" value="${TO_RADIAN * 150.0}"/>
+  <xacro:property name="SERVO_HOME" value="${radians(150.0)}"/>
+  <xacro:property name="JOINT_EFFORT_LIMIT" value="1.5"/>
   <xacro:property name="JOINT_VELOCITY_LIMIT" value="2.0"/>
-  <xacro:property name="JOINT_1_LOWER_LIMIT" value="${0.0 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_1_UPPER_LIMIT" value="${300.0 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${45.45 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${252.20 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${3.52 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${290.62 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${44.57 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${251.32 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${109.38 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${188.27 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_1_LOWER_LIMIT" value="${radians(0) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_1_UPPER_LIMIT" value="${radians(300) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${radians(45) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${radians(253) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${radians(3) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${radians(291) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${radians(44) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${radians(252) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${radians(109) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${radians(189) - SERVO_HOME}"/>
 ```
