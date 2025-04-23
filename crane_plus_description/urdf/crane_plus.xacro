@@ -5,10 +5,10 @@
   <xacro:macro name="crane_plus" params="parent *origin">
 
     <joint name="${NAME_JOINT_BASE}" type="fixed">
-      <xacro:insert_block name="origin"/>         
-      <parent link="${parent}"/>                  
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
       <child link="${NAME_LINK_BASE}"/>
-    </joint>                                      
+    </joint>
 
     <link name="${NAME_LINK_BASE}">
       <visual>
