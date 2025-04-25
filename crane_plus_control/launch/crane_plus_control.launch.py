@@ -17,7 +17,6 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import ExecuteProcess
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -45,22 +44,22 @@ def generate_launch_description():
         )
 
     spawn_joint_state_controller = Node(
-        package="controller_manager",
-        executable="spawner",
+        package='controller_manager',
+        executable='spawner',
         output='screen',
-        arguments=["joint_state_broadcaster"])
+        arguments=['joint_state_broadcaster'])
 
     spawn_arm_controller = Node(
-        package="controller_manager",
-        executable="spawner",
+        package='controller_manager',
+        executable='spawner',
         output='screen',
-        arguments=["crane_plus_arm_controller"])
+        arguments=['crane_plus_arm_controller'])
 
     spawn_gripper_controller = Node(
-        package="controller_manager",
-        executable="spawner",
+        package='controller_manager',
+        executable='spawner',
         output='screen',
-        arguments=["crane_plus_gripper_controller"])
+        arguments=['crane_plus_gripper_controller'])
 
     return LaunchDescription([
       declare_loaded_description,
