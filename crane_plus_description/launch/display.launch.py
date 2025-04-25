@@ -49,9 +49,9 @@ def generate_launch_description():
                      output='log',
                      arguments=['-d', rviz_config_file])
 
-    ld = LaunchDescription()
-    ld.add_action(declare_use_camera)
-    ld.add_action(rsp)
-    ld.add_action(jsp)
-    ld.add_action(rviz_node)
-    return ld
+    return LaunchDescription([
+        declare_use_camera,
+        rsp,
+        jsp,
+        rviz_node,
+    ])
