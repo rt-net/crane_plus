@@ -39,28 +39,28 @@ def generate_launch_description():
     controller_manager = Node(
         package='controller_manager',
         executable='ros2_control_node',
+        output='screen',
         parameters=[{'robot_description': LaunchConfiguration('loaded_description')},
                     crane_plus_controllers],
-        output='screen',
         )
 
-    spawn_joint_state_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner joint_state_broadcaster'],
-                shell=True,
-                output='screen',
-            )
+    spawn_joint_state_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        output='screen',
+        arguments=["joint_state_broadcaster"])
 
-    spawn_arm_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner crane_plus_arm_controller'],
-                shell=True,
-                output='screen',
-            )
+    spawn_arm_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        output='screen',
+        arguments=["crane_plus_arm_controller"])
 
-    spawn_gripper_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner crane_plus_gripper_controller'],
-                shell=True,
-                output='screen',
-            )
+    spawn_gripper_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        output='screen',
+        arguments=["crane_plus_gripper_controller"])
 
     return LaunchDescription([
       declare_loaded_description,
