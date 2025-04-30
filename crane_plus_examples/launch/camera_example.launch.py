@@ -12,38 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
-from ament_index_python.packages import get_package_share_directory
 from crane_plus_description.robot_description_loader import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.actions import SetParameter
-import yaml
-
-
-def load_file(package_name, file_path):
-    package_path = get_package_share_directory(package_name)
-    absolute_file_path = os.path.join(package_path, file_path)
-
-    try:
-        with open(absolute_file_path, 'r') as file:
-            return file.read()
-    except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
-        return None
-
-
-def load_yaml(package_name, file_path):
-    package_path = get_package_share_directory(package_name)
-    absolute_file_path = os.path.join(package_path, file_path)
-
-    try:
-        with open(absolute_file_path, 'r') as file:
-            return yaml.safe_load(file)
-    except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
-        return None
+from moveit_configs_utils import MoveItConfigsBuilder
 
 
 def generate_launch_description():
@@ -53,15 +28,10 @@ def generate_launch_description():
         description='Use camera.'
     )
 
+    moveit_config = MoveItConfigsBuilder('crane_plus').to_moveit_configs()
+
     description_loader = RobotDescriptionLoader()
     description_loader.use_camera = LaunchConfiguration('use_camera')
-
-    robot_description_semantic_config = load_file(
-        'crane_plus_moveit_config', 'config/crane_plus.srdf')
-    robot_description_semantic = {
-        'robot_description_semantic': robot_description_semantic_config}
-
-    kinematics_yaml = load_yaml('crane_plus_moveit_config', 'config/kinematics.yaml')
 
     declare_example_name = DeclareLaunchArgument(
         'example', default_value='color_detection',
@@ -79,8 +49,8 @@ def generate_launch_description():
                         executable='pick_and_place_tf',
                         output='screen',
                         parameters=[{'robot_description': description_loader.load()},
-                                    robot_description_semantic,
-                                    kinematics_yaml])
+                                    moveit_config.robot_description_semantic,
+                                    moveit_config.robot_description_kinematics])
 
     detection_node = Node(name=[LaunchConfiguration('example'), '_node'],
                           package='crane_plus_examples',

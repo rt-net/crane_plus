@@ -43,15 +43,15 @@ def generate_launch_description():
 
     rviz_config_file = get_package_share_directory(
         'crane_plus_description') + '/launch/display.rviz'
-    rviz_node = Node(package='rviz2',
+    rviz_node = Node(name='rviz2',
+                     package='rviz2',
                      executable='rviz2',
-                     name='rviz2',
                      output='log',
                      arguments=['-d', rviz_config_file])
 
-    ld = LaunchDescription()
-    ld.add_action(declare_use_camera)
-    ld.add_action(rsp)
-    ld.add_action(jsp)
-    ld.add_action(rviz_node)
-    return ld
+    return LaunchDescription([
+        declare_use_camera,
+        rsp,
+        jsp,
+        rviz_node,
+    ])
