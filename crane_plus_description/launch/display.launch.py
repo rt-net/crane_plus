@@ -14,7 +14,9 @@
 
 
 from ament_index_python.packages import get_package_share_directory
-from crane_plus_description.robot_description_loader import RobotDescriptionLoader
+from crane_plus_description.robot_description_loader import (
+    RobotDescriptionLoader,
+)
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -44,7 +46,8 @@ def generate_launch_description():
     )
 
     rviz_config_file = (
-        get_package_share_directory('crane_plus_description') + '/launch/display.rviz'
+        get_package_share_directory('crane_plus_description')
+        + '/launch/display.rviz'
     )
     rviz_node = Node(
         name='rviz2',

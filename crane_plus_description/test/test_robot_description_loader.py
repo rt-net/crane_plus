@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from crane_plus_description.robot_description_loader import RobotDescriptionLoader
+from crane_plus_description.robot_description_loader import (
+    RobotDescriptionLoader,
+)
 from launch.launch_context import LaunchContext
 import pytest
 

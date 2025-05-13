@@ -13,7 +13,9 @@
 # limitations under the License.
 
 from ament_index_python.packages import get_package_share_directory
-from crane_plus_description.robot_description_loader import RobotDescriptionLoader
+from crane_plus_description.robot_description_loader import (
+    RobotDescriptionLoader,
+)
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
@@ -34,7 +36,9 @@ def generate_launch_description():
     )
 
     declare_video_device = DeclareLaunchArgument(
-        'video_device', default_value='/dev/video0', description='Set video device.'
+        'video_device',
+        default_value='/dev/video0',
+        description='Set video device.',
     )
 
     declare_use_mock_components = DeclareLaunchArgument(
@@ -62,7 +66,9 @@ def generate_launch_description():
     description_loader = RobotDescriptionLoader()
     description_loader.port_name = LaunchConfiguration('port_name')
     description_loader.use_camera = LaunchConfiguration('use_camera')
-    description_loader.use_mock_components = LaunchConfiguration('use_mock_components')
+    description_loader.use_mock_components = LaunchConfiguration(
+        'use_mock_components'
+    )
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(

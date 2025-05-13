@@ -15,7 +15,9 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from crane_plus_description.robot_description_loader import RobotDescriptionLoader
+from crane_plus_description.robot_description_loader import (
+    RobotDescriptionLoader,
+)
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import ExecuteProcess
@@ -52,7 +54,9 @@ def generate_launch_description():
     declare_world_name = DeclareLaunchArgument(
         'world_name',
         default_value=os.path.join(
-            get_package_share_directory('crane_plus_gazebo'), 'worlds', 'table.sdf'
+            get_package_share_directory('crane_plus_gazebo'),
+            'worlds',
+            'table.sdf',
         ),
         description='Set world name.',
     )
@@ -64,7 +68,9 @@ def generate_launch_description():
             get_package_share_directory('crane_plus_description')
         )
         + ':'
-        + os.path.join(get_package_share_directory('crane_plus_gazebo'), 'models'),
+        + os.path.join(
+            get_package_share_directory('crane_plus_gazebo'), 'models'
+        ),
     }
 
     gui_config = os.path.join(
