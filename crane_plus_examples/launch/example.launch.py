@@ -23,9 +23,7 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 def generate_launch_description():
     declare_use_camera = DeclareLaunchArgument(
-        'use_camera',
-        default_value='false',
-        description='Use camera.'
+        'use_camera', default_value='false', description='Use camera.'
     )
 
     moveit_config = MoveItConfigsBuilder('crane_plus').to_moveit_configs()
@@ -34,28 +32,40 @@ def generate_launch_description():
     description_loader.use_camera = LaunchConfiguration('use_camera')
 
     declare_example_name = DeclareLaunchArgument(
-        'example', default_value='gripper_control',
-        description=('Set an example executable name: '
-                     '[gripper_control, pose_groupstate, joint_values, pick_and_place]')
+        'example',
+        default_value='gripper_control',
+        description=(
+            'Set an example executable name: '
+            '[gripper_control, pose_groupstate, joint_values, pick_and_place]'
+        ),
     )
 
     declare_use_sim_time = DeclareLaunchArgument(
-        'use_sim_time', default_value='false',
-        description=('Set true when using the gazebo simulator.')
+        'use_sim_time',
+        default_value='false',
+        description=('Set true when using the gazebo simulator.'),
     )
 
-    example_node = Node(name=[LaunchConfiguration('example'), '_node'],
-                        package='crane_plus_examples',
-                        executable=LaunchConfiguration('example'),
-                        output='screen',
-                        parameters=[{'robot_description': description_loader.load()},
-                                    moveit_config.robot_description_semantic,
-                                    moveit_config.robot_description_kinematics])
+    example_node = Node(
+        name=[LaunchConfiguration('example'), '_node'],
+        package='crane_plus_examples',
+        executable=LaunchConfiguration('example'),
+        output='screen',
+        parameters=[
+            {'robot_description': description_loader.load()},
+            moveit_config.robot_description_semantic,
+            moveit_config.robot_description_kinematics,
+        ],
+    )
 
-    return LaunchDescription([
-        declare_use_camera,
-        declare_use_sim_time,
-        SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
-        declare_example_name,
-        example_node
-    ])
+    return LaunchDescription(
+        [
+            declare_use_camera,
+            declare_use_sim_time,
+            SetParameter(
+                name='use_sim_time', value=LaunchConfiguration('use_sim_time')
+            ),
+            declare_example_name,
+            example_node,
+        ]
+    )

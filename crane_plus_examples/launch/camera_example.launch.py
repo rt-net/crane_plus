@@ -23,9 +23,7 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 def generate_launch_description():
     declare_use_camera = DeclareLaunchArgument(
-        'use_camera',
-        default_value='true',
-        description='Use camera.'
+        'use_camera', default_value='true', description='Use camera.'
     )
 
     moveit_config = MoveItConfigsBuilder('crane_plus').to_moveit_configs()
@@ -34,34 +32,45 @@ def generate_launch_description():
     description_loader.use_camera = LaunchConfiguration('use_camera')
 
     declare_example_name = DeclareLaunchArgument(
-        'example', default_value='color_detection',
-        description=('Set an example executable name: '
-                     '[color_detection]')
+        'example',
+        default_value='color_detection',
+        description=('Set an example executable name: [color_detection]'),
     )
 
     declare_use_sim_time = DeclareLaunchArgument(
-        'use_sim_time', default_value='false',
-        description=('Set true when using the gazebo simulator.')
+        'use_sim_time',
+        default_value='false',
+        description=('Set true when using the gazebo simulator.'),
     )
 
-    picking_node = Node(name='pick_and_place_tf',
-                        package='crane_plus_examples',
-                        executable='pick_and_place_tf',
-                        output='screen',
-                        parameters=[{'robot_description': description_loader.load()},
-                                    moveit_config.robot_description_semantic,
-                                    moveit_config.robot_description_kinematics])
+    picking_node = Node(
+        name='pick_and_place_tf',
+        package='crane_plus_examples',
+        executable='pick_and_place_tf',
+        output='screen',
+        parameters=[
+            {'robot_description': description_loader.load()},
+            moveit_config.robot_description_semantic,
+            moveit_config.robot_description_kinematics,
+        ],
+    )
 
-    detection_node = Node(name=[LaunchConfiguration('example'), '_node'],
-                          package='crane_plus_examples',
-                          executable=LaunchConfiguration('example'),
-                          output='screen')
+    detection_node = Node(
+        name=[LaunchConfiguration('example'), '_node'],
+        package='crane_plus_examples',
+        executable=LaunchConfiguration('example'),
+        output='screen',
+    )
 
-    return LaunchDescription([
-        declare_use_camera,
-        declare_use_sim_time,
-        SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
-        detection_node,
-        picking_node,
-        declare_example_name
-    ])
+    return LaunchDescription(
+        [
+            declare_use_camera,
+            declare_use_sim_time,
+            SetParameter(
+                name='use_sim_time', value=LaunchConfiguration('use_sim_time')
+            ),
+            detection_node,
+            picking_node,
+            declare_example_name,
+        ]
+    )

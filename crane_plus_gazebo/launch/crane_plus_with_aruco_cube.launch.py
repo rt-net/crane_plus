@@ -25,17 +25,18 @@ def generate_launch_description():
     world_file = os.path.join(
         get_package_share_directory('crane_plus_gazebo'),
         'worlds',
-        'table_with_aruco_cube.sdf')
+        'table_with_aruco_cube.sdf',
+    )
     world_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            get_package_share_directory('crane_plus_gazebo'),
-            '/launch/crane_plus_with_table.launch.py']),
-        launch_arguments={
-            'world_name': world_file
-            }.items()
+        PythonLaunchDescriptionSource(
+            [
+                get_package_share_directory('crane_plus_gazebo'),
+                '/launch/crane_plus_with_table.launch.py',
+            ]
+        ),
+        launch_arguments={'world_name': world_file}.items(),
     )
 
-    return LaunchDescription([
-        SetParameter(name='use_sim_time', value=True),
-        world_launch
-    ])
+    return LaunchDescription(
+        [SetParameter(name='use_sim_time', value=True), world_launch]
+    )
