@@ -68,9 +68,7 @@ def generate_launch_description():
         [
             declare_use_camera,
             declare_use_sim_time,
-            SetParameter(
-                name='use_sim_time', value=LaunchConfiguration('use_sim_time')
-            ),
+            SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
             detection_node,
             picking_node,
             declare_example_name,

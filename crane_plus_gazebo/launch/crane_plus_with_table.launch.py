@@ -68,9 +68,7 @@ def generate_launch_description():
             get_package_share_directory('crane_plus_description')
         )
         + ':'
-        + os.path.join(
-            get_package_share_directory('crane_plus_gazebo'), 'models'
-        ),
+        + os.path.join(get_package_share_directory('crane_plus_gazebo'), 'models'),
     }
 
     gui_config = os.path.join(
@@ -109,9 +107,7 @@ def generate_launch_description():
     description_loader.use_camera = LaunchConfiguration('use_camera')
     description_loader.use_gazebo = 'true'
     description_loader.gz_control_config_package = 'crane_plus_control'
-    description_loader.gz_control_config_file_path = (
-        'config/crane_plus_controllers.yaml'
-    )
+    description_loader.gz_control_config_file_path = 'config/crane_plus_controllers.yaml'
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(

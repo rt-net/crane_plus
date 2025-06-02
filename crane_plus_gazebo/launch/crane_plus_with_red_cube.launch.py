@@ -37,6 +37,4 @@ def generate_launch_description():
         launch_arguments={'world_name': world_file}.items(),
     )
 
-    return LaunchDescription(
-        [SetParameter(name='use_sim_time', value=True), world_launch]
-    )
+    return LaunchDescription([SetParameter(name='use_sim_time', value=True), world_launch])

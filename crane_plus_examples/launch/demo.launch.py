@@ -66,9 +66,7 @@ def generate_launch_description():
     description_loader = RobotDescriptionLoader()
     description_loader.port_name = LaunchConfiguration('port_name')
     description_loader.use_camera = LaunchConfiguration('use_camera')
-    description_loader.use_mock_components = LaunchConfiguration(
-        'use_mock_components'
-    )
+    description_loader.use_mock_components = LaunchConfiguration('use_mock_components')
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
@@ -95,9 +93,7 @@ def generate_launch_description():
     )
 
     camera_info_file = (
-        'file://'
-        + get_package_share_directory('crane_plus_examples')
-        + '/config/camera_info.yaml'
+        'file://' + get_package_share_directory('crane_plus_examples') + '/config/camera_info.yaml'
     )
     usb_cam_node = Node(
         package='usb_cam',
