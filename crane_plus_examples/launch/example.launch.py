@@ -28,11 +28,6 @@ def generate_launch_description():
         'use_camera', default_value='false', description='Use camera.'
     )
 
-    moveit_config = MoveItConfigsBuilder('crane_plus').to_moveit_configs()
-
-    description_loader = RobotDescriptionLoader()
-    description_loader.use_camera = LaunchConfiguration('use_camera')
-
     declare_example_name = DeclareLaunchArgument(
         'example',
         default_value='gripper_control',
@@ -48,16 +43,20 @@ def generate_launch_description():
         description=('Set true when using the gazebo simulator.'),
     )
 
+    description_loader = RobotDescriptionLoader()
+    description_loader.use_camera = LaunchConfiguration('use_camera')
+
+    moveit_config = MoveItConfigsBuilder('crane_plus').to_moveit_configs()
+    moveit_config.robot_description = {
+        'robot_description': description_loader.load(),
+    }
+
     example_node = Node(
         name=[LaunchConfiguration('example'), '_node'],
         package='crane_plus_examples',
         executable=LaunchConfiguration('example'),
         output='screen',
-        parameters=[
-            {'robot_description': description_loader.load()},
-            moveit_config.robot_description_semantic,
-            moveit_config.robot_description_kinematics,
-        ],
+        parameters=[moveit_config.to_dict()],
     )
 
     return LaunchDescription(
