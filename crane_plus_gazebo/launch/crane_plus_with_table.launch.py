@@ -30,66 +30,75 @@ from launch_ros.actions import SetParameter
 
 def generate_launch_description():
     declare_use_camera = DeclareLaunchArgument(
-        'use_camera',
-        default_value='false',
-        description='Use camera.'
-        )
+        'use_camera', default_value='false', description='Use camera.'
+    )
 
     declare_rviz_config = DeclareLaunchArgument(
         'rviz_config',
-        default_value=get_package_share_directory(
-            'crane_plus_moveit_config'
-        ) + '/config/moveit.rviz',
+        default_value=get_package_share_directory('crane_plus_moveit_config')
+        + '/config/moveit.rviz',
         description='Set the path to rviz configuration file.',
         condition=UnlessCondition(LaunchConfiguration('use_camera')),
-        )
+    )
 
     declare_rviz_config_camera = DeclareLaunchArgument(
         'rviz_config',
-        default_value=get_package_share_directory(
-            'crane_plus_examples'
-        ) + '/launch/camera_example.rviz',
+        default_value=get_package_share_directory('crane_plus_examples')
+        + '/launch/camera_example.rviz',
         description='Set the path to rviz configuration file.',
         condition=IfCondition(LaunchConfiguration('use_camera')),
-        )
+    )
 
     declare_world_name = DeclareLaunchArgument(
         'world_name',
         default_value=os.path.join(
-            get_package_share_directory('crane_plus_gazebo'), 'worlds',
-            'table.sdf'),
-        description='Set world name.'
-        )
+            get_package_share_directory('crane_plus_gazebo'),
+            'worlds',
+            'table.sdf',
+        ),
+        description='Set world name.',
+    )
 
     # PATHを追加で通さないとSTLファイルが読み込まれない
-    env = {'GZ_SIM_SYSTEM_PLUGIN_PATH': os.environ['LD_LIBRARY_PATH'],
-           'GZ_SIM_RESOURCE_PATH': os.path.dirname(
-                get_package_share_directory('crane_plus_description')) + ':' +
-           os.path.join(get_package_share_directory('crane_plus_gazebo'),
-                        'models'),
-           }
+    env = {
+        'GZ_SIM_SYSTEM_PLUGIN_PATH': os.environ['LD_LIBRARY_PATH'],
+        'GZ_SIM_RESOURCE_PATH': os.path.dirname(
+            get_package_share_directory('crane_plus_description')
+        )
+        + ':'
+        + os.path.join(get_package_share_directory('crane_plus_gazebo'), 'models'),
+    }
 
     gui_config = os.path.join(
-        get_package_share_directory('crane_plus_gazebo'), 'gui', 'gui.config')
+        get_package_share_directory('crane_plus_gazebo'), 'gui', 'gui.config'
+    )
     # -r オプションで起動時にシミュレーションをスタートしないと、コントローラが起動しない
     gz_sim = ExecuteProcess(
-            cmd=['gz sim -r',
-                 LaunchConfiguration('world_name'),
-                 '--gui-config',
-                 gui_config],
-            output='screen',
-            additional_env=env,
-            shell=True
-        )
+        cmd=[
+            'gz sim -r',
+            LaunchConfiguration('world_name'),
+            '--gui-config',
+            gui_config,
+        ],
+        output='screen',
+        additional_env=env,
+        shell=True,
+    )
 
     gz_sim_spawn_entity = Node(
         package='ros_gz_sim',
         executable='create',
         output='screen',
-        arguments=['-topic', '/robot_description',
-                   '-name', 'crane_plus',
-                   '-z', '1.015',
-                   '-allow_renaming', 'true'],
+        arguments=[
+            '-topic',
+            '/robot_description',
+            '-name',
+            'crane_plus',
+            '-z',
+            '1.015',
+            '-allow_renaming',
+            'true',
+        ],
     )
 
     description_loader = RobotDescriptionLoader()
@@ -100,58 +109,63 @@ def generate_launch_description():
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
+        PythonLaunchDescriptionSource(
+            [
                 get_package_share_directory('crane_plus_moveit_config'),
-                '/launch/run_move_group.launch.py']),
-            launch_arguments={
-                'loaded_description': description,
-                'rviz_config': LaunchConfiguration('rviz_config')
-                }.items()
-        )
+                '/launch/run_move_group.launch.py',
+            ]
+        ),
+        launch_arguments={
+            'loaded_description': description,
+            'rviz_config': LaunchConfiguration('rviz_config'),
+        }.items(),
+    )
 
-    spawn_joint_state_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner '
-                     'joint_state_broadcaster'],
-                shell=True,
-                output='screen',
-            )
+    spawn_joint_state_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        output='screen',
+        arguments=['joint_state_broadcaster'],
+    )
 
-    spawn_arm_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner '
-                     'crane_plus_arm_controller'],
-                shell=True,
-                output='screen',
-            )
+    spawn_arm_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        output='screen',
+        arguments=['crane_plus_arm_controller'],
+    )
 
-    spawn_gripper_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner '
-                     'crane_plus_gripper_controller'],
-                shell=True,
-                output='screen',
-            )
+    spawn_gripper_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        output='screen',
+        arguments=['crane_plus_gripper_controller'],
+    )
 
     bridge = Node(
-                package='ros_gz_bridge',
-                executable='parameter_bridge',
-                arguments=[
-                    '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
-                    'image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
-                    'camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'
-                ],
-                output='screen'
-            )
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        output='screen',
+        arguments=[
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+            'image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
+            'camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+        ],
+    )
 
-    return LaunchDescription([
-        SetParameter(name='use_sim_time', value=True),
-        declare_use_camera,
-        declare_rviz_config,
-        declare_rviz_config_camera,
-        declare_world_name,
-        gz_sim,
-        gz_sim_spawn_entity,
-        move_group,
-        spawn_joint_state_controller,
-        spawn_arm_controller,
-        spawn_gripper_controller,
-        bridge
-    ])
+    return LaunchDescription(
+        [
+            SetParameter(name='use_sim_time', value=True),
+            declare_use_camera,
+            declare_rviz_config,
+            declare_rviz_config_camera,
+            declare_world_name,
+            gz_sim,
+            gz_sim_spawn_entity,
+            move_group,
+            spawn_joint_state_controller,
+            spawn_arm_controller,
+            spawn_gripper_controller,
+            bridge,
+        ]
+    )

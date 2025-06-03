@@ -23,35 +23,42 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     declare_use_camera = DeclareLaunchArgument(
-            'use_camera',
-            default_value='false',
-            description='Set true to attach the camera model.'
+        'use_camera',
+        default_value='false',
+        description='Set true to attach the camera model.',
     )
 
     description_loader = RobotDescriptionLoader()
     description_loader.use_camera = LaunchConfiguration('use_camera')
 
-    rsp = Node(package='robot_state_publisher',
-               executable='robot_state_publisher',
-               output='both',
-               parameters=[{'robot_description': description_loader.load()}])
+    rsp = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='both',
+        parameters=[{'robot_description': description_loader.load()}],
+    )
     jsp = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         output='screen',
     )
 
-    rviz_config_file = get_package_share_directory(
-        'crane_plus_description') + '/launch/display.rviz'
-    rviz_node = Node(package='rviz2',
-                     executable='rviz2',
-                     name='rviz2',
-                     output='log',
-                     arguments=['-d', rviz_config_file])
+    rviz_config_file = (
+        get_package_share_directory('crane_plus_description') + '/launch/display.rviz'
+    )
+    rviz_node = Node(
+        name='rviz2',
+        package='rviz2',
+        executable='rviz2',
+        output='log',
+        arguments=['-d', rviz_config_file],
+    )
 
-    ld = LaunchDescription()
-    ld.add_action(declare_use_camera)
-    ld.add_action(rsp)
-    ld.add_action(jsp)
-    ld.add_action(rviz_node)
-    return ld
+    return LaunchDescription(
+        [
+            declare_use_camera,
+            rsp,
+            jsp,
+            rviz_node,
+        ]
+    )
