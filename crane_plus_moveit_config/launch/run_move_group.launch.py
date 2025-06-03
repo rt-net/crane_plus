@@ -21,9 +21,7 @@ from moveit_configs_utils import MoveItConfigsBuilder
 from moveit_configs_utils.launches import generate_move_group_launch
 from moveit_configs_utils.launches import generate_moveit_rviz_launch
 from moveit_configs_utils.launches import generate_rsp_launch
-from moveit_configs_utils.launches import (
-    generate_static_virtual_joint_tfs_launch,
-)
+from moveit_configs_utils.launches import generate_static_virtual_joint_tfs_launch
 
 
 def generate_launch_description():
