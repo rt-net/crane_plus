@@ -56,7 +56,8 @@ int main(int argc, char ** argv)
   auto gripper_joint_values = move_group_gripper.getCurrentJointValues();
   double GRIPPER_DEFAULT = 0.0;
   double GRIPPER_OPEN = to_radians(-30);
-  double GRIPPER_CLOSE = to_radians(10);
+  double GRIPPER_CLOSE = to_radians(30);
+  double TCP_LINK_LENGTH = 0.121;
 
   // Set goal tolerances to improve IK success rate
   move_group_arm.setGoalPositionTolerance(1e-5);
@@ -80,7 +81,7 @@ int main(int argc, char ** argv)
   geometry_msgs::msg::Pose target_pose;
   tf2::Quaternion q;
   target_pose.position.x = 0.0;
-  target_pose.position.y = -0.18;
+  target_pose.position.y = -0.09 - TCP_LINK_LENGTH;
   target_pose.position.z = 0.17;
   q.setRPY(to_radians(0), to_radians(90), to_radians(-90));
   target_pose.orientation = tf2::toMsg(q);
@@ -88,13 +89,13 @@ int main(int argc, char ** argv)
   move_group_arm.move();
 
   target_pose.position.y = -0.09;
-  target_pose.position.z = 0.08;
+  target_pose.position.z = 0.17 - TCP_LINK_LENGTH;
   q.setRPY(to_radians(0), to_radians(180), to_radians(-90));
   target_pose.orientation = tf2::toMsg(q);
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
-  target_pose.position.z = 0.05;
+  target_pose.position.z = 0.14 - TCP_LINK_LENGTH;
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
@@ -103,7 +104,7 @@ int main(int argc, char ** argv)
   move_group_gripper.setJointValueTarget(gripper_joint_values);
   move_group_gripper.move();
 
-  target_pose.position.z = 0.08;
+  target_pose.position.z = 0.17 - TCP_LINK_LENGTH;
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
@@ -111,7 +112,7 @@ int main(int argc, char ** argv)
   move_group_arm.setNamedTarget("home");
   move_group_arm.move();
 
-  target_pose.position.x = 0.24;
+  target_pose.position.x = 0.15 + TCP_LINK_LENGTH;
   target_pose.position.y = 0.0;
   target_pose.position.z = 0.06;
   q.setRPY(to_radians(0), to_radians(90), to_radians(0));
