@@ -141,7 +141,7 @@ private:
   {
     const double GRIPPER_DEFAULT = 0.0;
     const double GRIPPER_OPEN = angles::from_degrees(-30.0);
-    const double GRIPPER_CLOSE = angles::from_degrees(30.0);
+    const double GRIPPER_CLOSE = angles::from_degrees(10.0);
     const double TCP_LINK_LENGTH = 0.121;
 
     // 何かを掴んでいた時のためにハンドを開く
