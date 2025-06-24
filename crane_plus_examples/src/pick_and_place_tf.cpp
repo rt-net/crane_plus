@@ -85,8 +85,7 @@ public:
     move_group_arm_->setPathConstraints(constraints);
 
     // 待機姿勢
-    move_group_arm_->setNamedTarget("vertical");
-    move_group_arm_->move();
+    control_arm(0.0, 0.0, 0.3, 0, 0, 0);
 
     tf_buffer_ =
       std::make_unique<tf2_ros::Buffer>(this->get_clock());
