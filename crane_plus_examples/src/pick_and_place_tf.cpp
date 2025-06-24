@@ -180,7 +180,7 @@ private:
     control_arm(0.0, -0.15 - TCP_LINK_LENGTH, 0.10, 0, 90, -90);
 
     // 待機姿勢に戻る
-    control_arm(0.0, 0.0, 0.17 + TCP_LINK_LENGTH, 0, 0, 0);
+    control_arm(0.0, 0.0, 0.3, 0, 0, 0);
 
     // ハンドを閉じる
     control_gripper(GRIPPER_DEFAULT);
