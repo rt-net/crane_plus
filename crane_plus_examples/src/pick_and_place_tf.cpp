@@ -160,7 +160,7 @@ private:
     // 掴みに行く
     if (!control_arm(x, y, 0.04, 0, 90, theta_deg)) {
       // アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
-      control_arm(0.0, 0.0, 0.17 + TCP_LINK_LENGTH, 0, 0, 0);
+      control_arm(0.0, 0.0, 0.3, 0, 0, 0);
       return;
     }
 
