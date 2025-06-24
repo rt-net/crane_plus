@@ -26,17 +26,17 @@
         <joint name="crane_plus_joint3" value="0"/>
         <joint name="crane_plus_joint4" value="0"/>
     </group_state>
-    <group_state name="vertical" group="arm_tcp">
-        <joint name="crane_plus_joint1" value="0"/>
-        <joint name="crane_plus_joint2" value="0"/>
-        <joint name="crane_plus_joint3" value="0"/>
-        <joint name="crane_plus_joint4" value="0"/>
-    </group_state>
     <group_state name="home" group="arm">
         <joint name="crane_plus_joint1" value="0"/>
         <joint name="crane_plus_joint2" value="-1.16"/>
         <joint name="crane_plus_joint3" value="-2.01"/>
         <joint name="crane_plus_joint4" value="-0.73"/>
+    </group_state>
+    <group_state name="vertical" group="arm_tcp">
+        <joint name="crane_plus_joint1" value="0"/>
+        <joint name="crane_plus_joint2" value="0"/>
+        <joint name="crane_plus_joint3" value="0"/>
+        <joint name="crane_plus_joint4" value="0"/>
     </group_state>
     <group_state name="home" group="arm_tcp">
         <joint name="crane_plus_joint1" value="0"/>
