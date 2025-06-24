@@ -142,7 +142,6 @@ private:
     const double GRIPPER_DEFAULT = 0.0;
     const double GRIPPER_OPEN = angles::from_degrees(-30.0);
     const double GRIPPER_CLOSE = angles::from_degrees(10.0);
-    const double TCP_LINK_LENGTH = 0.121;
 
     // 何かを掴んでいた時のためにハンドを開く
     control_gripper(GRIPPER_OPEN);
@@ -154,7 +153,7 @@ private:
     double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
     // 把持対象物に正対する
-    control_arm(TCP_LINK_LENGTH * std::cos(theta_rad), TCP_LINK_LENGTH * std::sin(theta_rad),
+    control_arm(0.12 * std::cos(theta_rad), 0.12 * std::sin(theta_rad),
                 0.17, 0, 90, theta_deg);
 
     // 掴みに行く
@@ -168,16 +167,16 @@ private:
     control_gripper(GRIPPER_CLOSE);
 
     // 移動する
-    control_arm(TCP_LINK_LENGTH, 0.0, 0.17, 0, 90, 0);
+    control_arm(0.12, 0.0, 0.17, 0, 90, 0);
 
     // 下ろす
-    control_arm(0.0, -0.15 - TCP_LINK_LENGTH, 0.05, 0, 90, -90);
+    control_arm(0.0, -0.27, 0.05, 0, 90, -90);
 
     // ハンドを開く
     control_gripper(GRIPPER_OPEN);
 
     // 少しだけハンドを持ち上げる
-    control_arm(0.0, -0.15 - TCP_LINK_LENGTH, 0.10, 0, 90, -90);
+    control_arm(0.0, -0.27, 0.10, 0, 90, -90);
 
     // 待機姿勢に戻る
     control_arm(0.0, 0.0, 0.3, 0, 0, 0);
