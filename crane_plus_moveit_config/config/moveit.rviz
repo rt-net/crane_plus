@@ -17,7 +17,6 @@ Panels:
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
-      - /Current View1/Focal Point1
     Name: Views
     Splitter Ratio: 0.5
 Visualization Manager:
@@ -106,6 +105,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          crane_plus_link_tcp:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           world:
             Alpha: 1
             Show Axes: false
@@ -133,7 +136,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: arm
+        Planning Group: arm_tcp
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -190,6 +193,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          crane_plus_link_tcp:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           world:
             Alpha: 1
             Show Axes: false
@@ -243,6 +250,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        crane_plus_link_tcp:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         world:
           Alpha: 1
           Show Axes: false
@@ -306,7 +317,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.800000011920929
+      Distance: 0.8999999761581421
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
