@@ -153,8 +153,7 @@ private:
     double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
     // 把持対象物に正対する
-    control_arm(0.12 * std::cos(theta_rad), 0.12 * std::sin(theta_rad),
-                0.17, 0, 90, theta_deg);
+    control_arm(0.0, 0.0, 0.3, 0, 0, theta_deg);
 
     // 掴みに行く
     if (!control_arm(x, y, 0.04, 0, 90, theta_deg)) {
