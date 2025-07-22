@@ -87,7 +87,7 @@ int main(int argc, char ** argv)
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
-  target_pose.position.y = -0.09;
+  target_pose.position.y = -0.1;
   target_pose.position.z = 0.05;
   q.setRPY(to_radians(0), to_radians(180), to_radians(-90));
   target_pose.orientation = tf2::toMsg(q);
