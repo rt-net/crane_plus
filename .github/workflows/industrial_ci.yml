@@ -21,7 +21,7 @@ jobs:
           - { ROS_DISTRO: jazzy, ROS_REPO: main }
           - { ROS_DISTRO: rolling, ROS_REPO: main, UPSTREAM_WORKSPACE: crane_plus-not-released.rolling.repos }
     runs-on: ubuntu-latest
-    continue-on-error: ${{ fromJson(matrix.env.ROS_DISTRO == 'rolling') }}
+    continue-on-error: ${{ matrix.env.ROS_DISTRO == 'rolling' }}
     steps:
       - uses: actions/checkout@v4
       - uses: "ros-industrial/industrial_ci@master"
