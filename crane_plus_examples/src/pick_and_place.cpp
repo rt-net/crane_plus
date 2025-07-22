@@ -111,7 +111,7 @@ int main(int argc, char ** argv)
   move_group_arm.setNamedTarget("home");
   move_group_arm.move();
 
-  target_pose.position.x = 0.27;
+  target_pose.position.x = 0.25;
   target_pose.position.y = 0.0;
   target_pose.position.z = 0.06;
   q.setRPY(to_radians(0), to_radians(90), to_radians(0));
