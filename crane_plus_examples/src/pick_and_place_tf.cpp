@@ -178,7 +178,7 @@ private:
     control_gripper(GRIPPER_OPEN);
 
     // 少しだけハンドを持ち上げる
-    control_arm(0.0, -0.27, 0.10, 0, 90, -90);
+    control_arm(0.0, -0.25, 0.10, 0, 90, -90);
 
     // 待機姿勢に戻る
     control_arm(0.0, 0.0, 0.3, 0, 0, 0);
