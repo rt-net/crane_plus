@@ -19,7 +19,8 @@
 `crane_plus_hardware`がCRANE+ V2実機と通信するために、
 PCとCRANE+ V2の設定が必要です。
 
-**正しく設定できていない場合、CRANE+ V2が動作しない、振動する、などの不安定な動きをするため注意してください**
+> [!NOTE]
+> 正しく設定できていない場合、CRANE+ V2が動作しない、振動する、などの不安定な動きをするため注意してください。
 
 ### USB通信ポートの設定
 
@@ -107,8 +108,7 @@ controller_manager:
 
 `update_rate`は制御周期を設定します。
 
-CRANE+ V2に使用しているサーボモータの仕様により、
-100 Hz以上の周期で制御できません。
+CRANE+ V2に使用しているサーボモータの仕様により、100 Hz以上の周期で制御できません。
 
 ### コントローラ
 
@@ -117,8 +117,7 @@ CRANE+ V2の腕の制御用に`crane_plus_arm_controller`を、
 
 ## crane_plus_hardwareのパラメータ
 
-`crane_plus_hardware`のパラメータは
-[crane_plus_description/urdf/crane_plus.urdf.xacro](../crane_plus_description/urdf/crane_plus.urdf.xacro)
+`crane_plus_hardware`のパラメータは、[crane_plus_description/urdf/crane_plus.urdf.xacro](../crane_plus_description/urdf/crane_plus.urdf.xacro)
 で設定しています。
 
 ```xml
@@ -146,14 +145,12 @@ CRANE+ V2の腕の制御用に`crane_plus_arm_controller`を、
 
 `timeout_seconds`は通信タイムアウト時間（秒）を設定します。
 
-`crane_plus_hardware`は、一定時間（デフォルト5秒間）通信に失敗し続けると、
-read/write動作を停止します。
+`crane_plus_hardware`は、一定時間（デフォルト5秒間）通信に失敗し続けると、read/write動作を停止します。
 USBケーブルや電源ケーブルが抜けた場合等に有効です。
 
 ### サーボパラメータ
 
-`read_velocities`、`read_loads`、`read_voltages`、`read_temperatures`
-は、サーボの回転速度、電圧、負荷、温度を読み取るためのパラメータです。
+`read_velocities`、`read_loads`、`read_voltages`、`read_temperatures`は、サーボの回転速度、電圧、負荷、温度を読み取るためのパラメータです。
 
 `1`をセットすると、サーボパラメータを読み取ります。
 
@@ -167,4 +164,4 @@ $ ros2 topic echo /dynamic_joint_states
 
 ---
 
-[back to top](#crane_plus_control)
+[Back to top](#crane_plus_control)
