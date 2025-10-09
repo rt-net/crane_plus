@@ -88,6 +88,7 @@ USB通信ポートの設定については`crane_plus_control`の
 
 > [!NOTE]
 > CRANE+ V2の前にArUcoマーカ付きのBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
+> 
 > [aruco\_detection](#aruco_detection)サンプルを実行する際に使用することを想定しています。
 > 
 > ```sh
@@ -96,6 +97,7 @@ USB通信ポートの設定については`crane_plus_control`の
 
 > [!NOTE]
 > CRANE+ V2の前に赤いBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
+> 
 > [color\_detection](#color_detection)サンプルを実行する際に使用すること想定しています。
 > 
 > ```sh
