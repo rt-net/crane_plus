@@ -30,7 +30,7 @@ PCとCRANE+ V2の設定が必要です。
 
 ```sh
 # /dev/ttyUSB0を使用する場合
-$ sudo chmod 666 /dev/ttyUSB0
+sudo chmod 666 /dev/ttyUSB0
 ```
 
 ### latency_timerの設定
@@ -44,9 +44,8 @@ USB通信ポートとサーボモータの設定を変更します。
 
 ```sh
 # /dev/ttyUSB0を使用する場合
-
-# rootに切り替える
-$ sudo su
+## rootに切り替える
+sudo su
 ```
 
 ```txt
@@ -82,7 +81,7 @@ CRANE+ V2に搭載されているサーボモータ[Dynamixel AX-12A](https://em
 次のコマンドでジョイント角度情報（`joint_states`）を表示できます
 
 ```sh
-$ ros2 topic echo /joint_states
+ros2 topic echo /joint_states
 ```
 
 ## Controller Managerのパラメータ
@@ -159,7 +158,7 @@ USBケーブルや電源ケーブルが抜けた場合等に有効です。
 読み取ったパラメータは`dynamic_joint_states`トピックとしてパブリッシュされます。
 
 ```sh
-$ ros2 topic echo /dynamic_joint_states
+ros2 topic echo /dynamic_joint_states
 ```
 
 ---
