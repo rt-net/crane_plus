@@ -86,24 +86,21 @@ USB通信ポートの設定については`crane_plus_control`の
   ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py use_camera:=true
   ```
 
-  > [!NOTE]
-  > Test
+> [!NOTE]
+> CRANE+ V2の前にArUcoマーカ付きのBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
+> [aruco\_detection](#aruco_detection)サンプルを実行する際に使用することを想定しています。
+> 
+> ```sh
+> ros2 launch crane_plus_gazebo crane_plus_with_aruco_cube.launch.py use_camera:=true
+> ```
 
-  > [!NOTE]
-  > CRANE+ V2の前にArUcoマーカ付きのBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
-  > [aruco\_detection](#aruco_detection)サンプルを実行する際に使用することを想定しています。
-  > 
-  > ```sh
-  > ros2 launch crane_plus_gazebo crane_plus_with_aruco_cube.launch.py use_camera:=true
-  > ```
-
-  > [!NOTE]
-  > CRANE+ V2の前に赤いBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
-  > [color\_detection](#color_detection)サンプルを実行する際に使用すること想定しています。
-  > 
-  > ```sh
-  > ros2 launch crane_plus_gazebo crane_plus_with_red_cube.launch.py use_camera:=true
-  > ```
+> [!NOTE]
+> CRANE+ V2の前に赤いBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
+> [color\_detection](#color_detection)サンプルを実行する際に使用すること想定しています。
+> 
+> ```sh
+> ros2 launch crane_plus_gazebo crane_plus_with_red_cube.launch.py use_camera:=true
+> ```
 
 ### Using Mock Components
 
