@@ -87,6 +87,9 @@ USB通信ポートの設定については`crane_plus_control`の
   ```
 
   > [!NOTE]
+  > Test
+
+  > [!NOTE]
   > CRANE+ V2の前にArUcoマーカ付きのBoxを置いたシミュレータ環境を使用する場合は次のコマンドを実行します。
   > [aruco\_detection](#aruco_detection)サンプルを実行する際に使用することを想定しています。
   > 
@@ -121,7 +124,7 @@ ros2 launch crane_plus_examples demo.launch.py use_mock_components:=true
 例えばグリッパを開閉するサンプルは次のコマンドで実行できます。
 
 ```sh
-ros2 launch crane_x7_examples_py example.launch.py example:='gripper_control'
+$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
 終了するときは`Ctrl+c`を入力します。
@@ -130,7 +133,7 @@ ros2 launch crane_x7_examples_py example.launch.py example:='gripper_control'
 > Gazeboでサンプルプログラムを実行する場合は`use_sim_time`オプションを付けます。
 > 
 > ```sh
-> ros2 launch crane_x7_examples_py example.launch.py example:='gripper_control' use_sim_time:='true'
+> $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control' use_sim_time:=true
 > ```
 
 ## Examples
@@ -146,31 +149,27 @@ ros2 launch crane_x7_examples_py example.launch.py example:='gripper_control'
 > 実行できるサンプルの一覧は、`example.launch.py`にオプション`-s`を付けて実行することで表示できます。
 > 
 > ```sh
-> $ ros2 launch crane_x7_examples_py example.launch.py -s
+> $ ros2 launch crane_plus_examples example.launch.py -s
 > Arguments (pass arguments as '<name>:=<value>'):
 > 
 >     'example':
 >         Set an example executable name: [gripper_control, pose_groupstate, joint_values, pick_and_place]
->         (default: 'pose_groupstate')
+>         (default: 'gripper_control')
 > ```
 
 ---
 
 ### gripper_control
 
-ハンドを開閉させるコード例です。
-
-<a href="https://youtu.be/uLRLkwbXUP0" target="_blank" rel="noopener noreferrer">
-  <img src="http://img.youtube.com/vi/uLRLkwbXUP0/hqdefault.jpg" alt="crane_x7_gripper_control_demo" width="650">
-</a>
+グリッパを開閉させるコード例です。
 
 次のコマンドを実行します。
 
 ```sh
-ros2 launch crane_x7_examples_py example.launch.py example:='gripper_control'
+$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
-<img src=https://rt-net.github.io/images/crane-x7/gazebo_gripper_example.gif width=450 />
+<img src=https://rt-net.github.io/images/crane-plus/gripper_control.gif width=450px />
 
 [Back to example list](#examples)
 
@@ -180,19 +179,16 @@ ros2 launch crane_x7_examples_py example.launch.py example:='gripper_control'
 
 group_stateを使うコード例です。
 
-SRDFファイル[crane_x7_moveit_config/config/crane_x7.srdf](../crane_x7_moveit_config/config/crane_x7.srdf)に記載されている`home`と`vertical`の姿勢に移行します。
-
-<a href="https://youtu.be/FH18dA_xcjM" target="_blank" rel="noopener noreferrer">
-  <img src="http://img.youtube.com/vi/FH18dA_xcjM/hqdefault.jpg" alt="crane_x7_pose_groupstate_demo" width="650">
-</a>
+SRDFファイル[crane_plus_moveit_config/config/crane_plus.srdf](../crane_plus_moveit_config/config/crane_plus.srdf)
+に記載されている`home`と`vertical`の姿勢に移行します。
 
 次のコマンドを実行します。
 
 ```sh
-ros2 launch crane_x7_examples_py example.launch.py example:='pose_groupstate'
+$ ros2 launch crane_plus_examples example.launch.py example:='pose_groupstate'
 ```
 
-<img src=https://rt-net.github.io/images/crane-x7/gazebo_pose_groupstate.gif width=450 />
+<img src=https://rt-net.github.io/images/crane-plus/pose_groupstate.gif width=450px />
 
 [Back to example list](#examples)
 
@@ -200,19 +196,15 @@ ros2 launch crane_x7_examples_py example.launch.py example:='pose_groupstate'
 
 ### joint_values
 
-アームのジョイント角度を１つずつ変更させるコード例です。
-
-<a href="https://youtu.be/skRwrrlUl4c" target="_blank" rel="noopener noreferrer">
-  <img src="http://img.youtube.com/vi/skRwrrlUl4c/hqdefault.jpg" alt="crane_x7_joint_values_demo" width="650">
-</a>
+アームのジョイント角度を１つずつ変更するコード例です。
 
 次のコマンドを実行します。
 
 ```sh
-ros2 launch crane_x7_examples_py example.launch.py example:='joint_values'
+ros2 launch crane_plus_examples example.launch.py example:='joint_values'
 ```
 
-<img src= https://rt-net.github.io/images/crane-x7/gazebo_joint_values_example.gif width=450 />
+<img src=https://rt-net.github.io/images/crane-plus/joint_values.gif width=450px />
 
 [Back to example list](#examples)
 
@@ -222,47 +214,37 @@ ros2 launch crane_x7_examples_py example.launch.py example:='joint_values'
 
 モノを掴む・持ち上げる・運ぶ・置くコード例です。
 
-<a href="https://youtu.be/S_MwSvG2tKw" target="_blank" rel="noopener noreferrer">
-  <img src="http://img.youtube.com/vi/S_MwSvG2tKw/hqdefault.jpg" alt="crane_x7_pick_and_place_demo" width="650">
-</a>
-
-> [!NOTE]
-> 実機を使う場合は、CRANE-X7から20cm離れた位置にピッキング対象を設置します。
-> 
-> オレンジ色のソフトボールは[RT ROBOT SHOP](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1307&products_id=3701)から入手できます。
->
-> <img src = https://rt-net.github.io/images/crane-x7/bringup.jpg width = 300 />
-
 次のコマンドを実行します。
 
 ```sh
-ros2 launch crane_x7_examples_py example.launch.py example:='pick_and_place'
+$ ros2 launch crane_plus_examples example.launch.py example:='pick_and_place'
 ```
 
-<img src = https://rt-net.github.io/images/crane-x7/bringup_rviz.gif width = 450 />
+<img src=https://rt-net.github.io/images/crane-plus/pick_and_place.gif width=450px />
 
 [Back to example list](#examples)
 
 ## Camera Examples
 
-[RealSense D435マウンタ](https://github.com/rt-net/crane_x7_Hardware/blob/master/3d_print_parts/v1.0/CRANE-X7_HandA_RealSenseD435マウンタ.stl)搭載モデルのカメラを使用したサンプルコードです。
+Webカメラ搭載モデルのカメラを使用したサンプルコードです。
 
-[crane_x7_examplesのREADME](../crane_x7_examples/README.md)に記載されている「RealSense D435マウンタ搭載モデルを使用する場合」の手順に従って`demo.launch`を実行している状態で各サンプルを実行できます。
+[「Webカメラ搭載モデルを使用する場合」](#Webカメラ搭載モデルを使用する場合)の手順に従い、`demo.launch`を実行している状態で各サンプルを実行します。
 
 - [aruco\_detection](#aruco_detection)
 - [color\_detection](#color_detection)
 
-> [!NOTE]
-> 実行できるサンプルの一覧は、`camera_example.launch.py`にオプション`-s`を付けて実行することで表示できます。
-> 
+実行できるサンプルの一覧は、`camera_example.launch.py`にオプション`-s`を付けて実行することで確認できます。
+
 > ```sh
-> $ ros2 launch crane_x7_examples_py camera_example.launch.py -s
+> $ ros2 launch crane_plus_examples camera_example.launch.py -s
 > Arguments (pass arguments as '<name>:=<value>'):
 > 
 >     'example':
->         Set an example executable name: [aruco_detection, color_detection]
->         (default: 'aruco_detection')
+>         Set an example executable name: [color_detection]
+>         (default: 'color_detection')
 > ```
+
+---
 
 ### aruco_detection
 
@@ -274,14 +256,14 @@ ros2 launch crane_x7_examples_py example.launch.py example:='pick_and_place'
 - 掴む対象は`target_0`に設定されています。
 - マーカ検出には[OpenCV](https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html)を使用しています。
 
-<a href="https://youtu.be/eWzmG_jbTmM" target="_blank" rel="noopener noreferrer">
-  <img src="http://img.youtube.com/vi/eWzmG_jbTmM/hqdefault.jpg" alt="crane_x7_aruco_detection_demo" width="650">
+<a href="https://youtu.be/m9dus6LCocc" target="_blank" rel="noopener noreferrer">
+  <img src="https://rt-net.github.io/images/crane-plus/aruco_detection.gif" alt="aruco_detection" width="650">
 </a>
 
 次のコマンドを実行します。
 
-```sh
-ros2 launch crane_x7_examples_py camera_example.launch.py example:='aruco_detection'
+```bash
+ros2 launch crane_plus_examples camera_example.launch.py example:='aruco_detection'
 ```
 
 [Back to camera example list](#camera-examples)
@@ -295,16 +277,15 @@ ros2 launch crane_x7_examples_py camera_example.launch.py example:='aruco_detect
 - デフォルトでは青い物体の位置をtfのフレームとして配信します。
 - tfの`frame_id`は`target_0`です。
 - 色の検出には[OpenCV](https://docs.opencv.org/4.x/db/d8e/tutorial_threshold.html)を使用しています。
-- 検出した物体の距離は深度画像から取得します。
 
-<a href="https://youtu.be/O8lqw7yemAI" target="_blank" rel="noopener noreferrer">
-  <img src="http://img.youtube.com/vi/O8lqw7yemAI/hqdefault.jpg" alt="crane_x7_color_detection_demo" width="650">
+<a href="https://youtu.be/Kn0eWA7sALY" target="_blank" rel="noopener noreferrer">
+  <img src="https://rt-net.github.io/images/crane-plus/color_detection.gif" alt="color_detection" width="450">
 </a>
 
 次のコマンドを実行します。
 
 ```sh
-ros2 launch crane_x7_examples_py camera_example.launch.py example:='color_detection'
+ros2 launch crane_plus_examples camera_example.launch.py example:='color_detection'
 ```
 
 [Back to camera example list](#camera-examples)
