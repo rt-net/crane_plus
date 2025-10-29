@@ -227,7 +227,7 @@ $ ros2 launch crane_plus_examples example.launch.py example:='pick_and_place'
 
 Webカメラ搭載モデルのカメラを使用したサンプルコードです。
 
-[「Webカメラ搭載モデルを使用する場合」](#Webカメラ搭載モデルを使用する場合)の手順に従い、`demo.launch`を実行している状態で各サンプルを実行します。
+[「Webカメラ搭載モデルを使用する場合」](#Webカメラ搭載モデルを使用する場合)の手順に従い、`demo.launch.py`を実行している状態で各サンプルを実行します。
 
 - [aruco\_detection](#aruco_detection)
 - [color\_detection](#color_detection)
