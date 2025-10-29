@@ -22,7 +22,7 @@
 
 ## Setup
 
-CRANE-X7の起動方法は[crane\_x7\_examplesのREADME](../crane_x7_examples/README.md)を参照してください。
+CRANE+ V2の起動方法は[crane\_plus\_examplesのREADME](../crane_plus_examples/README.md)を参照してください。
 
 ### Using CRANE+ V2
 
