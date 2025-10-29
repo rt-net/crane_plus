@@ -1,6 +1,6 @@
 # crane_plus_examples
 
-このパッケージはCRANE-X7 ROS 2パッケージのサンプルコード集です。
+このパッケージはCRANE+ V2 ROS 2パッケージのサンプルコード集です。
 
 ## Table of Contents
 
