@@ -132,7 +132,7 @@ CRANE+ V2に使用しているサーボモータの仕様により、100 Hz以�
 CRANE+ V2の腕の制御用に`crane_plus_arm_controller`を、
 グリッパの制御用に`crane_plus_gripper_controller`を設定しています。
 
-## crane_x7_hardware Parameters
+## crane_plus_hardware Parameters
 
 `crane_plus_hardware`のパラメータは、[crane_plus_description/urdf/crane_plus.urdf.xacro](../crane_plus_description/urdf/crane_plus.urdf.xacro)
 で設定しています。
