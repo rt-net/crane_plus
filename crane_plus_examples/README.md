@@ -137,7 +137,7 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 ## Examples
 
-`demo.launch`を実行している状態で各サンプルを実行できます。
+`demo.launch.py`を実行している状態で各サンプルを実行できます。
 
 - [gripper_control](#gripper_control)
 - [pose_groupstate](#pose_groupstate)
