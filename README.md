@@ -107,12 +107,6 @@ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 サンプルプログラムは、`crane_plus_examples`パッケージの[README](./crane_plus_description/README.md)参照してください。
 
-- crane_plus_examples
-  - gripper_control
-  - pose_groupstate
-  - joint_values
-  - pick_and_place
-
 ## License
 
 各ファイルにライセンスが明記されている場合、そのライセンスに従います。
