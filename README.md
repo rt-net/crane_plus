@@ -124,7 +124,7 @@ We have obtained permission from ROBOTIS Co., Ltd. to use CAD models relating to
 - 本ソフトウェアは基本的にオープンソースソフトウェアとして「AS IS」（現状有姿のまま）で提供しています。
 - 本ソフトウェアに関する無償サポートはありません。
 - バグの修正や誤字脱字の修正に関するリクエストは常に受け付けていますが、それ以外の機能追加等のリクエストについては社内のガイドラインを優先します。
-詳しくは[コントリビューションガイドライン](./CONTRIBUTING.md)に従ってください。
+詳しくは[コントリビューションガイドライン](https://github.com/rt-net/.github/blob/master/CONTRIBUTING.md)に従ってください。
 
 ## Disclaimer
 
