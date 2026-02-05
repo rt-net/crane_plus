@@ -2,16 +2,17 @@
 
 このパッケージはCRANE+ V2のmove_group設定ファイル及びlaunchファイルを含んでいます。
 
-[ros-planning/moveit2/moveit_demo_nodes/run_move_group](https://github.com/ros-planning/moveit2/tree/main/moveit_demo_nodes/run_move_group)
-を参考にパッケージを作成しています。
+[ros\-planning/moveit2/moveit\_demo\_nodes/run\_move\_group](https://github.com/ros-planning/moveit2/tree/main/moveit_demo_nodes/run_move_group)を参考にパッケージを作成しています。
 
-## ノードの起動
+## How to Launch Nodes
 
 `run_move_group.launch.py`を実行すると、`move_group`や`rviz`等のノードが起動します。
-コントローラノードは起動しないため、
-CRANE+ V2本体を動かすことはできません。(`crane_plus_examples`を参照してください。)
 
-## configファイル
+> [!NOTE]
+> コントローラノードは起動しないため、CRANE+ V2本体を動かすことはできません。
+> (`crane_plus_examples`を参照してください。)
+
+## Config File
 
 - controllers.yaml
   - `moveit_simple_controller_manager`のパラメータを設定しています
@@ -24,4 +25,4 @@ CRANE+ V2本体を動かすことはできません。(`crane_plus_examples`を�
   - デフォルトの`KDLKinematicsPlugin`では軌道計画に失敗するため、`LMAKinematicsPlugin`を使用しています
 - ompl_planning.yaml
   - Open Motion Planning Libraryのパラメータを設定しています
-  - [ros-planning/moveit_resources/panda_moveit_config](https://github.com/ros-planning/moveit_resources/tree/master/panda_moveit_config)のパラメータを流用しています
+  - [ros-planning/moveit\_resources/panda\_moveit\_config](https://github.com/ros-planning/moveit_resources/tree/master/panda_moveit_config)のパラメータを流用しています
