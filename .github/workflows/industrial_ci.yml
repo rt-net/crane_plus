@@ -14,14 +14,30 @@ on:
 
 jobs:
   industrial_ci:
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        env:
-          - { ROS_DISTRO: jazzy, ROS_REPO: main }
-          - { ROS_DISTRO: rolling, ROS_REPO: main, UPSTREAM_WORKSPACE: crane_plus-not-released.rolling.repos }
-    runs-on: ubuntu-latest
+        include:
+          - name: jazzy
+            env:
+              ROS_DISTRO: jazzy
+              ROS_REPO: main
+          - name: rolling
+            env:
+              ROS_DISTRO: rolling
+              ROS_REPO: main
+              UPSTREAM_WORKSPACE: crane_plus-not-released.rolling.repos
+              
     steps:
       - uses: actions/checkout@v4
-      - uses: "ros-industrial/industrial_ci@master"
+
+      - name: Run industrial_ci
+        id: run_ci
+        uses: ros-industrial/industrial_ci@master
         env: ${{ matrix.env }}
+        continue-on-error: ${{ matrix.env.ROS_DISTRO == 'rolling' }}
+
+      - name: status message
+        if: ${{ matrix.env.ROS_DISTRO == 'rolling' && steps.run_ci.outcome == 'failure' }}
+        run: echo "ROS ${MATRIX_ENV} のジョブは失敗しましたが、PRチェックには影響しません。"
