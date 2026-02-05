@@ -3,7 +3,8 @@ Panels:
     Help Height: 0
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 244
   - Class: rviz_common/Selection
@@ -144,6 +145,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          crane_plus_link_tcp:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           world:
             Alpha: 1
             Show Axes: false
@@ -171,7 +176,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: arm
+        Planning Group: arm_tcp
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -266,6 +271,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          crane_plus_link_tcp:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           world:
             Alpha: 1
             Show Axes: false
@@ -357,6 +366,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        crane_plus_link_tcp:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         world:
           Alpha: 1
           Show Axes: false
@@ -432,6 +445,8 @@ Visualization Manager:
           Value: false
         crane_plus_link_hand:
           Value: false
+        crane_plus_link_tcp:
+          Value: false
         world:
           Value: false
       Marker Scale: 1
@@ -460,6 +475,8 @@ Visualization Manager:
                   crane_plus_link3:
                     crane_plus_link4:
                       crane_plus_link_hand:
+                        {}
+                      crane_plus_link_tcp:
                         {}
       Update Interval: 0
       Value: true

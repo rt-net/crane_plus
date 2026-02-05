@@ -47,6 +47,7 @@
   <xacro:property name="NAME_LINK_3" value="crane_plus_link3"/>
   <xacro:property name="NAME_LINK_4" value="crane_plus_link4"/>
   <xacro:property name="NAME_LINK_HAND" value="crane_plus_link_hand"/>
+  <xacro:property name="NAME_LINK_TCP" value="crane_plus_link_tcp"/>
 
   <xacro:property name="NAME_JOINT_BASE" value="crane_plus_joint_base"/>
   <xacro:property name="NAME_JOINT_1" value="crane_plus_joint1"/>
@@ -54,6 +55,7 @@
   <xacro:property name="NAME_JOINT_3" value="crane_plus_joint3"/>
   <xacro:property name="NAME_JOINT_4" value="crane_plus_joint4"/>
   <xacro:property name="NAME_JOINT_HAND" value="crane_plus_joint_hand"/>
+  <xacro:property name="NAME_JOINT_TCP" value="crane_plus_joint_tcp"/>
 
   <xacro:property name="SERVO_HOME" value="${radians(150.0)}"/>
   <xacro:property name="JOINT_EFFORT_LIMIT" value="1.5"/>

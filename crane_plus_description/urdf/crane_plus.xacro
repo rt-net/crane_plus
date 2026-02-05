@@ -224,5 +224,13 @@
       </inertial>
     </link>
 
+    <joint name="${NAME_JOINT_TCP}" type="fixed">
+      <origin xyz="0 0 0.121" rpy="0 0 0"/>
+      <parent link="${NAME_LINK_4}"/>
+      <child link="${NAME_LINK_TCP}"/>
+    </joint>
+
+    <link name="${NAME_LINK_TCP}"/>
+
   </xacro:macro>
 </robot>

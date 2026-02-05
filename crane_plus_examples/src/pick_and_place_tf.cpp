@@ -47,7 +47,7 @@ public:
   : Node("pick_and_place_tf_node")
   {
     using namespace std::placeholders;
-    move_group_arm_ = std::make_shared<MoveGroupInterface>(move_group_arm_node, "arm");
+    move_group_arm_ = std::make_shared<MoveGroupInterface>(move_group_arm_node, "arm_tcp");
     move_group_arm_->setMaxVelocityScalingFactor(1.0);
     move_group_arm_->setMaxAccelerationScalingFactor(1.0);
 
@@ -85,7 +85,7 @@ public:
     move_group_arm_->setPathConstraints(constraints);
 
     // 待機姿勢
-    control_arm(0.0, 0.0, 0.17, 0, 0, 0);
+    control_arm(0.0, 0.0, 0.3, 0, 0, 0);
 
     tf_buffer_ =
       std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -153,15 +153,12 @@ private:
     double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
     // 把持対象物に正対する
-    control_arm(0.0, 0.0, 0.17, 0, 90, theta_deg);
+    control_arm(0.0, 0.0, 0.3, 0, 0, theta_deg);
 
     // 掴みに行く
-    const double GRIPPER_OFFSET = 0.13;
-    double gripper_offset_x = GRIPPER_OFFSET * std::cos(theta_rad);
-    double gripper_offset_y = GRIPPER_OFFSET * std::sin(theta_rad);
-    if (!control_arm(x - gripper_offset_x, y - gripper_offset_y, 0.04, 0, 90, theta_deg)) {
+    if (!control_arm(x, y, 0.04, 0, 90, theta_deg)) {
       // アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
-      control_arm(0.0, 0.0, 0.17, 0, 0, 0);
+      control_arm(0.0, 0.0, 0.3, 0, 0, 0);
       return;
     }
 
@@ -169,19 +166,22 @@ private:
     control_gripper(GRIPPER_CLOSE);
 
     // 移動する
-    control_arm(0.0, 0.0, 0.17, 0, 90, 0);
+    control_arm(0.12, 0.0, 0.17, 0, 90, 0);
+
+    // 横を向く
+    control_arm(0.0, -0.12, 0.17, 0, 90, -90);
 
     // 下ろす
-    control_arm(0.0, -0.15, 0.05, 0, 90, -90);
+    control_arm(0.0, -0.25, 0.05, 0, 90, -90);
 
     // ハンドを開く
     control_gripper(GRIPPER_OPEN);
 
     // 少しだけハンドを持ち上げる
-    control_arm(0.0, -0.15, 0.10, 0, 90, -90);
+    control_arm(0.0, -0.25, 0.10, 0, 90, -90);
 
     // 待機姿勢に戻る
-    control_arm(0.0, 0.0, 0.17, 0, 0, 0);
+    control_arm(0.0, 0.0, 0.3, 0, 0, 0);
 
     // ハンドを閉じる
     control_gripper(GRIPPER_DEFAULT);
