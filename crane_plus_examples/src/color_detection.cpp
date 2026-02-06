@@ -16,28 +16,27 @@
 // https://www.opencv-srf.com/2010/09/object-detection-using-color-seperation.html
 
 #include <cmath>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <memory>
 
-#include "rclcpp/rclcpp.hpp"
+#include "cv_bridge/cv_bridge.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
+#include "image_geometry/pinhole_camera_model.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/opencv.hpp"
+#include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/camera_info.hpp"
 #include "sensor_msgs/msg/image.hpp"
-#include "tf2/LinearMath/Quaternion.hpp"
 #include "tf2/LinearMath/Matrix3x3.hpp"
+#include "tf2/LinearMath/Quaternion.hpp"
 #include "tf2_ros/transform_broadcaster.h"
-#include "opencv2/opencv.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "cv_bridge/cv_bridge.hpp"
-#include "image_geometry/pinhole_camera_model.hpp"
 using std::placeholders::_1;
 
 class ImageSubscriber : public rclcpp::Node
 {
 public:
-  ImageSubscriber()
-  : Node("color_detection")
+  ImageSubscriber() : Node("color_detection")
   {
     image_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
       "image_raw", 10, std::bind(&ImageSubscriber::image_callback, this, _1));
@@ -48,8 +47,7 @@ public:
     image_thresholded_publisher_ =
       this->create_publisher<sensor_msgs::msg::Image>("image_thresholded", 10);
 
-    tf_broadcaster_ =
-      std::make_unique<tf2_ros::TransformBroadcaster>(*this);
+    tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
   }
 
 private:
@@ -83,14 +81,10 @@ private:
 
       // 画像の二値化
       cv::inRange(
-        cv_img->image,
-        cv::Scalar(LOW_H_1, LOW_S, LOW_V),
-        cv::Scalar(HIGH_H_1, HIGH_S, HIGH_V),
+        cv_img->image, cv::Scalar(LOW_H_1, LOW_S, LOW_V), cv::Scalar(HIGH_H_1, HIGH_S, HIGH_V),
         img_mask_1);
       cv::inRange(
-        cv_img->image,
-        cv::Scalar(LOW_H_2, LOW_S, LOW_V),
-        cv::Scalar(HIGH_H_2, HIGH_S, HIGH_V),
+        cv_img->image, cv::Scalar(LOW_H_2, LOW_S, LOW_V), cv::Scalar(HIGH_H_2, HIGH_S, HIGH_V),
         img_mask_2);
 
       // マスク画像の合成
@@ -98,16 +92,12 @@ private:
 
       // ノイズ除去の処理
       cv::morphologyEx(
-        img_thresholded,
-        img_thresholded,
-        cv::MORPH_OPEN,
+        img_thresholded, img_thresholded, cv::MORPH_OPEN,
         cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5)));
 
       // 穴埋めの処理
       cv::morphologyEx(
-        img_thresholded,
-        img_thresholded,
-        cv::MORPH_CLOSE,
+        img_thresholded, img_thresholded, cv::MORPH_CLOSE,
         cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5)));
 
       // 画像の検出領域におけるモーメントを計算
@@ -138,9 +128,7 @@ private:
         // カメラの高さを0.44[m]として把持対象物の位置を計算
         const double CAMERA_HEIGHT = 0.46;
         cv::Point3d object_position(
-          ray.x * CAMERA_HEIGHT,
-          ray.y * CAMERA_HEIGHT,
-          ray.z * CAMERA_HEIGHT);
+          ray.x * CAMERA_HEIGHT, ray.y * CAMERA_HEIGHT, ray.z * CAMERA_HEIGHT);
 
         // 把持対象物の位置をTFに配信
         geometry_msgs::msg::TransformStamped t;

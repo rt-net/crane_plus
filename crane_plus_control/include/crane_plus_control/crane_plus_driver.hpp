@@ -16,6 +16,7 @@
 #define CRANE_PLUS_CONTROL__CRANE_PLUS_DRIVER_HPP_
 
 #include <dynamixel_sdk/dynamixel_sdk.h>
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -50,8 +51,8 @@ private:
   bool read_byte_data_from_each_joints(const uint16_t address, std::vector<uint8_t> & buffer);
   bool read_word_data_from_each_joints(const uint16_t address, std::vector<uint16_t> & buffer);
   bool parse_dxl_error(
-    const std::string func_name, const uint8_t dxl_id,
-    const int dxl_comm_result, const uint8_t dxl_packet_error);
+    const std::string func_name, const uint8_t dxl_id, const int dxl_comm_result,
+    const uint8_t dxl_packet_error);
   double dxl_pos_to_radian(const uint16_t position);
   uint16_t radian_to_dxl_pos(const double position);
   double dxl_speed_to_rps(const uint16_t speed);

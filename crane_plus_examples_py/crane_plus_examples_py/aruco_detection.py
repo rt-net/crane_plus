@@ -66,7 +66,8 @@ class ImageSubscriber(Node):
                 for i in range(n_markers):
                     # 画像座標系上のマーカ位置を三次元のカメラ座標系に変換
                     rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-                                        corners, MARKER_LENGTH, CAMERA_MATRIX, DIST_COEFFS)
+                        corners, MARKER_LENGTH, CAMERA_MATRIX, DIST_COEFFS
+                    )
                     # tfの配信
                     t = TransformStamped()
                     t.header = msg.header

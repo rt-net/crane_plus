@@ -18,26 +18,25 @@
 
 #include <cmath>
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
 
-#include "rclcpp/rclcpp.hpp"
+#include "cv_bridge/cv_bridge.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
+#include "opencv2/aruco.hpp"
+#include "opencv2/opencv.hpp"
+#include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/camera_info.hpp"
 #include "sensor_msgs/msg/image.hpp"
-#include "opencv2/opencv.hpp"
-#include "opencv2/aruco.hpp"
-#include "cv_bridge/cv_bridge.hpp"
-#include "tf2/LinearMath/Quaternion.hpp"
 #include "tf2/LinearMath/Matrix3x3.hpp"
+#include "tf2/LinearMath/Quaternion.hpp"
 #include "tf2_ros/transform_broadcaster.h"
 using std::placeholders::_1;
 
 class ImageSubscriber : public rclcpp::Node
 {
 public:
-  ImageSubscriber()
-  : Node("aruco_detection")
+  ImageSubscriber() : Node("aruco_detection")
   {
     image_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
       "image_raw", 10, std::bind(&ImageSubscriber::image_callback, this, _1));
@@ -45,8 +44,7 @@ public:
     camera_info_subscription_ = this->create_subscription<sensor_msgs::msg::CameraInfo>(
       "camera_info", 10, std::bind(&ImageSubscriber::camera_info_callback, this, _1));
 
-    tf_broadcaster_ =
-      std::make_unique<tf2_ros::TransformBroadcaster>(*this);
+    tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
   }
 
 private:
@@ -98,14 +96,10 @@ private:
           cv::Mat cv_rotation_matrix;
           cv::Rodrigues(rvecs[i], cv_rotation_matrix);
           tf2::Matrix3x3 tf2_rotation_matrix = tf2::Matrix3x3(
-            cv_rotation_matrix.at<double>(0, 0),
-            cv_rotation_matrix.at<double>(0, 1),
-            cv_rotation_matrix.at<double>(0, 2),
-            cv_rotation_matrix.at<double>(1, 0),
-            cv_rotation_matrix.at<double>(1, 1),
-            cv_rotation_matrix.at<double>(1, 2),
-            cv_rotation_matrix.at<double>(2, 0),
-            cv_rotation_matrix.at<double>(2, 1),
+            cv_rotation_matrix.at<double>(0, 0), cv_rotation_matrix.at<double>(0, 1),
+            cv_rotation_matrix.at<double>(0, 2), cv_rotation_matrix.at<double>(1, 0),
+            cv_rotation_matrix.at<double>(1, 1), cv_rotation_matrix.at<double>(1, 2),
+            cv_rotation_matrix.at<double>(2, 0), cv_rotation_matrix.at<double>(2, 1),
             cv_rotation_matrix.at<double>(2, 2));
           tf2_rotation_matrix.getRotation(q);
           t.transform.rotation.x = q.x();

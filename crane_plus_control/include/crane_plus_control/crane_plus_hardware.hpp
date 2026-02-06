@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef CRANE_PLUS_CONTROL__CRANE_PLUS_HARDWARE_HPP_
 #define CRANE_PLUS_CONTROL__CRANE_PLUS_HARDWARE_HPP_
 
@@ -31,13 +30,12 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 
-using hardware_interface::return_type;
 using hardware_interface::CallbackReturn;
+using hardware_interface::return_type;
 
 namespace crane_plus_control
 {
-class CranePlusHardware : public
-  hardware_interface::SystemInterface
+class CranePlusHardware : public hardware_interface::SystemInterface
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(CranePlusHardware)

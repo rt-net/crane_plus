@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "crane_plus_control/crane_plus_driver.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <memory>
 #include <string>
 #include <vector>
-
-#include "crane_plus_control/crane_plus_driver.hpp"
 
 constexpr double PROTOCOL_VERSION = 1.0;
 constexpr int DXL_HOME_POSITION = 511;  // value range:0 ~ 1023
@@ -44,8 +44,7 @@ constexpr uint16_t ADDR_PRESENT_VOLTAGE = 42;
 constexpr uint16_t ADDR_PRESENT_TEMPERATURE = 43;
 
 CranePlusDriver::CranePlusDriver(
-  const std::string port_name, const int baudrate,
-  std::vector<uint8_t> id_list)
+  const std::string port_name, const int baudrate, std::vector<uint8_t> id_list)
 : baudrate_(baudrate), id_list_(id_list)
 {
   dxl_port_handler_ = std::shared_ptr<dynamixel::PortHandler>(
@@ -54,37 +53,28 @@ CranePlusDriver::CranePlusDriver(
     dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION));
 }
 
-CranePlusDriver::~CranePlusDriver()
-{
-  close_port();
-}
+CranePlusDriver::~CranePlusDriver() { close_port(); }
 
 bool CranePlusDriver::open_port(void)
 {
   if (!dxl_port_handler_->openPort()) {
-    last_error_log_ = std::string(__func__) + ": unable to open dynamixel port: " +
-      dxl_port_handler_->getPortName();
+    last_error_log_ = std::string(__func__) +
+                      ": unable to open dynamixel port: " + dxl_port_handler_->getPortName();
     return false;
   }
 
   if (!dxl_port_handler_->setBaudRate(baudrate_)) {
     last_error_log_ = std::string(__func__) + ": unable to set baudrate" +
-      std::to_string(dxl_port_handler_->getBaudRate());
+                      std::to_string(dxl_port_handler_->getBaudRate());
     return false;
   }
 
   return true;
 }
 
-void CranePlusDriver::close_port(void)
-{
-  dxl_port_handler_->closePort();
-}
+void CranePlusDriver::close_port(void) { dxl_port_handler_->closePort(); }
 
-std::string CranePlusDriver::get_last_error_log(void)
-{
-  return last_error_log_;
-}
+std::string CranePlusDriver::get_last_error_log(void) { return last_error_log_; }
 
 bool CranePlusDriver::torque_enable(const bool enable)
 {
@@ -92,8 +82,7 @@ bool CranePlusDriver::torque_enable(const bool enable)
   for (auto dxl_id : id_list_) {
     uint8_t dxl_error = 0;
     int dxl_result = dxl_packet_handler_->write1ByteTxRx(
-      dxl_port_handler_.get(),
-      dxl_id, ADDR_TORQUE_ENABLE, enable, &dxl_error);
+      dxl_port_handler_.get(), dxl_id, ADDR_TORQUE_ENABLE, enable, &dxl_error);
 
     if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
       retval = false;
@@ -107,8 +96,8 @@ bool CranePlusDriver::write_goal_joint_positions(const std::vector<double> & goa
 {
   if (goal_positions.size() != id_list_.size()) {
     last_error_log_ = std::string(__func__) + ": vectors size does not match: " +
-      " goal_positions:" + std::to_string(goal_positions.size()) +
-      ", id_list:" + std::to_string(id_list_.size());
+                      " goal_positions:" + std::to_string(goal_positions.size()) +
+                      ", id_list:" + std::to_string(id_list_.size());
     return false;
   }
 
@@ -119,8 +108,7 @@ bool CranePlusDriver::write_goal_joint_positions(const std::vector<double> & goa
     uint16_t goal_position = radian_to_dxl_pos(goal_positions[i]);
     auto dxl_id = id_list_[i];
     int dxl_result = dxl_packet_handler_->write2ByteTxRx(
-      dxl_port_handler_.get(),
-      dxl_id, ADDR_GOAL_POSITION, goal_position, &dxl_error);
+      dxl_port_handler_.get(), dxl_id, ADDR_GOAL_POSITION, goal_position, &dxl_error);
 
     if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
       retval = false;
@@ -135,8 +123,7 @@ bool CranePlusDriver::write_moving_speed_rpm(const uint8_t dxl_id, const double 
   const int DXL_MAX_MOVING_SPEED = 1023;
   const double SPEED_UNIT = 0.111;  // rpm
   if (std::find(id_list_.begin(), id_list_.end(), dxl_id) == id_list_.end()) {
-    last_error_log_ = std::string(__func__) + ": dxl_id: " + std::to_string(dxl_id) +
-      "not found.";
+    last_error_log_ = std::string(__func__) + ": dxl_id: " + std::to_string(dxl_id) + "not found.";
     return false;
   }
 
@@ -153,8 +140,7 @@ bool CranePlusDriver::write_moving_speed_rpm(const uint8_t dxl_id, const double 
 
   uint8_t dxl_error = 0;
   int dxl_result = dxl_packet_handler_->write2ByteTxRx(
-    dxl_port_handler_.get(),
-    dxl_id, ADDR_MOVING_SPEED, dxl_moving_speed, &dxl_error);
+    dxl_port_handler_.get(), dxl_id, ADDR_MOVING_SPEED, dxl_moving_speed, &dxl_error);
 
   retval = parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error);
 
@@ -235,16 +221,14 @@ bool CranePlusDriver::read_present_joint_temperatures(std::vector<double> & join
 }
 
 bool CranePlusDriver::read_byte_data_from_each_joints(
-  const uint16_t address,
-  std::vector<uint8_t> & buffer)
+  const uint16_t address, std::vector<uint8_t> & buffer)
 {
   bool retval = true;
   for (auto dxl_id : id_list_) {
     uint8_t dxl_error = 0;
     uint8_t data = 0;
     int dxl_result = dxl_packet_handler_->read1ByteTxRx(
-      dxl_port_handler_.get(),
-      dxl_id, address, &data, &dxl_error);
+      dxl_port_handler_.get(), dxl_id, address, &data, &dxl_error);
 
     if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
       retval = false;
@@ -257,16 +241,14 @@ bool CranePlusDriver::read_byte_data_from_each_joints(
 }
 
 bool CranePlusDriver::read_word_data_from_each_joints(
-  const uint16_t address,
-  std::vector<uint16_t> & buffer)
+  const uint16_t address, std::vector<uint16_t> & buffer)
 {
   bool retval = true;
   for (auto dxl_id : id_list_) {
     uint8_t dxl_error = 0;
     uint16_t data = 0;
     int dxl_result = dxl_packet_handler_->read2ByteTxRx(
-      dxl_port_handler_.get(),
-      dxl_id, address, &data, &dxl_error);
+      dxl_port_handler_.get(), dxl_id, address, &data, &dxl_error);
 
     if (!parse_dxl_error(std::string(__func__), dxl_id, dxl_result, dxl_error)) {
       retval = false;
@@ -279,20 +261,20 @@ bool CranePlusDriver::read_word_data_from_each_joints(
 }
 
 bool CranePlusDriver::parse_dxl_error(
-  const std::string func_name, const uint8_t dxl_id,
-  const int dxl_comm_result, const uint8_t dxl_packet_error)
+  const std::string func_name, const uint8_t dxl_id, const int dxl_comm_result,
+  const uint8_t dxl_packet_error)
 {
   bool retval = true;
 
   if (dxl_comm_result != COMM_SUCCESS) {
     last_error_log_ = func_name + ": dxl_id: " + std::to_string(dxl_id) + " :" +
-      std::string(dxl_packet_handler_->getTxRxResult(dxl_comm_result));
+                      std::string(dxl_packet_handler_->getTxRxResult(dxl_comm_result));
     retval = false;
   }
 
   if (dxl_packet_error != 0) {
     last_error_log_ = func_name + ": dxl_id: " + std::to_string(dxl_id) + " :" +
-      std::string(dxl_packet_handler_->getRxPacketError(dxl_packet_error));
+                      std::string(dxl_packet_handler_->getRxPacketError(dxl_packet_error));
     retval = false;
   }
 
