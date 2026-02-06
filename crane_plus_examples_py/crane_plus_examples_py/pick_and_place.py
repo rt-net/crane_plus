@@ -15,18 +15,17 @@
 import math
 
 from crane_plus_examples_py.utils import plan_and_execute
-from geometry_msgs.msg import Point, Pose, PoseStamped, Quaternion
+from geometry_msgs.msg import PoseStamped
 from moveit.core.robot_state import RobotState
-from moveit_msgs.msg import Constraints, PositionConstraint, OrientationConstraint, BoundingVolume
-from shape_msgs.msg import SolidPrimitive
 from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-
+from moveit_msgs.msg import Constraints, PositionConstraint, OrientationConstraint, BoundingVolume
 import rclpy
 from rclpy.logging import get_logger
 from scipy.spatial.transform import Rotation
+from shape_msgs.msg import SolidPrimitive
 
 
 def set_goal_constraints(x, y, z, roll, pitch, yaw):

@@ -33,10 +33,10 @@ import rclpy
 from rclpy.logging import get_logger
 from rclpy.node import Node
 from rclpy.time import Time
+from scipy.spatial.transform import Rotation
 import tf2_ros
 from tf2_ros import TransformListener, TransformStamped
 from tf2_ros.buffer import Buffer
-from scipy.spatial.transform import Rotation
 
 
 class PickAndPlaceTf(Node):
