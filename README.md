@@ -44,19 +44,16 @@ ROS 2 package suite of CRANE+ V2.
 
 ```sh
 $ sudo apt update 
-$ sudo apt install ros-jazzy-crane-plus
+$ sudo apt install ros-$ROS_DISTRO-crane-plus
 ```
 
 ### Source Build
 
 ```sh
-# Setup ROS environment
-$ source /opt/ros/jazzy/setup.bash
-
 # Download crane_plus repository
 $ mkdir -p ~/ros2_ws/src
 $ cd ~/ros2_ws/src
-$ git clone https://github.com/rt-net/crane_plus.git
+$ git clone -b $ROS_DISTRO https://github.com/rt-net/crane_plus.git
 
 # Install dependencies
 $ rosdep install -r -y -i --from-paths .

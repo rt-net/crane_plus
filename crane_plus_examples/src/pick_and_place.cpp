@@ -20,7 +20,7 @@
 
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/quaternion.hpp"
-#include "moveit/move_group_interface/move_group_interface.h"
+#include "moveit/move_group_interface/move_group_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
@@ -46,7 +46,7 @@ int main(int argc, char ** argv)
   executor.add_node(move_group_gripper_node);
   std::thread([&executor]() {executor.spin();}).detach();
 
-  MoveGroupInterface move_group_arm(move_group_arm_node, "arm");
+  MoveGroupInterface move_group_arm(move_group_arm_node, "arm_tcp");
   move_group_arm.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
   move_group_arm.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 
@@ -57,6 +57,10 @@ int main(int argc, char ** argv)
   double GRIPPER_DEFAULT = 0.0;
   double GRIPPER_OPEN = to_radians(-30);
   double GRIPPER_CLOSE = to_radians(10);
+
+  // Set goal tolerances to improve IK success rate
+  move_group_arm.setGoalPositionTolerance(1e-5);
+  move_group_arm.setGoalOrientationTolerance(1e-4);
 
   move_group_arm.setNamedTarget("vertical");
   move_group_arm.move();
@@ -76,19 +80,21 @@ int main(int argc, char ** argv)
   geometry_msgs::msg::Pose target_pose;
   tf2::Quaternion q;
   target_pose.position.x = 0.0;
-  target_pose.position.y = -0.09;
+  target_pose.position.y = -0.21;
   target_pose.position.z = 0.17;
   q.setRPY(to_radians(0), to_radians(90), to_radians(-90));
   target_pose.orientation = tf2::toMsg(q);
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
+  target_pose.position.y = -0.1;
+  target_pose.position.z = 0.05;
   q.setRPY(to_radians(0), to_radians(180), to_radians(-90));
   target_pose.orientation = tf2::toMsg(q);
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
-  target_pose.position.z = 0.14;
+  target_pose.position.z = 0.02;
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
@@ -97,7 +103,7 @@ int main(int argc, char ** argv)
   move_group_gripper.setJointValueTarget(gripper_joint_values);
   move_group_gripper.move();
 
-  target_pose.position.z = 0.17;
+  target_pose.position.z = 0.05;
   move_group_arm.setPoseTarget(target_pose);
   move_group_arm.move();
 
@@ -105,7 +111,7 @@ int main(int argc, char ** argv)
   move_group_arm.setNamedTarget("home");
   move_group_arm.move();
 
-  target_pose.position.x = 0.15;
+  target_pose.position.x = 0.25;
   target_pose.position.y = 0.0;
   target_pose.position.z = 0.06;
   q.setRPY(to_radians(0), to_radians(90), to_radians(0));

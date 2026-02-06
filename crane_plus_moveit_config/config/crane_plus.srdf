@@ -12,6 +12,9 @@
     <group name="arm">
         <chain base_link="crane_plus_base" tip_link="crane_plus_link4"/>
     </group>
+    <group name="arm_tcp">
+      <chain base_link="crane_plus_base" tip_link="crane_plus_link_tcp" />
+    </group>
     <group name="gripper">
         <link name="crane_plus_link_hand"/>
         <joint name="crane_plus_joint_hand"/>
@@ -29,8 +32,21 @@
         <joint name="crane_plus_joint3" value="-2.01"/>
         <joint name="crane_plus_joint4" value="-0.73"/>
     </group_state>
+    <group_state name="vertical" group="arm_tcp">
+        <joint name="crane_plus_joint1" value="0"/>
+        <joint name="crane_plus_joint2" value="0"/>
+        <joint name="crane_plus_joint3" value="0"/>
+        <joint name="crane_plus_joint4" value="0"/>
+    </group_state>
+    <group_state name="home" group="arm_tcp">
+        <joint name="crane_plus_joint1" value="0"/>
+        <joint name="crane_plus_joint2" value="-1.16"/>
+        <joint name="crane_plus_joint3" value="-2.01"/>
+        <joint name="crane_plus_joint4" value="-0.73"/>
+    </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="end_effector" parent_link="crane_plus_link4" group="gripper"/>
+    <end_effector name="end_effector" parent_link="crane_plus_link4" group="gripper" parent_group="arm"/>
+    <end_effector name="end_effector_tcp" parent_link="crane_plus_link_tcp" group="gripper" parent_group="arm_tcp"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="table" type="fixed" parent_frame="world" child_link="base_link"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->

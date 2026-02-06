@@ -26,43 +26,37 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     declare_port_name = DeclareLaunchArgument(
-        'port_name',
-        default_value='/dev/ttyUSB0',
-        description='Set port name.'
+        'port_name', default_value='/dev/ttyUSB0', description='Set port name.'
     )
 
     declare_use_camera = DeclareLaunchArgument(
-        'use_camera',
-        default_value='false',
-        description='Use camera.'
+        'use_camera', default_value='false', description='Use camera.'
     )
 
     declare_video_device = DeclareLaunchArgument(
         'video_device',
         default_value='/dev/video0',
-        description='Set video device.'
+        description='Set video device.',
     )
 
     declare_use_mock_components = DeclareLaunchArgument(
         'use_mock_components',
         default_value='false',
-        description='Use mock_components or not.'
+        description='Use mock_components or not.',
     )
 
     declare_rviz_config = DeclareLaunchArgument(
         'rviz_config',
-        default_value=get_package_share_directory(
-            'crane_plus_moveit_config'
-        ) + '/config/moveit.rviz',
+        default_value=get_package_share_directory('crane_plus_moveit_config')
+        + '/config/moveit.rviz',
         description='Set the path to rviz configuration file.',
         condition=UnlessCondition(LaunchConfiguration('use_camera')),
     )
 
     declare_rviz_config_camera = DeclareLaunchArgument(
         'rviz_config',
-        default_value=get_package_share_directory(
-            'crane_plus_examples'
-        ) + '/launch/camera_example.rviz',
+        default_value=get_package_share_directory('crane_plus_examples')
+        + '/launch/camera_example.rviz',
         description='Set the path to rviz configuration file.',
         condition=IfCondition(LaunchConfiguration('use_camera')),
     )
@@ -74,44 +68,53 @@ def generate_launch_description():
     description = description_loader.load()
 
     move_group = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            get_package_share_directory('crane_plus_moveit_config'),
-            '/launch/run_move_group.launch.py']),
+        PythonLaunchDescriptionSource(
+            [
+                get_package_share_directory('crane_plus_moveit_config'),
+                '/launch/run_move_group.launch.py',
+            ]
+        ),
         launch_arguments={
             'loaded_description': description,
-            'rviz_config': LaunchConfiguration('rviz_config')
-        }.items()
+            'rviz_config': LaunchConfiguration('rviz_config'),
+        }.items(),
     )
 
     control_node = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
+        PythonLaunchDescriptionSource(
+            [
                 get_package_share_directory('crane_plus_control'),
-                '/launch/crane_plus_control.launch.py']),
-            launch_arguments={'loaded_description': description}.items()
-        )
+                '/launch/crane_plus_control.launch.py',
+            ]
+        ),
+        launch_arguments={'loaded_description': description}.items(),
+    )
 
-    camera_info_file = 'file://' + get_package_share_directory(
-        'crane_plus_examples') + '/config/camera_info.yaml'
+    camera_info_file = (
+        'file://' + get_package_share_directory('crane_plus_examples') + '/config/camera_info.yaml'
+    )
     usb_cam_node = Node(
-            package='usb_cam',
-            executable='usb_cam_node_exe',
-            parameters=[
-                {'video_device': LaunchConfiguration('video_device')},
-                {'frame_id': 'camera_color_optical_frame'},
-                {'camera_info_url': camera_info_file},
-                {'pixel_format': 'yuyv2rgb'}
-            ],
-            condition=IfCondition(LaunchConfiguration('use_camera'))
-        )
+        package='usb_cam',
+        executable='usb_cam_node_exe',
+        parameters=[
+            {'video_device': LaunchConfiguration('video_device')},
+            {'frame_id': 'camera_color_optical_frame'},
+            {'camera_info_url': camera_info_file},
+            {'pixel_format': 'yuyv2rgb'},
+        ],
+        condition=IfCondition(LaunchConfiguration('use_camera')),
+    )
 
-    return LaunchDescription([
-        declare_port_name,
-        declare_use_camera,
-        declare_video_device,
-        declare_use_mock_components,
-        declare_rviz_config,
-        declare_rviz_config_camera,
-        move_group,
-        control_node,
-        usb_cam_node
-    ])
+    return LaunchDescription(
+        [
+            declare_port_name,
+            declare_use_camera,
+            declare_video_device,
+            declare_use_mock_components,
+            declare_rviz_config,
+            declare_rviz_config_camera,
+            move_group,
+            control_node,
+            usb_cam_node,
+        ]
+    )

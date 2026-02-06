@@ -4,10 +4,9 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
-    Tree Height: 251
+    Tree Height: 244
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -19,6 +18,7 @@ Panels:
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
+      - /Current View1/Focal Point1
     Name: Views
     Splitter Ratio: 0.5
 Visualization Manager:
@@ -54,8 +54,6 @@ Visualization Manager:
       MoveIt_Planning_Time: 5
       MoveIt_Use_Cartesian_Path: false
       MoveIt_Use_Constraint_Aware_IK: true
-      MoveIt_Warehouse_Host: 127.0.0.1
-      MoveIt_Warehouse_Port: 33829
       MoveIt_Workspace:
         Center:
           X: 0
@@ -92,27 +90,27 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p1:
+          camera_stand_link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p2:
+          camera_stand_link2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p3:
+          camera_stand_link3:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p4:
+          camera_stand_link4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p5:
+          camera_stand_link5:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -147,6 +145,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          crane_plus_link_tcp:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           world:
             Alpha: 1
             Show Axes: false
@@ -160,6 +162,7 @@ Visualization Manager:
         State Display Time: 0.05 s
         Trail Step Size: 1
         Trajectory Topic: /move_group/display_planned_path
+        Use Sim Time: false
       Planning Metrics:
         Payload: 1
         Show Joint Torques: false
@@ -173,7 +176,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: arm
+        Planning Group: arm_tcp
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -213,27 +216,27 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p1:
+          camera_stand_link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p2:
+          camera_stand_link2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p3:
+          camera_stand_link3:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p4:
+          camera_stand_link4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_stand_p5:
+          camera_stand_link5:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -268,6 +271,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          crane_plus_link_tcp:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           world:
             Alpha: 1
             Show Axes: false
@@ -304,27 +311,27 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_stand_p1:
+        camera_stand_link1:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_stand_p2:
+        camera_stand_link2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_stand_p3:
+        camera_stand_link3:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_stand_p4:
+        camera_stand_link4:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_stand_p5:
+        camera_stand_link5:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -359,6 +366,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        crane_plus_link_tcp:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         world:
           Alpha: 1
           Show Axes: false
@@ -374,9 +385,11 @@ Visualization Manager:
       State Display Time: 0.05 s
       Trail Step Size: 1
       Trajectory Topic: display_planned_path
+      Use Sim Time: false
       Value: true
     - Class: rviz_default_plugins/Camera
       Enabled: true
+      Far Plane Distance: 100
       Image Rendering: background and overlay
       Name: Camera
       Overlay Alpha: 0.5
@@ -397,6 +410,8 @@ Visualization Manager:
       Zoom Factor: 1
     - Class: rviz_default_plugins/TF
       Enabled: true
+      Filter (blacklist): ""
+      Filter (whitelist): ""
       Frame Timeout: 1
       Frames:
         All Enabled: false
@@ -408,15 +423,15 @@ Visualization Manager:
           Value: true
         camera_link:
           Value: false
-        camera_stand_p1:
+        camera_stand_link1:
           Value: false
-        camera_stand_p2:
+        camera_stand_link2:
           Value: false
-        camera_stand_p3:
+        camera_stand_link3:
           Value: false
-        camera_stand_p4:
+        camera_stand_link4:
           Value: false
-        camera_stand_p5:
+        camera_stand_link5:
           Value: false
         crane_plus_base:
           Value: false
@@ -430,8 +445,8 @@ Visualization Manager:
           Value: false
         crane_plus_link_hand:
           Value: false
-        target_0:
-          Value: true
+        crane_plus_link_tcp:
+          Value: false
         world:
           Value: false
       Marker Scale: 1
@@ -446,23 +461,22 @@ Visualization Manager:
               camera_link:
                 camera_color_frame:
                   camera_color_optical_frame:
-                    target_0:
-                      {}
-              camera_stand_p1:
-                {}
-              camera_stand_p2:
-                {}
-              camera_stand_p3:
-                {}
-              camera_stand_p4:
-                {}
-              camera_stand_p5:
-                {}
+                    {}
+              camera_stand_link1:
+                camera_stand_link2:
+                  camera_stand_link3:
+                    {}
+                camera_stand_link4:
+                  {}
+                camera_stand_link5:
+                  {}
               crane_plus_link1:
                 crane_plus_link2:
                   crane_plus_link3:
                     crane_plus_link4:
                       crane_plus_link_hand:
+                        {}
+                      crane_plus_link_tcp:
                         {}
       Update Interval: 0
       Value: true
@@ -495,6 +509,9 @@ Visualization Manager:
     - Class: rviz_default_plugins/Measure
       Line color: 128; 128; 0
     - Class: rviz_default_plugins/SetInitialPose
+      Covariance x: 0.25
+      Covariance y: 0.25
+      Covariance yaw: 0.06853891909122467
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -523,32 +540,32 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.0756522417068481
+      Distance: 1
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.04136588051915169
-        Y: -0.017012163996696472
-        Z: 0.08837244659662247
+        X: 0
+        Y: 0
+        Z: 0.20000000298023224
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.44539815187454224
+      Pitch: 0.5
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.5553978681564331
+      Yaw: 0.5
     Saved: ~
 Window Geometry:
   Camera:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 1016
+  Height: 1011
   Hide Left Dock: false
   Hide Right Dock: false
   Image:
@@ -557,7 +574,7 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000002360000039efc020000000cfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d00000138000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000017b000002600000017d00fffffffb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000003c005400720061006a006500630074006f007200790020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100ffffff00000001000002510000039efc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000c00430061006d006500720061010000003d000001c20000002800fffffffb0000000a0049006d0061006700650100000205000001d60000002800fffffffb0000000a005600690065007700730000000337000000a4000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000002a50000039e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000023600000395fc020000000cfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005d00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003f00000134000000cc00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004400fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001790000025b0000019600fffffffb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000003c005400720061006a006500630074006f007200790020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004400ffffff000000010000025100000395fc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000c00430061006d006500720061010000003f000001eb0000001700fffffffb0000000a0049006d0061006700650100000230000001a40000001700fffffffb0000000a00560069006500770073000000032b000000a9000000a900fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000002ab0000039500000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
@@ -566,6 +583,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1848
-  X: 72
-  Y: 27
+  Width: 1854
+  X: 66
+  Y: 32

@@ -27,13 +27,13 @@
 
     <include>
       <uri>
-        https://fuel.gazebosim.or/1.0/OpenRobotics/models/Ground%20Plane
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ground%20Plane
       </uri>
     </include>
 
     <include>
       <uri>
-        https://fuel.gazebosim.or/1.0/OpenRobotics/models/Table
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Table
       </uri>
       <pose>0.29 0 0 0 0 1.5708</pose>
     </include>
@@ -44,7 +44,7 @@
           model://aruco_cube_0
         </uri>
       </include>
-      <pose>0.2 0.05 1.05 3.1415 0 0</pose>
+      <pose>0.2 0 1.05 3.1415 0 0</pose>
     </model>
 
   </world>

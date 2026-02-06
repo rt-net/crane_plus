@@ -18,7 +18,7 @@
 
 #include <cmath>
 
-#include "moveit/move_group_interface/move_group_interface.h"
+#include "moveit/move_group_interface/move_group_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
@@ -41,7 +41,7 @@ int main(int argc, char ** argv)
   executor.add_node(move_group_node);
   std::thread([&executor]() {executor.spin();}).detach();
 
-  MoveGroupInterface move_group_arm(move_group_node, "arm");
+  MoveGroupInterface move_group_arm(move_group_node, "arm_tcp");
   move_group_arm.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
   move_group_arm.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 

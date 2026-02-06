@@ -17,7 +17,6 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import ExecuteProcess
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -27,45 +26,52 @@ def generate_launch_description():
         'loaded_description',
         default_value='',
         description='Set robot_description text.  \
-                     It is recommended to use RobotDescriptionLoader() in crane_plus_description.'
+                     It is recommended to use RobotDescriptionLoader() in crane_plus_description.',
     )
 
     crane_plus_controllers = os.path.join(
         get_package_share_directory('crane_plus_control'),
         'config',
-        'crane_plus_controllers.yaml'
-        )
+        'crane_plus_controllers.yaml',
+    )
 
     controller_manager = Node(
         package='controller_manager',
         executable='ros2_control_node',
-        parameters=[{'robot_description': LaunchConfiguration('loaded_description')},
-                    crane_plus_controllers],
         output='screen',
-        )
+        parameters=[
+            {'robot_description': LaunchConfiguration('loaded_description')},
+            crane_plus_controllers,
+        ],
+    )
 
-    spawn_joint_state_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner joint_state_broadcaster'],
-                shell=True,
-                output='screen',
-            )
+    spawn_joint_state_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        output='screen',
+        arguments=['joint_state_broadcaster'],
+    )
 
-    spawn_arm_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner crane_plus_arm_controller'],
-                shell=True,
-                output='screen',
-            )
+    spawn_arm_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        output='screen',
+        arguments=['crane_plus_arm_controller'],
+    )
 
-    spawn_gripper_controller = ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner crane_plus_gripper_controller'],
-                shell=True,
-                output='screen',
-            )
+    spawn_gripper_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        output='screen',
+        arguments=['crane_plus_gripper_controller'],
+    )
 
-    return LaunchDescription([
-      declare_loaded_description,
-      controller_manager,
-      spawn_joint_state_controller,
-      spawn_arm_controller,
-      spawn_gripper_controller
-    ])
+    return LaunchDescription(
+        [
+            declare_loaded_description,
+            controller_manager,
+            spawn_joint_state_controller,
+            spawn_arm_controller,
+            spawn_gripper_controller,
+        ]
+    )

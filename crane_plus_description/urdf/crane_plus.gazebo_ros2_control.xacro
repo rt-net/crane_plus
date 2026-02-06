@@ -1,74 +1,57 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="crane_plus_gazebo_ros2_control_settings"
-    params="name
-            name_joint_1
-            name_joint_2
-            name_joint_3
-            name_joint_4
-            name_joint_hand
-            joint_1_lower_limit
-            joint_1_upper_limit
-            joint_2_lower_limit
-            joint_2_upper_limit
-            joint_3_lower_limit
-            joint_3_upper_limit
-            joint_4_lower_limit
-            joint_4_upper_limit
-            joint_hand_lower_limit
-            joint_hand_upper_limit
-            ">
+  <xacro:macro name="crane_plus_gazebo_ros2_control_settings">
 
-    <ros2_control name="${name}" type="system">
+    <ros2_control name="crane_plus" type="system">
       <hardware>
         <plugin>gz_ros2_control/GazeboSimSystem</plugin>
       </hardware>
 
-      <joint name="${name_joint_1}">
+      <joint name="${NAME_JOINT_1}">
         <command_interface name="position">
-          <param name="min">${joint_1_lower_limit}</param>
-          <param name="max">${joint_1_upper_limit}</param>
+          <param name="min">${JOINT_1_LOWER_LIMIT}</param>
+          <param name="max">${JOINT_1_UPPER_LIMIT}</param>
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${name_joint_2}">
+      <joint name="${NAME_JOINT_2}">
         <command_interface name="position">
-          <param name="min">${joint_2_lower_limit}</param>
-          <param name="max">${joint_2_upper_limit}</param>
+          <param name="min">${JOINT_2_LOWER_LIMIT}</param>
+          <param name="max">${JOINT_2_UPPER_LIMIT}</param>
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${name_joint_3}">
+      <joint name="${NAME_JOINT_3}">
         <command_interface name="position">
-          <param name="min">${joint_3_lower_limit}</param>
-          <param name="max">${joint_3_upper_limit}</param>
+          <param name="min">${JOINT_3_LOWER_LIMIT}</param>
+          <param name="max">${JOINT_3_UPPER_LIMIT}</param>
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${name_joint_4}">
+      <joint name="${NAME_JOINT_4}">
         <command_interface name="position">
-          <param name="min">${joint_4_lower_limit}</param>
-          <param name="max">${joint_4_upper_limit}</param>
+          <param name="min">${JOINT_4_LOWER_LIMIT}</param>
+          <param name="max">${JOINT_4_UPPER_LIMIT}</param>
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${name_joint_hand}">
+      <joint name="${NAME_JOINT_HAND}">
         <command_interface name="position">
-          <param name="min">${joint_hand_lower_limit}</param>
-          <param name="max">${joint_hand_upper_limit}</param>
+          <param name="min">${JOINT_HAND_LOWER_LIMIT}</param>
+          <param name="max">${JOINT_HAND_UPPER_LIMIT}</param>
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>

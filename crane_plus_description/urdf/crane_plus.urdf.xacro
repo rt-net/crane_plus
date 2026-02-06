@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 
-<robot
-    name="crane_plus"
-    xmlns:xacro="http://ros.org/wiki/xacro"
-    xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
-    xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
-    xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface">
+<robot name="crane_plus" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.xacro"/>
   <xacro:include filename="$(find crane_plus_description)/urdf/crane_plus.ros2_control.xacro"/>
@@ -24,17 +19,27 @@
   <xacro:arg name="read_temperatures" default="0" />
   <xacro:arg name="gz_control_config_package" default="" />
   <xacro:arg name="gz_control_config_file_path" default="" />
+  <xacro:property name="USE_CAMERA" value="$(arg use_camera)"/>
+  <xacro:property name="USE_MOCK_COMPONENTS" value="$(arg use_mock_components)"/>
+  <xacro:property name="PORT_NAME" value="$(arg port_name)"/>
+  <xacro:property name="BAUDRATE" value="$(arg baudrate)"/>
+  <xacro:property name="TIMEOUT_SECONDS" value="$(arg timeout_seconds)"/>
+  <xacro:property name="READ_VELOCITIES" value="$(arg read_velocities)"/>
+  <xacro:property name="READ_LOADS" value="$(arg read_loads)"/>
+  <xacro:property name="READ_VOLTAGES" value="$(arg read_voltages)"/>
+  <xacro:property name="READ_TEMPERATURES" value="$(arg read_temperatures)"/>
+  <xacro:property name="GZ_CONTROL_CONFIG_PACKAGE" value="$(arg gz_control_config_package)"/>
+  <xacro:property name="GZ_CONTROL_CONFIG_FILE_PATH" value="$(arg gz_control_config_file_path)"/>
 
-  <!-- Link to provide the location reference for the arm -->
-  <link name="base_link"/>
-
-  <!-- Used for fixing robot to Gazebo 'base_link' -->
-  <link name="world"/>                                
-
-  <joint name="base_link_to_world_joint" type="fixed">
-    <parent link="world"/>                            
-    <child link="base_link"/>                         
-  </joint>                                            
+  <material name="black">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="0.95 0.95 0.95 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.8 0.8 0.8 1.0" />
+  </material>
 
   <xacro:property name="NAME_LINK_BASE" value="crane_plus_base"/>
   <xacro:property name="NAME_LINK_1" value="crane_plus_link1"/>
@@ -42,6 +47,7 @@
   <xacro:property name="NAME_LINK_3" value="crane_plus_link3"/>
   <xacro:property name="NAME_LINK_4" value="crane_plus_link4"/>
   <xacro:property name="NAME_LINK_HAND" value="crane_plus_link_hand"/>
+  <xacro:property name="NAME_LINK_TCP" value="crane_plus_link_tcp"/>
 
   <xacro:property name="NAME_JOINT_BASE" value="crane_plus_joint_base"/>
   <xacro:property name="NAME_JOINT_1" value="crane_plus_joint1"/>
@@ -49,109 +55,49 @@
   <xacro:property name="NAME_JOINT_3" value="crane_plus_joint3"/>
   <xacro:property name="NAME_JOINT_4" value="crane_plus_joint4"/>
   <xacro:property name="NAME_JOINT_HAND" value="crane_plus_joint_hand"/>
+  <xacro:property name="NAME_JOINT_TCP" value="crane_plus_joint_tcp"/>
 
-  <xacro:property name="M_PI" value="3.14159"/>
-  <xacro:property name="TO_RADIAN" value="${M_PI / 180.0}"/>
-  <xacro:property name="SERVO_HOME" value="${TO_RADIAN * 150.0}"/>
+  <xacro:property name="SERVO_HOME" value="${radians(150.0)}"/>
+  <xacro:property name="JOINT_EFFORT_LIMIT" value="1.5"/>
   <xacro:property name="JOINT_VELOCITY_LIMIT" value="2.0"/>
-  <xacro:property name="JOINT_1_LOWER_LIMIT" value="${0.0 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_1_UPPER_LIMIT" value="${300.0 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${45.45 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${252.20 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${3.52 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${290.62 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${44.57 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${251.32 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${109.38 * TO_RADIAN - SERVO_HOME}"/>
-  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${188.27 * TO_RADIAN - SERVO_HOME}"/>
+  <xacro:property name="JOINT_1_LOWER_LIMIT" value="${radians(0) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_1_UPPER_LIMIT" value="${radians(300) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_LOWER_LIMIT" value="${radians(45) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_2_UPPER_LIMIT" value="${radians(253) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_LOWER_LIMIT" value="${radians(3) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_3_UPPER_LIMIT" value="${radians(291) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_LOWER_LIMIT" value="${radians(44) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_4_UPPER_LIMIT" value="${radians(252) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_LOWER_LIMIT" value="${radians(109) - SERVO_HOME}"/>
+  <xacro:property name="JOINT_HAND_UPPER_LIMIT" value="${radians(189) - SERVO_HOME}"/>
 
-  <xacro:crane_plus
-    parent="base_link"
-    name_link_base="${NAME_LINK_BASE}"
-    name_link_1="${NAME_LINK_1}"
-    name_link_2="${NAME_LINK_2}"
-    name_link_3="${NAME_LINK_3}"
-    name_link_4="${NAME_LINK_4}"
-    name_link_hand="${NAME_LINK_HAND}"
-    name_joint_base="${NAME_JOINT_BASE}"
-    name_joint_1="${NAME_JOINT_1}"
-    name_joint_2="${NAME_JOINT_2}"
-    name_joint_3="${NAME_JOINT_3}"
-    name_joint_4="${NAME_JOINT_4}"
-    name_joint_hand="${NAME_JOINT_HAND}"
+  <!-- Used for fixing robot 'base_link' to Gazebo 'world' -->
+  <link name="world"/>
+  <link name="base_link"/>
 
-    joints_vlimit="${JOINT_VELOCITY_LIMIT}"
-    joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
-    joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
-    joint_2_lower_limit="${JOINT_2_LOWER_LIMIT}"
-    joint_2_upper_limit="${JOINT_2_UPPER_LIMIT}"
-    joint_3_lower_limit="${JOINT_3_LOWER_LIMIT}"
-    joint_3_upper_limit="${JOINT_3_UPPER_LIMIT}"
-    joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
-    joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
-    joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
-    joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"
-    use_camera="$(arg use_camera)">
-    <origin xyz="0 0 0"/>
+  <joint name="base_link_to_world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+
+  <xacro:crane_plus parent="base_link">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </xacro:crane_plus>
 
   <xacro:unless value="$(arg use_gazebo)">
-    <xacro:crane_plus_ros2_control_settings 
-      name="crane_plus"
-      name_joint_1="${NAME_JOINT_1}"
-      name_joint_2="${NAME_JOINT_2}"
-      name_joint_3="${NAME_JOINT_3}"
-      name_joint_4="${NAME_JOINT_4}"
-      name_joint_hand="${NAME_JOINT_HAND}"
-      joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
-      joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
-      joint_2_lower_limit="${JOINT_2_LOWER_LIMIT}"
-      joint_2_upper_limit="${JOINT_2_UPPER_LIMIT}"
-      joint_3_lower_limit="${JOINT_3_LOWER_LIMIT}"
-      joint_3_upper_limit="${JOINT_3_UPPER_LIMIT}"
-      joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
-      joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
-      joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
-      joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"
-      port_name="$(arg port_name)"
-      baudrate="$(arg baudrate)"
-      timeout_seconds="$(arg timeout_seconds)"
-      read_velocities="$(arg read_velocities)"
-      read_loads="$(arg read_loads)"
-      read_voltages="$(arg read_voltages)"
-      read_temperatures="$(arg read_temperatures)"
-      use_mock_components="$(arg use_mock_components)" />
+    <xacro:crane_plus_ros2_control_settings />
   </xacro:unless>
 
   <xacro:if value="$(arg use_gazebo)">
-    <xacro:gazebo_robot_settings
-      name_link_base="${NAME_LINK_BASE}"
-      name_link_1="${NAME_LINK_1}"
-      name_link_2="${NAME_LINK_2}"
-      name_link_3="${NAME_LINK_3}"
-      name_link_4="${NAME_LINK_4}"
-      name_link_hand="${NAME_LINK_HAND}"
-      use_camera="$(arg use_camera)"
-      config_package="$(arg gz_control_config_package)" 
-      config_file_path="$(arg gz_control_config_file_path)" />
+    <xacro:gazebo_robot_settings />
+    <xacro:crane_plus_gazebo_ros2_control_settings /> 
+  </xacro:if>
 
-    <xacro:crane_plus_gazebo_ros2_control_settings 
-      name="crane_plus"
-      name_joint_1="${NAME_JOINT_1}"
-      name_joint_2="${NAME_JOINT_2}"
-      name_joint_3="${NAME_JOINT_3}"
-      name_joint_4="${NAME_JOINT_4}"
-      name_joint_hand="${NAME_JOINT_HAND}"
-      joint_1_lower_limit="${JOINT_1_LOWER_LIMIT}"
-      joint_1_upper_limit="${JOINT_1_UPPER_LIMIT}"
-      joint_2_lower_limit="${JOINT_2_LOWER_LIMIT}"
-      joint_2_upper_limit="${JOINT_2_UPPER_LIMIT}"
-      joint_3_lower_limit="${JOINT_3_LOWER_LIMIT}"
-      joint_3_upper_limit="${JOINT_3_UPPER_LIMIT}"
-      joint_4_lower_limit="${JOINT_4_LOWER_LIMIT}"
-      joint_4_upper_limit="${JOINT_4_UPPER_LIMIT}"
-      joint_hand_lower_limit="${JOINT_HAND_LOWER_LIMIT}"
-      joint_hand_upper_limit="${JOINT_HAND_UPPER_LIMIT}"/> 
+  <xacro:if value="$(arg use_camera)">
+    <xacro:include filename="$(find crane_plus_description)/urdf/camera.xacro" />
+    <xacro:include filename="$(find crane_plus_description)/urdf/camera_stand.xacro" />
+    <xacro:sensor_camera parent="${NAME_LINK_BASE}" />
+    <xacro:camera_stand parent="${NAME_LINK_BASE}" />
   </xacro:if>
 
 </robot>
