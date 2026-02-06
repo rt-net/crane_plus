@@ -25,15 +25,21 @@ from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-from moveit_msgs.msg import Constraints, JointConstraint
+from moveit_msgs.msg import (
+    BoundingVolume,
+    Constraints,
+    JointConstraint,
+    OrientationConstraint,
+    PositionConstraint,
+)
 
 import numpy as np
 
 import rclpy
 from rclpy.logging import get_logger
 from rclpy.node import Node
-from rclpy.time import Time
 from scipy.spatial.transform import Rotation
+from shape_msgs.msg import SolidPrimitive
 import tf2_ros
 from tf2_ros import TransformListener, TransformStamped
 from tf2_ros.buffer import Buffer
@@ -119,35 +125,38 @@ class PickAndPlaceTf(Node):
         # target_0のtf位置姿勢を取得
         tf_msg = TransformStamped()
         try:
-            tf_msg = self.tf_buffer.lookup_transform('base_link', 'target_0', Time())
+            tf_msg = self.tf_buffer.lookup_transform(
+                'crane_plus_base', 'target_0', rclpy.time.Time()
+            )
         except tf2_ros.LookupException as ex:
             self.get_logger().info(f'Could not transform base_link to target: {ex}')
 
-        now = Time()
-        FILTERING_TIME = datetime.timedelta(seconds=2)
-        STOP_TIME_THRESHOLD = datetime.timedelta(seconds=3)
+        now_time = self.get_clock().now()
+        FILTERING_TIME = rclpy.duration.Duration(seconds=2)
+        STOP_TIME_THRESHOLD = rclpy.duration.Duration(seconds=3)
         DISTANCE_THRESHOLD = 0.01
 
         # 経過時間と停止時間を計算(nsec)
         # 経過時間
-        TF_ELAPSED_TIME = now.nanoseconds - tf_msg.header.stamp.nanosec
+        tf_time = rclpy.time.Time.from_msg(tf_msg.header.stamp)
+        TF_ELAPSED_TIME = now_time - tf_time
         # 停止時間
-        if self.tf_past is not None:
-            TF_STOP_TIME = now.nanoseconds - self.tf_past.header.stamp.nanosec
-        else:
-            TF_STOP_TIME = now.nanoseconds
+        tf_past_time = rclpy.time.Time.from_msg(self.tf_past.header.stamp)
+        TF_STOP_TIME = now_time - tf_past_time
 
         # 現在時刻から2秒以内に受け取ったtfを使用
-        if TF_ELAPSED_TIME < FILTERING_TIME.total_seconds() * 1e9:
-            tf_diff = np.sqrt(
-                (self.tf_past.transform.translation.x - tf_msg.transform.translation.x) ** 2
-                + (self.tf_past.transform.translation.y - tf_msg.transform.translation.y) ** 2
-                + (self.tf_past.transform.translation.z - tf_msg.transform.translation.z) ** 2
+        if TF_ELAPSED_TIME < FILTERING_TIME:
+            tf_diff = np.linalg.norm(
+                [
+                    self.tf_past.transform.translation.x - tf_msg.transform.translation.x,
+                    self.tf_past.transform.translation.y - tf_msg.transform.translation.y,
+                    self.tf_past.transform.translation.z - tf_msg.transform.translation.z,
+                ]
             )
             # 把持対象の位置が停止していることを判定
             if tf_diff < DISTANCE_THRESHOLD:
                 # 把持対象が3秒以上停止している場合ピッキング動作開始
-                if TF_STOP_TIME > STOP_TIME_THRESHOLD.total_seconds() * 1e9:
+                if TF_STOP_TIME > STOP_TIME_THRESHOLD:
                     self._picking(tf_msg)
             else:
                 self.tf_past = tf_msg
@@ -215,6 +224,11 @@ class PickAndPlaceTf(Node):
 
     # アーム制御
     def _control_arm(self, x, y, z, roll, pitch, yaw):
+        # 位置姿勢の許容誤差
+        POSITION_TOLERANCE = 0.00001
+        ORIENTATION_TOLERANCE = 0.0001
+
+        # 目標位置姿勢
         target_pose = PoseStamped()
         target_pose.header.frame_id = 'crane_plus_base'
         target_pose.pose.position.x = x
@@ -226,14 +240,42 @@ class PickAndPlaceTf(Node):
         target_pose.pose.orientation.y = quat[1]
         target_pose.pose.orientation.z = quat[2]
         target_pose.pose.orientation.w = quat[3]
+
+        # 目標位置姿勢の制約設定
+        goal_constraints = Constraints()
+        goal_constraints.name = 'tolerance_goal'
+
+        # 位置の制約設定
+        position_constraint = PositionConstraint()
+        position_constraint.header.frame_id = 'crane_plus_base'
+        position_constraint.link_name = 'crane_plus_link4'
+        tolerance_region = BoundingVolume()
+        primitive = SolidPrimitive()
+        primitive.type = SolidPrimitive.SPHERE
+        primitive.dimensions = [POSITION_TOLERANCE]
+        tolerance_region.primitives.append(primitive)
+        tolerance_region.primitive_poses.append(target_pose.pose)
+        position_constraint.constraint_region = tolerance_region
+        position_constraint.weight = 1.0
+
+        # 姿勢の制約設定
+        orientation_constraint = OrientationConstraint()
+        orientation_constraint.header.frame_id = 'crane_plus_base'
+        orientation_constraint.link_name = 'crane_plus_link4'
+        orientation_constraint.orientation = target_pose.pose.orientation
+        orientation_constraint.absolute_x_axis_tolerance = ORIENTATION_TOLERANCE
+        orientation_constraint.absolute_y_axis_tolerance = ORIENTATION_TOLERANCE
+        orientation_constraint.absolute_z_axis_tolerance = ORIENTATION_TOLERANCE
+        orientation_constraint.weight = 1.0
+
+        goal_constraints.position_constraints.append(position_constraint)
+        goal_constraints.orientation_constraints.append(orientation_constraint)
+
         self.crane_plus_arm.set_start_state_to_current_state()
-        self.crane_plus_arm.set_goal_state(
-            pose_stamped_msg=target_pose, pose_link='crane_plus_link4'
-        )
+        self.crane_plus_arm.set_goal_state(motion_plan_constraints=[goal_constraints])
         result = plan_and_execute(
             self.crane_plus,
             self.crane_plus_arm,
-            # logger=None,
             self.logger,
             single_plan_parameters=self.arm_plan_request_params,
         )

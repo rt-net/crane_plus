@@ -32,7 +32,7 @@ class ImageSubscriber(Node):
             CameraInfo, 'camera_info', self.camera_info_callback, 10
         )
         self.image_thresholded_publisher = self.create_publisher(Image, 'image_thresholded', 10)
-        self.tf_broadcaster = tf2_ros.TransformBroadcaster()
+        self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
         self.camera_info = None
         self.bridge = CvBridge()
 
@@ -89,7 +89,7 @@ class ImageSubscriber(Node):
                 point = (pixel_x, pixel_y)
 
                 # 補正後の画像座標系における把持対象物の位置を取得（2D）
-                rect_point = camera_model.rectifyImage(point)
+                rect_point = camera_model.rectifyPoint(point)
 
                 # カメラ座標系から見た把持対象物の方向（Ray）を取得する
                 ray = camera_model.projectPixelTo3dRay(rect_point)
@@ -97,9 +97,9 @@ class ImageSubscriber(Node):
                 # カメラの高さを0.44[m]として把持対象物の位置を計算
                 CAMERA_HEIGHT = 0.46
                 object_position = [
-                    ray.x * CAMERA_HEIGHT,
-                    ray.y * CAMERA_HEIGHT,
-                    ray.z * CAMERA_HEIGHT,
+                    ray[0] * CAMERA_HEIGHT,
+                    ray[1] * CAMERA_HEIGHT,
+                    ray[2] * CAMERA_HEIGHT,
                 ]
 
                 # 把持対象物の位置をTFに配信
