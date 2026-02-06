@@ -49,7 +49,7 @@ def set_goal_constraints(x, y, z, roll, pitch, yaw):
 
     # 目標位置姿勢の制約設定
     goal_constraints = Constraints()
-    goal_constraints.name = "tolerance_goal"
+    goal_constraints.name = 'tolerance_goal'
 
     # 位置の制約設定
     position_constraint = PositionConstraint()
@@ -106,17 +106,16 @@ def main(args=None):
     )
 
     # 動作速度の調整
-    arm_plan_request_params.max_acceleration_scaling_factor = 1.0    # Set 0.0 ~ 1.0
-    arm_plan_request_params.max_velocity_scaling_factor = 1.0    # Set 0.0 ~ 1.0
+    arm_plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+    arm_plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
-    gripper_plan_request_params.max_acceleration_scaling_factor = 1.0    # Set 0.0 ~ 1.0
-    gripper_plan_request_params.max_velocity_scaling_factor = 1.0    # Set 0.0 ~ 1.0
+    gripper_plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+    gripper_plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
     # グリッパの開閉角
     GRIPPER_DEFAULT = 0.0
     GRIPPER_OPEN = math.radians(-30.0)
     GRIPPER_CLOSE = math.radians(10.0)
-
 
     # 物体を置く位置
 
