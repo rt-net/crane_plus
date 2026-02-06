@@ -21,7 +21,7 @@ from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
-from moveit_msgs.msg import Constraints, PositionConstraint, OrientationConstraint, BoundingVolume
+from moveit_msgs.msg import BoundingVolume, Constraints, OrientationConstraint, PositionConstraint
 import rclpy
 from rclpy.logging import get_logger
 from scipy.spatial.transform import Rotation
