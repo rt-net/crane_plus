@@ -36,7 +36,7 @@ def main(args=None):
     logger.info('MoveItPy instance created')
 
     # アーム制御用 planning component
-    arm = crane_plus.get_planning_component('arm')
+    arm = crane_plus.get_planning_component('arm_tcp')
 
     # instantiate a RobotState instance using the current robot model
     robot_model = crane_plus.get_robot_model()
@@ -67,7 +67,7 @@ def main(args=None):
         robot_state.joint_positions = joint_values
         joint_constraint = construct_joint_constraint(
             robot_state=robot_state,
-            joint_model_group=crane_plus.get_robot_model().get_joint_model_group('arm'),
+            joint_model_group=crane_plus.get_robot_model().get_joint_model_group('arm_tcp'),
         )
 
         arm.set_goal_state(motion_plan_constraints=[joint_constraint])

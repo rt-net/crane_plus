@@ -32,7 +32,7 @@ def main(args=None):
     logger.info('MoveItPy instance created')
 
     # アーム制御用 planning component
-    arm = crane_plus.get_planning_component('arm')
+    arm = crane_plus.get_planning_component('arm_tcp')
 
     plan_request_params = PlanRequestParameters(
         crane_plus,
