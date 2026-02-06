@@ -17,6 +17,8 @@ import math
 from crane_plus_examples_py.utils import plan_and_execute
 from geometry_msgs.msg import Point, Pose, PoseStamped, Quaternion
 from moveit.core.robot_state import RobotState
+from moveit_msgs.msg import Constraints, PositionConstraint, OrientationConstraint, BoundingVolume
+from shape_msgs.msg import SolidPrimitive
 from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
@@ -25,6 +27,58 @@ from moveit.planning import (
 import rclpy
 from rclpy.logging import get_logger
 from scipy.spatial.transform import Rotation
+
+
+def set_goal_constraints(x, y, z, roll, pitch, yaw):
+    # 位置姿勢の許容誤差
+    POSITION_TOLERANCE = 0.00001
+    ORIENTATION_TOLERANCE = 0.0001
+
+    # 目標位置姿勢
+    target_pose = PoseStamped()
+    target_pose.header.frame_id = 'crane_plus_base'
+    target_pose.pose.position.x = x
+    target_pose.pose.position.y = y
+    target_pose.pose.position.z = z
+    rotation = Rotation.from_euler('xyz', [roll, pitch, yaw], degrees=True)
+    quat = rotation.as_quat()
+    target_pose.pose.orientation.x = quat[0]
+    target_pose.pose.orientation.y = quat[1]
+    target_pose.pose.orientation.z = quat[2]
+    target_pose.pose.orientation.w = quat[3]
+
+    # 目標位置姿勢の制約設定
+    goal_constraints = Constraints()
+    goal_constraints.name = "tolerance_goal"
+
+    # 位置の制約設定
+    position_constraint = PositionConstraint()
+    position_constraint.header.frame_id = 'crane_plus_base'
+    position_constraint.link_name = 'crane_plus_link4'
+    tolerance_region = BoundingVolume()
+    primitive = SolidPrimitive()
+    primitive.type = SolidPrimitive.SPHERE
+    primitive.dimensions = [POSITION_TOLERANCE]
+    tolerance_region.primitives.append(primitive)
+    tolerance_region.primitive_poses.append(target_pose.pose)
+    position_constraint.constraint_region = tolerance_region
+    position_constraint.weight = 1.0
+
+    # 姿勢の制約設定
+    orientation_constraint = OrientationConstraint()
+    orientation_constraint.header.frame_id = 'crane_plus_base'
+    orientation_constraint.link_name = 'crane_plus_link4'
+    orientation_constraint.orientation = target_pose.pose.orientation
+    orientation_constraint.absolute_x_axis_tolerance = ORIENTATION_TOLERANCE
+    orientation_constraint.absolute_y_axis_tolerance = ORIENTATION_TOLERANCE
+    orientation_constraint.absolute_z_axis_tolerance = ORIENTATION_TOLERANCE
+    orientation_constraint.weight = 1.0
+
+    goal_constraints.position_constraints.append(position_constraint)
+    goal_constraints.orientation_constraints.append(orientation_constraint)
+
+    # 制約設定を返す
+    return goal_constraints
 
 
 def main(args=None):
@@ -63,22 +117,8 @@ def main(args=None):
     GRIPPER_OPEN = math.radians(-30.0)
     GRIPPER_CLOSE = math.radians(10.0)
 
-    # 物体を掴む位置
-    rightward = Rotation.from_euler('xyz', [0.0, 90.0, -90.0], degrees=True)
-    quat = rightward.as_quat()
-    PRE_GRASP_POSE = Pose(position=Point(x=0.0, y=-0.09, z=0.17),
-                          orientation=Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3]))
-
-    downward = Rotation.from_euler('xyz', [0.0, 180.0, -90.0], degrees=True)
-    quat = downward.as_quat()
-    GRASP_POSE = Pose(position=Point(x=0.0, y=-0.09, z=0.14),
-                      orientation=Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3]))
 
     # 物体を置く位置
-    forward = Rotation.from_euler('xyz', [0.0, 90.0, 0.0], degrees=True)
-    quat = forward.as_quat()
-    RELEASE_POSE = Pose(position=Point(x=0.15, y=0.0, z=0.06),
-                        orientation=Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3]))
 
     # SRDF内に定義されている'vertical'の姿勢にする
     arm.set_start_state_to_current_state()
@@ -126,10 +166,8 @@ def main(args=None):
 
     # 物体の上に腕を伸ばす
     arm.set_start_state_to_current_state()
-    goal_pose = PoseStamped()
-    goal_pose.header.frame_id = 'crane_plus_base'
-    goal_pose.pose = PRE_GRASP_POSE
-    arm.set_goal_state(pose_stamped_msg=goal_pose, pose_link='crane_plus_link4')
+    goal_constraints = set_goal_constraints(0.0, -0.09, 0.17, 0.0, 90.0, -90.0)
+    arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
         arm,
@@ -139,10 +177,8 @@ def main(args=None):
 
     # 掴みに行く
     arm.set_start_state_to_current_state()
-    goal_pose = PoseStamped()
-    goal_pose.header.frame_id = 'crane_plus_base'
-    goal_pose.pose = GRASP_POSE
-    arm.set_goal_state(pose_stamped_msg=goal_pose, pose_link='crane_plus_link4')
+    goal_constraints = set_goal_constraints(0.0, -0.09, 0.14, 0.0, 180.0, -90.0)
+    arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
         arm,
@@ -164,10 +200,8 @@ def main(args=None):
 
     # 持ち上げる
     arm.set_start_state_to_current_state()
-    goal_pose = PoseStamped()
-    goal_pose.header.frame_id = 'crane_plus_base'
-    goal_pose.pose = PRE_GRASP_POSE
-    arm.set_goal_state(pose_stamped_msg=goal_pose, pose_link='crane_plus_link4')
+    goal_constraints = set_goal_constraints(0.0, -0.09, 0.17, 0.0, 90.0, -90.0)
+    arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
         arm,
@@ -187,10 +221,8 @@ def main(args=None):
 
     # 下ろす
     arm.set_start_state_to_current_state()
-    goal_pose = PoseStamped()
-    goal_pose.header.frame_id = 'crane_plus_base'
-    goal_pose.pose = RELEASE_POSE
-    arm.set_goal_state(pose_stamped_msg=goal_pose, pose_link='crane_plus_link4')
+    goal_constraints = set_goal_constraints(0.15, 0.0, 0.06, 0.0, 90.0, 0.0)
+    arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
         arm,
