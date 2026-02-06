@@ -27,7 +27,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'aruco_detection = crane_plus_examples_py.aruco_detectio:main',
+            'aruco_detection = crane_plus_examples_py.aruco_detection:main',
             'color_detection = crane_plus_examples_py.color_detection:main',
             'gripper_control = crane_plus_examples_py.gripper_control:main',
             'joint_values = crane_plus_examples_py.joint_values:main',
