@@ -2,59 +2,23 @@
 
 このパッケージはCRANE+ V2 ROS 2パッケージのPythonによるサンプルコード集です。
 
-## 準備（実機を使う場合）
+- [crane\_plus\_examples\_py](#crane_plus_examples_py)
+  - [起動方法](#起動方法)
+  - [サンプルプログラムを実行する](#サンプルプログラムを実行する)
+    - [Gazeboでサンプルプログラムを実行する場合](#Gazeboでサンプルプログラムを実行する場合)
+  - [Examples](#examples)
+    - [gripper\_control](#gripper_control)
+    - [pose\_groupstate](#pose_groupstate)
+    - [joint\_values](#joint_values)
+    - [pick\_and\_place](#pick_and_place)
+  - [Camera Examples](#camera-examples)
+    - [aruco\_detection](#aruco_detection)
+    - [color\_detection](#color_detection)
 
-![crane_plus](https://rt-net.github.io/images/crane-plus/CRANEV2-500x500.png)
+## 起動方法
+CRANE+ V2の起動方法は[crane_plus_examplesのREADME](../crane_plus_examples/README.md)を参照してください。
 
-### 1. CRANE+ V2本体をPCに接続する
-
-CRANE+ V2本体をPCに接続します。
-接続方法は製品マニュアルを参照してください。
-
-**※CRANE+ V2本体が接触しないように、十分なスペースを確保してください。**
-
-### 2. USB通信ポートの接続を確認する
-
-USB通信ポートの設定については`crane_plus_control`の
-[README](../crane_plus_control/README.md)
-を参照してください。
-
-**正しく設定できていない場合、CRANE+ V2が動作しない、振動する、などの不安定な動きになるので注意してください**
-
-### 3. move_groupとcontrollerを起動する
-
-#### 標準のCRANE+ V2を使用する場合
-
-次のコマンドでmove_group (`crane_plus_moveit_config`)と
-controller (`crane_plus_control`)を起動します。
-
-```sh
-$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
-```
-
-#### Webカメラ搭載モデルを使用する場合
-
-Webカメラ搭載モデルの場合は、次のコマンドを実行してください。
-```video_device```は使用するWebカメラを指定してください。
-
-```sh
-$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0 use_camera:=true video_device:=/dev/video0
-```
-
-## 準備（Gazeboを使う場合）
-=======
-![crane_plus_ignition](https://rt-net.github.io/images/crane-plus/crane_plus_ignition.png)
-
-### 1. move_groupとGazeboを起動する
-
-次のコマンドでmove_group (`crane_plus_moveit_config`)とGazeboを起動します。
-
-```sh
-$ ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py
-```
-
-## Pythonのサンプルプログラムを実行する
-
+## サンプルプログラムを実行する
 準備ができたらPythonによるサンプルプログラムを実行します。
 例えばグリッパを開閉するサンプルは次のコマンドで実行できます。
 
