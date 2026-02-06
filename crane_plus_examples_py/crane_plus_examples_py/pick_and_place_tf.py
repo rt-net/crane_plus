@@ -119,9 +119,12 @@ class PickAndPlaceTf(Node):
         # target_0のtf位置姿勢を取得
         tf_msg = TransformStamped()
         try:
-            tf_msg = self.tf_buffer.lookup_transform('base_link', 'target_0', Time())
+            tf_msg = self.tf_buffer.lookup_transform(
+                'base_link', 'target_0', Time())
         except tf2_ros.LookupException as ex:
-            self.get_logger().info(f'Could not transform base_link to target: {ex}')
+            self.get_logger().info(
+                f'Could not transform base_link to target: {ex}'
+                )
 
         now = Time()
         FILTERING_TIME = datetime.timedelta(seconds=2)
@@ -139,11 +142,13 @@ class PickAndPlaceTf(Node):
 
         # 現在時刻から2秒以内に受け取ったtfを使用
         if TF_ELAPSED_TIME < FILTERING_TIME.total_seconds() * 1e9:
-            tf_diff = np.sqrt(
-                (self.tf_past.transform.translation.x - tf_msg.transform.translation.x) ** 2
-                + (self.tf_past.transform.translation.y - tf_msg.transform.translation.y) ** 2
-                + (self.tf_past.transform.translation.z - tf_msg.transform.translation.z) ** 2
-            )
+            tf_diff = np.sqrt((self.tf_past.transform.translation.x
+                               - tf_msg.transform.translation.x) ** 2
+                              + (self.tf_past.transform.translation.y
+                              - tf_msg.transform.translation.y) ** 2
+                              + (self.tf_past.transform.translation.z
+                              - tf_msg.transform.translation.z) ** 2
+                              )
             # 把持対象の位置が停止していることを判定
             if tf_diff < DISTANCE_THRESHOLD:
                 # 把持対象が3秒以上停止している場合ピッキング動作開始
@@ -173,9 +178,8 @@ class PickAndPlaceTf(Node):
         GRIPPER_OFFSET = 0.13
         gripper_offset_x = GRIPPER_OFFSET * math.cos(theta_rad)
         gripper_offset_y = GRIPPER_OFFSET * math.sin(theta_rad)
-        if not self._control_arm(
-            x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg
-        ):
+        if not self._control_arm(x - gripper_offset_x, y - gripper_offset_y,
+                                 0.05, 0, 90, theta_deg):
             # アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
             self._control_arm(0.0, 0.0, 0.17, 0, 0, 0)
             return

@@ -18,11 +18,13 @@ from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import Command
 
 
-class RobotDescriptionLoader:
+class RobotDescriptionLoader():
+
     def __init__(self):
         self.robot_description_path = os.path.join(
-            get_package_share_directory('crane_plus_description'), 'urdf', 'crane_plus.urdf.xacro'
-        )
+            get_package_share_directory('crane_plus_description'),
+            'urdf',
+            'crane_plus.urdf.xacro')
         self.port_name = '/dev/ttyUSB0'
         self.use_gazebo = 'false'
         self.use_camera = 'false'
@@ -31,21 +33,13 @@ class RobotDescriptionLoader:
         self.gz_control_config_file_path = ''
 
     def load(self):
-        return Command(
-            [
+        return Command([
                 'xacro ',
                 self.robot_description_path,
-                ' port_name:=',
-                self.port_name,
-                ' use_gazebo:=',
-                self.use_gazebo,
-                ' use_camera:=',
-                self.use_camera,
-                ' use_mock_components:=',
-                self.use_mock_components,
-                ' gz_control_config_package:=',
-                self.gz_control_config_package,
-                ' gz_control_config_file_path:=',
-                self.gz_control_config_file_path,
-            ]
-        )
+                ' port_name:=', self.port_name,
+                ' use_gazebo:=', self.use_gazebo,
+                ' use_camera:=', self.use_camera,
+                ' use_mock_components:=', self.use_mock_components,
+                ' gz_control_config_package:=', self.gz_control_config_package,
+                ' gz_control_config_file_path:=', self.gz_control_config_file_path
+                ])

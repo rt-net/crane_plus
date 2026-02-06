@@ -29,12 +29,12 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "moveit/move_group_interface/move_group_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/convert.hpp"
 #include "tf2/exceptions.hpp"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
-#include "tf2_ros/buffer.h"
 #include "tf2_ros/transform_listener.h"
+#include "tf2_ros/buffer.h"
+#include "std_msgs/msg/string.hpp"
 using namespace std::chrono_literals;
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
@@ -42,7 +42,8 @@ class PickAndPlaceTf : public rclcpp::Node
 {
 public:
   PickAndPlaceTf(
-    rclcpp::Node::SharedPtr move_group_arm_node, rclcpp::Node::SharedPtr move_group_gripper_node)
+    rclcpp::Node::SharedPtr move_group_arm_node,
+    rclcpp::Node::SharedPtr move_group_gripper_node)
   : Node("pick_and_place_tf_node")
   {
     using namespace std::placeholders;
@@ -86,10 +87,13 @@ public:
     // 待機姿勢
     control_arm(0.0, 0.0, 0.3, 0, 0, 0);
 
-    tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
-    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+    tf_buffer_ =
+      std::make_unique<tf2_ros::Buffer>(this->get_clock());
+    tf_listener_ =
+      std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
-    timer_ = this->create_wall_timer(500ms, std::bind(&PickAndPlaceTf::on_timer, this));
+    timer_ = this->create_wall_timer(
+      500ms, std::bind(&PickAndPlaceTf::on_timer, this));
   }
 
 private:
@@ -99,9 +103,13 @@ private:
     geometry_msgs::msg::TransformStamped tf_msg;
 
     try {
-      tf_msg = tf_buffer_->lookupTransform("base_link", "target_0", tf2::TimePointZero);
+      tf_msg = tf_buffer_->lookupTransform(
+        "base_link", "target_0",
+        tf2::TimePointZero);
     } catch (const tf2::TransformException & ex) {
-      RCLCPP_INFO(this->get_logger(), "Could not transform base_link to target: %s", ex.what());
+      RCLCPP_INFO(
+        this->get_logger(), "Could not transform base_link to target: %s",
+        ex.what());
       return;
     }
 
@@ -190,8 +198,8 @@ private:
 
   // アーム制御
   bool control_arm(
-    const double x, const double y, const double z, const double roll, const double pitch,
-    const double yaw)
+    const double x, const double y, const double z,
+    const double roll, const double pitch, const double yaw)
   {
     geometry_msgs::msg::Pose target_pose;
     tf2::Quaternion q;
@@ -223,8 +231,9 @@ int main(int argc, char ** argv)
   auto move_group_gripper_node = rclcpp::Node::make_shared("move_group_gripper_node", node_options);
 
   rclcpp::executors::MultiThreadedExecutor exec;
-  auto pick_and_place_tf_node =
-    std::make_shared<PickAndPlaceTf>(move_group_arm_node, move_group_gripper_node);
+  auto pick_and_place_tf_node = std::make_shared<PickAndPlaceTf>(
+    move_group_arm_node,
+    move_group_gripper_node);
   exec.add_node(pick_and_place_tf_node);
   exec.add_node(move_group_arm_node);
   exec.add_node(move_group_gripper_node);

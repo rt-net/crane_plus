@@ -31,7 +31,9 @@ class ImageSubscriber(Node):
         self.camera_info_subscription = self.create_subscription(
             CameraInfo, 'camera_info', self.camera_info_callback, 10
         )
-        self.image_thresholded_publisher = self.create_publisher(Image, 'image_thresholded', 10)
+        self.image_thresholded_publisher = self.create_publisher(
+            Image, 'image_thresholded',  10
+        )
         self.tf_broadcaster = tf2_ros.TransformBroadcaster()
         self.camera_info = None
         self.bridge = CvBridge()
@@ -56,18 +58,26 @@ class ImageSubscriber(Node):
             cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2HSV)
 
             # 画像の二値化
-            img_mask_1 = cv2.inRange(cv_img, (LOW_H_1, LOW_S, LOW_V), (HIGH_H_1, HIGH_S, HIGH_V))
-            img_mask_2 = cv2.inRange(cv_img, (LOW_H_2, LOW_S, LOW_V), (HIGH_H_2, HIGH_S, HIGH_V))
+            img_mask_1 = cv2.inRange(
+                cv_img, (LOW_H_1, LOW_S, LOW_V), (HIGH_H_1, HIGH_S, HIGH_V)
+            )
+            img_mask_2 = cv2.inRange(
+                cv_img, (LOW_H_2, LOW_S, LOW_V), (HIGH_H_2, HIGH_S, HIGH_V)
+            )
 
             # マスク画像の合成
             img_thresholded = cv2.bitwise_or(img_mask_1, img_mask_2)
 
             # ノイズ除去の処理
             kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-            img_thresholded = cv2.morphologyEx(img_thresholded, cv2.MORPH_OPEN, kernel)
+            img_thresholded = cv2.morphologyEx(
+                img_thresholded, cv2.MORPH_OPEN, kernel
+            )
 
             # 穴埋めの処理
-            img_thresholded = cv2.morphologyEx(img_thresholded, cv2.MORPH_CLOSE, kernel)
+            img_thresholded = cv2.morphologyEx(
+                img_thresholded, cv2.MORPH_CLOSE, kernel
+            )
 
             # 画像の検出領域におけるモーメントを計算
             moment = cv2.moments(img_thresholded)
@@ -96,11 +106,9 @@ class ImageSubscriber(Node):
 
                 # カメラの高さを0.44[m]として把持対象物の位置を計算
                 CAMERA_HEIGHT = 0.46
-                object_position = [
-                    ray.x * CAMERA_HEIGHT,
-                    ray.y * CAMERA_HEIGHT,
-                    ray.z * CAMERA_HEIGHT,
-                ]
+                object_position = [ray.x * CAMERA_HEIGHT,
+                                   ray.y * CAMERA_HEIGHT,
+                                   ray.z * CAMERA_HEIGHT]
 
                 # 把持対象物の位置をTFに配信
                 t = TransformStamped()
@@ -112,7 +120,9 @@ class ImageSubscriber(Node):
                 self.tf_broadcaster.sendTransform(t)
 
             # 閾値による二値化画像を配信
-            img_thresholded_msg = self.bridge.cv2_to_imgmsg(img_thresholded, encoding='mono8')
+            img_thresholded_msg = self.bridge.cv2_to_imgmsg(
+                img_thresholded, encoding='mono8'
+            )
             self.image_thresholded_publisher.publish(img_thresholded_msg)
 
     def camera_info_callback(self, msg):

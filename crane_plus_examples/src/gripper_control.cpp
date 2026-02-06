@@ -25,7 +25,10 @@ using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
 static const rclcpp::Logger LOGGER = rclcpp::get_logger("gripper_control");
 
-double to_radians(const double deg_angle) { return deg_angle * M_PI / 180.0; }
+double to_radians(const double deg_angle)
+{
+  return deg_angle * M_PI / 180.0;
+}
 
 int main(int argc, char ** argv)
 {
@@ -36,10 +39,10 @@ int main(int argc, char ** argv)
   // For current state monitor
   rclcpp::executors::SingleThreadedExecutor executor;
   executor.add_node(move_group_gripper_node);
-  std::thread([&executor]() { executor.spin(); }).detach();
+  std::thread([&executor]() {executor.spin();}).detach();
 
   MoveGroupInterface move_group_gripper(move_group_gripper_node, "gripper");
-  move_group_gripper.setMaxVelocityScalingFactor(1.0);      // Set 0.0 ~ 1.0
+  move_group_gripper.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
   move_group_gripper.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
 
   auto gripper_joint_values = move_group_gripper.getCurrentJointValues();

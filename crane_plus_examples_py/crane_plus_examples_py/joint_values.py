@@ -52,12 +52,8 @@ def main(args=None):
     plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
     # armの関節のjoint1〜4を順番に45[deg]ずつ動かす
-    joint_names = [
-        'crane_plus_joint1',
-        'crane_plus_joint2',
-        'crane_plus_joint3',
-        'crane_plus_joint4',
-    ]
+    joint_names = ['crane_plus_joint1', 'crane_plus_joint2',
+                   'crane_plus_joint3', 'crane_plus_joint4']
     target_joint_value = math.radians(45)
 
     for joint_name in joint_names:
@@ -70,13 +66,25 @@ def main(args=None):
             joint_model_group=crane_plus.get_robot_model().get_joint_model_group('arm'),
         )
 
-        arm.set_goal_state(motion_plan_constraints=[joint_constraint])
-        plan_and_execute(crane_plus, arm, logger, single_plan_parameters=plan_request_params)
+        arm.set_goal_state(
+            motion_plan_constraints=[joint_constraint]
+        )
+        plan_and_execute(
+            crane_plus,
+            arm,
+            logger,
+            single_plan_parameters=plan_request_params
+        )
 
     # SRDF内に定義されている'vertical'の姿勢にする
     arm.set_start_state_to_current_state()
     arm.set_goal_state(configuration_name='vertical')
-    plan_and_execute(crane_plus, arm, logger, single_plan_parameters=plan_request_params)
+    plan_and_execute(
+        crane_plus,
+        arm,
+        logger,
+        single_plan_parameters=plan_request_params
+    )
 
     # Finish with error. Related Issue
     # https://github.com/moveit/moveit2/issues/2693

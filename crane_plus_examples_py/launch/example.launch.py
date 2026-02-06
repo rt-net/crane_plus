@@ -13,7 +13,8 @@
 # limitations under the License.
 
 from ament_index_python.packages import get_package_share_directory
-from crane_plus_description.robot_description_loader import RobotDescriptionLoader
+from crane_plus_description.robot_description_loader \
+    import RobotDescriptionLoader
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -53,7 +54,7 @@ def generate_launch_description():
         default_value='gripper_control',
         description='Set an example executable name: \
                     [gripper_control, pose_groupstate, \
-                    joint_values, pick_and_place]',
+                    joint_values, pick_and_place]'
     )
 
     declare_use_sim_time = DeclareLaunchArgument(
@@ -75,6 +76,9 @@ def generate_launch_description():
         parameters=[config_dict],
     )
 
-    return LaunchDescription(
-        [declare_loaded_description, declare_example_name, declare_use_sim_time, example_node]
-    )
+    return LaunchDescription([
+        declare_loaded_description,
+        declare_example_name,
+        declare_use_sim_time,
+        example_node
+    ])
