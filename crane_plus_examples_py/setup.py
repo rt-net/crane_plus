@@ -7,7 +7,7 @@ package_name = 'crane_plus_examples_py'
 
 setup(
     name=package_name,
-    version='0.1.0',
+    version='3.0.0',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -20,10 +20,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='user',
-    maintainer_email='user@todo.todo',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer='RT Corporation',
+    maintainer_email='shop@rt-net.jp',
+    description='python examples of CRANE+ V2 ROS package',
+    license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
