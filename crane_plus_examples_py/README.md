@@ -23,7 +23,7 @@ CRANE+ V2の起動方法は[crane_plus_examplesのREADME](../crane_plus_examples
 例えばグリッパを開閉するサンプルは次のコマンドで実行できます。
 
 ```sh
-$ ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control'
+ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control'
 ```
 
 終了するときは`Ctrl+c`を入力します。
@@ -33,7 +33,7 @@ $ ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control
 Gazeboでサンプルプログラムを実行する場合は`use_sim_time`オプションを付けます。
 
 ```sh
-$ ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control' use_sim_time:=true
+ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control' use_sim_time:=true
 ```
 
 ## Examples
@@ -65,7 +65,7 @@ Arguments (pass arguments as '<name>:=<value>'):
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control'
+ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/gripper_control.gif width=500px />
@@ -84,7 +84,7 @@ SRDFファイル[crane_plus_moveit_config/config/crane_plus.srdf](../crane_plus_
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples_py example.launch.py example:='pose_groupstate'
+ros2 launch crane_plus_examples_py example.launch.py example:='pose_groupstate'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/pose_groupstate.gif width=500px />
@@ -100,7 +100,7 @@ $ ros2 launch crane_plus_examples_py example.launch.py example:='pose_groupstate
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples_py example.launch.py example:='joint_values'
+ros2 launch crane_plus_examples_py example.launch.py example:='joint_values'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/joint_values.gif width=500px />
@@ -116,7 +116,7 @@ $ ros2 launch crane_plus_examples_py example.launch.py example:='joint_values'
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples_py example.launch.py example:='pick_and_place'
+ros2 launch crane_plus_examples_py example.launch.py example:='pick_and_place'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/pick_and_place.gif width=500px />
