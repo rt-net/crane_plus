@@ -50,7 +50,7 @@ class PickAndPlaceTf(Node):
         self.logger = get_logger('pick_and_place_tf')
         self.tf_past = TransformStamped()
         self.crane_plus = crane_plus
-        self.crane_plus_arm = crane_plus.get_planning_component('arm')
+        self.crane_plus_arm = crane_plus.get_planning_component('arm_tcp')
         self.crane_plus_gripper = crane_plus.get_planning_component('gripper')
         # instantiate a RobotState instance using the current robot model
         self.robot_model = crane_plus.get_robot_model()
@@ -111,7 +111,7 @@ class PickAndPlaceTf(Node):
         self.crane_plus_arm.set_path_constraints(constraints)
 
         # 待機姿勢
-        self._control_arm(0.0, 0.0, 0.17, 0, 0, 0)
+        self._control_arm(0.0, 0.0, 0.3, 0, 0, 0)
 
         # tf
         self.tf_buffer = Buffer()
@@ -175,36 +175,34 @@ class PickAndPlaceTf(Node):
         theta_deg = math.degrees(theta_rad)
 
         # 把持対象物に正対する
-        self._control_arm(0.0, 0.0, 0.17, 0, 90, theta_deg)
+        self._control_arm(0.0, 0.0, 0.3, 0, 0, theta_deg)
 
         # 掴みに行く
-        GRIPPER_OFFSET = 0.13
-        gripper_offset_x = GRIPPER_OFFSET * math.cos(theta_rad)
-        gripper_offset_y = GRIPPER_OFFSET * math.sin(theta_rad)
-        if not self._control_arm(
-            x - gripper_offset_x, y - gripper_offset_y, 0.05, 0, 90, theta_deg
-        ):
+        if not self._control_arm(x, y, 0.04, 0, 90, theta_deg):
             # アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
-            self._control_arm(0.0, 0.0, 0.17, 0, 0, 0)
+            self._control_arm(0.0, 0.0, 0.3, 0, 0, 0)
             return
 
         # ハンドを閉じる
         self._control_gripper(GRIPPER_CLOSE)
 
         # 移動する
-        self._control_arm(0.0, 0.0, 0.17, 0, 90, 0)
+        self._control_arm(0.12, 0.0, 0.17, 0, 90, 0)
+
+        # 横へ移動する
+        self._control_arm(0.0, -0.12, 0.17, 0, 90, -90)
 
         # 下ろす
-        self._control_arm(0.0, -0.15, 0.06, 0, 90, -90)
+        self._control_arm(0.0, -0.25, 0.05, 0, 90, -90)
 
         # ハンドを開く
         self._control_gripper(GRIPPER_OPEN)
 
         # 少しだけハンドを持ち上げる
-        self._control_arm(0.0, -0.15, 0.10, 0, 90, -90)
+        self._control_arm(0.0, -0.25, 0.10, 0, 90, -90)
 
         # 待機姿勢に戻る
-        self._control_arm(0.0, 0.0, 0.17, 0, 0, 0)
+        self._control_arm(0.0, 0.0, 0.3, 0, 0, 0)
 
         # ハンドを閉じる
         self._control_gripper(GRIPPER_DEFAULT)
@@ -247,7 +245,7 @@ class PickAndPlaceTf(Node):
         # 位置の制約設定
         position_constraint = PositionConstraint()
         position_constraint.header.frame_id = 'crane_plus_base'
-        position_constraint.link_name = 'crane_plus_link4'
+        position_constraint.link_name = 'crane_plus_link_tcp'
         tolerance_region = BoundingVolume()
         primitive = SolidPrimitive()
         primitive.type = SolidPrimitive.SPHERE
@@ -260,7 +258,7 @@ class PickAndPlaceTf(Node):
         # 姿勢の制約設定
         orientation_constraint = OrientationConstraint()
         orientation_constraint.header.frame_id = 'crane_plus_base'
-        orientation_constraint.link_name = 'crane_plus_link4'
+        orientation_constraint.link_name = 'crane_plus_link_tcp'
         orientation_constraint.orientation = target_pose.pose.orientation
         orientation_constraint.absolute_x_axis_tolerance = ORIENTATION_TOLERANCE
         orientation_constraint.absolute_y_axis_tolerance = ORIENTATION_TOLERANCE

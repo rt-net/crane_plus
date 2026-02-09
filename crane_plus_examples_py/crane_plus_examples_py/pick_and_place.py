@@ -53,7 +53,7 @@ def set_goal_constraints(x, y, z, roll, pitch, yaw):
     # 位置の制約設定
     position_constraint = PositionConstraint()
     position_constraint.header.frame_id = 'crane_plus_base'
-    position_constraint.link_name = 'crane_plus_link4'
+    position_constraint.link_name = 'crane_plus_link_tcp'
     tolerance_region = BoundingVolume()
     primitive = SolidPrimitive()
     primitive.type = SolidPrimitive.SPHERE
@@ -66,7 +66,7 @@ def set_goal_constraints(x, y, z, roll, pitch, yaw):
     # 姿勢の制約設定
     orientation_constraint = OrientationConstraint()
     orientation_constraint.header.frame_id = 'crane_plus_base'
-    orientation_constraint.link_name = 'crane_plus_link4'
+    orientation_constraint.link_name = 'crane_plus_link_tcp'
     orientation_constraint.orientation = target_pose.pose.orientation
     orientation_constraint.absolute_x_axis_tolerance = ORIENTATION_TOLERANCE
     orientation_constraint.absolute_y_axis_tolerance = ORIENTATION_TOLERANCE
@@ -89,7 +89,7 @@ def main(args=None):
     logger.info('MoveItPy instance created')
 
     # アーム制御用 planning component
-    arm = crane_plus.get_planning_component('arm')
+    arm = crane_plus.get_planning_component('arm_tcp')
     # グリッパ制御用 planning component
     gripper = crane_plus.get_planning_component('gripper')
 
@@ -164,7 +164,16 @@ def main(args=None):
 
     # 物体の上に腕を伸ばす
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.0, -0.09, 0.17, 0.0, 90.0, -90.0)
+    goal_constraints = set_goal_constraints(0.0, -0.21, 0.17, 0.0, 90.0, -90.0)
+    arm.set_goal_state(motion_plan_constraints=[goal_constraints])
+    plan_and_execute(
+        crane_plus,
+        arm,
+        logger,
+        single_plan_parameters=arm_plan_request_params,
+    )
+    arm.set_start_state_to_current_state()
+    goal_constraints = set_goal_constraints(0.0, -0.1, 0.05, 0.0, 180.0, -90.0)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
@@ -175,7 +184,7 @@ def main(args=None):
 
     # 掴みに行く
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.0, -0.09, 0.14, 0.0, 180.0, -90.0)
+    goal_constraints = set_goal_constraints(0.0, -0.1, 0.02, 0.0, 180.0, -90.0)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
@@ -198,7 +207,7 @@ def main(args=None):
 
     # 持ち上げる
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.0, -0.09, 0.17, 0.0, 90.0, -90.0)
+    goal_constraints = set_goal_constraints(0.0, -0.1, 0.05, 0.0, 180.0, -90.0)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
@@ -219,7 +228,7 @@ def main(args=None):
 
     # 下ろす
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.15, 0.0, 0.06, 0.0, 90.0, 0.0)
+    goal_constraints = set_goal_constraints(0.25, 0.0, 0.06, 0.0, 90.0, 0.0)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
