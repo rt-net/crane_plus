@@ -256,7 +256,7 @@ Webカメラ搭載モデルのカメラを使用したサンプルコードで�
 - マーカ検出には[OpenCV](https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html)を使用しています。
 
 <a href="https://youtu.be/m9dus6LCocc" target="_blank" rel="noopener noreferrer">
-  <img src="https://rt-net.github.io/images/crane-plus/aruco_detection.gif" alt="aruco_detection" width="650">
+  <img src="https://rt-net.github.io/images/crane-plus/aruco_detection.gif" alt="aruco_detection" width="450">
 </a>
 
 次のコマンドを実行します。
