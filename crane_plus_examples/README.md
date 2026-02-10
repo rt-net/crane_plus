@@ -117,7 +117,7 @@ ros2 launch crane_plus_examples demo.launch.py use_mock_components:=true
 > [!NOTE]
 > Mock Componentsではカメラを使ったサンプルを実行することはできません。
 
-## How to Run
+## How to Run Examples
 
 準備ができたらサンプルプログラムを実行します。
 例えばグリッパを開閉するサンプルは次のコマンドで実行できます。
