@@ -10,7 +10,7 @@
     - [Using CRANE+ V2](#using-crane-v2)
     - [Using Gazebo](#using-gazebo)
     - [Using Mock Components](#using-mock-components)
-  - [How to Run](#how-to-run)
+  - [How to Run Examples](#how-to-run-examples)
   - [Examples](#examples)
     - [gripper\_control](#gripper_control)
     - [pose\_groupstate](#pose_groupstate)
