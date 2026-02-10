@@ -106,6 +106,8 @@ USB通信ポートの設定については`crane_plus_control`の
 > ros2 launch crane_plus_gazebo crane_plus_with_red_cube.launch.py use_camera:=true
 > ```
 
+---
+
 ### Using Mock Components
 
 ### 1. move_groupとcontrollerを起動する
