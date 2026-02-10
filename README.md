@@ -8,21 +8,25 @@ ROS 2 package suite of CRANE+ V2.
 
 ## Table of Contents
 
-- [Supported ROS 2 distributions](#supported-ROS-2-distributions)
-- [Requirements](#requirements)
-- [Installation](#installation)
-  - [Binary installation](#binary-installation)
-  - [Source Build](#source-build)
-- [Quick Start](#quick-start)
-- [Packages](#packages)
-- [License](#license)
-- [Disclaimer](#disclaimer)
+- [crane\_plus](#crane_plus)
+  - [Supported ROS 2 distributions](#supported-ROS-2-distributions)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+    - [Docker images](#docker-images)
+    - [Binary installation](#binary-installation)
+    - [Source Build](#source-build)
+  - [Quick Start](#quick-start)
+  - [Packages](#packages)
+  - [How to Use Examples](#how-to-use-examples)
+  - [License](#license)
+  - [Contributing](#contributing)
+  - [Disclaimer](#disclaimer)
 
 ## Supported ROS 2 distributions
 
-- [Foxy](https://github.com/rt-net/crane_plus/tree/foxy-devel)
-- [Humble](https://github.com/rt-net/crane_plus/tree/humble-devel)
-- Jazzy
+- [Humble Hawksbill](https://github.com/rt-net/crane_plus/tree/humble)
+- [Jazzy Jalisco](https://github.com/rt-net/crane_plus/tree/jazzy)
+
 ## Requirements
 
 - CRANE+ V2
@@ -30,7 +34,7 @@ ROS 2 package suite of CRANE+ V2.
   - [Web Shop](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1&products_id=3626&language=ja)
 - Linux OS
   - Ubuntu 24.04
-- ROS
+- ROS 2
   - [Jazzy Jalisco](https://docs.ros.org/en/jazzy/Installation.html)
 
 ## Installation
@@ -43,45 +47,42 @@ ROS 2 package suite of CRANE+ V2.
 ### Binary installation
 
 ```sh
-$ sudo apt update 
-$ sudo apt install ros-$ROS_DISTRO-crane-plus
+sudo apt update 
+sudo apt install ros-$ROS_DISTRO-crane-plus
 ```
 
 ### Source Build
 
 ```sh
 # Download crane_plus repository
-$ mkdir -p ~/ros2_ws/src
-$ cd ~/ros2_ws/src
-$ git clone -b $ROS_DISTRO https://github.com/rt-net/crane_plus.git
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+git clone -b $ROS_DISTRO https://github.com/rt-net/crane_plus.git
 
 # Install dependencies
-$ rosdep install -r -y -i --from-paths .
+rosdep install -r -y -i --from-paths .
 
 # Build & Install
-$ cd ~/ros2_ws
-$ colcon build --symlink-install
-$ source ~/ros2_ws/install/setup.bash
+cd ~/ros2_ws
+colcon build --symlink-install
+source ~/ros2_ws/install/setup.bash
 ```
 
 ## Quick Start
 
 ```sh
 # Connect CRANE+ V2 to PC, then
-$ source ~/ros2_ws/install/setup.bash
-$ ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
+source ~/ros2_ws/install/setup.bash
+ros2 launch crane_plus_examples demo.launch.py port_name:=/dev/ttyUSB0
 
 # Terminal 2
-$ source ~/ros2_ws/install/setup.bash
-$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
+source ~/ros2_ws/install/setup.bash
+ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 # Press [Ctrl-c] to terminate.
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/gripper_control.gif width=500px />
-
-詳細は[crane_plus_examples](./crane_plus_examples/README.md)
-を参照してください。
 
 ## Packages
 
@@ -102,19 +103,30 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
   - [README](./crane_plus_moveit_config/README.md)
   - CRANE+ V2の`moveit2`設定ファイルです
 
+## How to Use Examples
+
+サンプルプログラムは、`crane_plus_examples`パッケージの[README](./crane_plus_description/README.md)参照してください。
+
 ## License
 
-このリポジトリはApache 2.0ライセンスの元、公開されています。 
-ライセンスについては[LICENSE](./LICENSE)を参照ください。
+各ファイルにライセンスが明記されている場合、そのライセンスに従います。
+特に明記がない場合は、Apache License, Version 2.0に基づいて公開されています。  
+ライセンスの全文は[LICENSE](./LICENSE)または[https://www.apache.org/licenses/LICENSE-2.0](https://www.apache.org/licenses/LICENSE-2.0)から確認できます。
 
 サーボモータのAX-12Aに関するCADモデルの使用については、ROBOTIS社より使用許諾を受けています。 
 CRANE+ V2に使用されているROBOTIS社の部品類にかかる著作権、商標権、その他の知的財産権は、ROBOTIS社に帰属します。
 
 We have obtained permission from ROBOTIS Co., Ltd. to use CAD models relating to servo motors AX-12A. The proprietary rights relating to any components or parts manufactured by ROBOTIS and used in this product, including but not limited to copyrights, trademarks, and other intellectual property rights, shall remain vested in ROBOTIS.
 
-## Disclaimer
+## Contributing
 
-本ソフトウェアはApache 2.0ライセンスで、「AS IS」（現状有姿のまま）で提供しています。本ソフトウェアに関する無償サポートはありません。
+- 本ソフトウェアはオープンソースですが、開発はオープンではありません。
+- 本ソフトウェアは基本的にオープンソースソフトウェアとして「AS IS」（現状有姿のまま）で提供しています。
+- 本ソフトウェアに関する無償サポートはありません。
+- バグの修正や誤字脱字の修正に関するリクエストは常に受け付けていますが、それ以外の機能追加等のリクエストについては社内のガイドラインを優先します。
+詳しくは[コントリビューションガイドライン](https://github.com/rt-net/.github/blob/master/CONTRIBUTING.md)に従ってください。
+
+## Disclaimer
 
 当該製品および当ソフトウェアの使用中に生じたいかなる損害も株式会社アールティでは一切の責任を負いかねます。 ユーザー自身で作成されたプログラムに適切な制限動作が備わっていない場合、本体の損傷や、本体が周囲や作業者に接触、あるいは衝突し、思わぬ重大事故が発生する危険があります。 ユーザーの責任において十分に安全に注意した上でご使用下さい。
 
