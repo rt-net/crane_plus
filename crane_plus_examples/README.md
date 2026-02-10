@@ -127,7 +127,7 @@ ros2 launch crane_plus_examples demo.launch.py use_mock_components:=true
 例えばグリッパを開閉するサンプルは次のコマンドで実行できます。
 
 ```sh
-$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
+ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
 終了するときは`Ctrl+c`を入力します。
@@ -152,7 +152,8 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 > 実行できるサンプルの一覧は、`example.launch.py`にオプション`-s`を付けて実行することで表示できます。
 > 
 > ```sh
-> $ ros2 launch crane_plus_examples example.launch.py -s
+> ros2 launch crane_plus_examples example.launch.py -s
+> 
 > Arguments (pass arguments as '<name>:=<value>'):
 > 
 >     'example':
@@ -169,7 +170,7 @@ $ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
+ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/gripper_control.gif width=450px />
@@ -188,7 +189,7 @@ SRDFファイル[crane_plus_moveit_config/config/crane_plus.srdf](../crane_plus_
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples example.launch.py example:='pose_groupstate'
+ros2 launch crane_plus_examples example.launch.py example:='pose_groupstate'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/pose_groupstate.gif width=450px />
@@ -220,7 +221,7 @@ ros2 launch crane_plus_examples example.launch.py example:='joint_values'
 次のコマンドを実行します。
 
 ```sh
-$ ros2 launch crane_plus_examples example.launch.py example:='pick_and_place'
+ros2 launch crane_plus_examples example.launch.py example:='pick_and_place'
 ```
 
 <img src=https://rt-net.github.io/images/crane-plus/pick_and_place.gif width=450px />
@@ -239,7 +240,8 @@ Webカメラ搭載モデルのカメラを使用したサンプルコードで�
 実行できるサンプルの一覧は、`camera_example.launch.py`にオプション`-s`を付けて実行することで確認できます。
 
 > ```sh
-> $ ros2 launch crane_plus_examples camera_example.launch.py -s
+> ros2 launch crane_plus_examples camera_example.launch.py -s
+> 
 > Arguments (pass arguments as '<name>:=<value>'):
 > 
 >     'example':
