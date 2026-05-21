@@ -144,7 +144,7 @@ Webカメラ搭載モデルのカメラを使用したサンプルコードで�
 > 実行できるサンプルの一覧は、`camera_example.launch.py`にオプション`-s`を付けて実行することで確認できます。
 >
 > ```sh
-> $ ros2 launch crane_plus_examples_py camera_example.launch.py -s
+> ros2 launch crane_plus_examples_py camera_example.launch.py -s
 > Arguments (pass arguments as '<name>:=<value>'):
 >
 >     'example':
