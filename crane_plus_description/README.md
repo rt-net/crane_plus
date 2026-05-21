@@ -9,13 +9,13 @@
 CRANE+ V2のモデルが表示されるので、xacroファイルのデバッグに役立ちます。
 
 ```sh
-$ ros2 launch crane_plus_description display.launch.py
+ros2 launch crane_plus_description display.launch.py
 ```
 
 Webカメラ搭載モデルの場合は、下記のコマンドを実行してください。
 
 ```sh
-$ ros2 launch crane_plus_description display.launch.py use_camera:=true
+ros2 launch crane_plus_description display.launch.py use_camera:=true
 ```
 
 ![display.launch.py](https://rt-net.github.io/images/crane-plus/display_launch.png)
@@ -25,14 +25,11 @@ $ ros2 launch crane_plus_description display.launch.py use_camera:=true
 CRANE+ V2の実機を動かす場合は、
 事前にサーボモータ内部の角度リミット（`CW Angle Limit`、`CCW Angle Limit`）を設定してください。
 
-CRANE+ V2に搭載されているサーボモータはROBOTISのAX-12Aのため、
-[Dynamixel Wizard 2](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/)
-を使用して角度リミットを設定できます。
+CRANE+ V2に搭載されているサーボモータはROBOTISのAX-12Aのため、[Dynamixel Wizard 2](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/)を使用して角度リミットを設定できます。
 
 ![dynamixel wizard2](https://rt-net.github.io/images/crane-plus/dynamixel_wizard2.png)
 
-[crane_plus.urdf.xacro](./urdf/crane_plus.urdf.xacro)には、
-下記のように各関節の角度リミットが定義されています。
+[crane_plus.urdf.xacro](./urdf/crane_plus.urdf.xacro)には、下記のように各関節の角度リミットが定義されています。
 この角度リミットに近い値をサーボモータに設定することを推奨します。
 
 ```xml

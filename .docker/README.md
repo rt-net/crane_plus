@@ -10,7 +10,7 @@ tagにはROSのディストリビューションを指定してください。
 Jazzyディストリビューションのイメージをダウンロードする場合は次のコマンドを実行します。
 
 ```sh
-$ docker pull ghcr.io/rt-net/crane_plus:jazzy
+docker pull ghcr.io/rt-net/crane_plus:jazzy
 ```
 
 ### ノードの起動
@@ -29,9 +29,9 @@ rockerのオプションには、
 
 ```sh
 # rockerのインストール
-$ sudo apt install python3-rocker
+sudo apt install python3-rocker
 
-$ rocker --x11 --net=host --privileged \
+rocker --x11 --net=host --privileged \
     --volume /dev/shm:/dev/shm \
     -- ghcr.io/rt-net/crane_plus:$ROS_DISTRO \
     ros2 launch crane_plus_examples demo.launch.py
@@ -44,18 +44,18 @@ $ rocker --x11 --net=host --privileged \
 
 ```sh
 # ワークスペース作成
-$ mkdir -p ~/crane_ws/src
+mkdir -p ~/crane_ws/src
 # パッケージをクローン
-$ git clone https://github.com/rt-net/crane_plus.git ~/crane_ws/src/crane_plus
+git clone https://github.com/rt-net/crane_plus.git ~/crane_ws/src/crane_plus
 
 # パッケージをビルド
-$ rocker --x11 --net=host --privileged \
+rocker --x11 --net=host --privileged \
     --volume ~/crane_ws:/root/overlay_ws \
     -- ghcr.io/rt-net/crane_plus:$ROS_DISTRO \
     colcon build --symlink-install
 
 # ノードを起動
-$ rocker --x11 --net=host --privileged \
+rocker --x11 --net=host --privileged \
     --volume /dev/shm:/dev/shm \
     --volume ~/crane_ws:/root/overlay_ws \
     -- ghcr.io/rt-net/crane_plus:$ROS_DISTRO \
@@ -68,8 +68,8 @@ $ rocker --x11 --net=host --privileged \
 
 ```sh
 # jazzyディストリビューションのイメージを作成する
-$ cd crane_plus/.docker
-$ ./build_source.sh jazzy
+cd crane_plus/.docker
+./build_source.sh jazzy
 ...
 Successfully tagged crane_plus:jazzy
 ```
