@@ -2,10 +2,12 @@
 
 このパッケージはCRANE+ V2 ROS 2パッケージのPythonによるサンプルコード集です。
 
+## Table of Contents
+
 - [crane\_plus\_examples\_py](#crane_plus_examples_py)
-  - [起動方法](#起動方法)
-  - [サンプルプログラムを実行する](#サンプルプログラムを実行する)
-    - [Gazeboでサンプルプログラムを実行する場合](#Gazeboでサンプルプログラムを実行する場合)
+  - [Table of Contents](#table-of-contents)
+  - [Setup](#setup)
+  - [How to Run Examples](#how-to-run-examples)
   - [Examples](#examples)
     - [gripper\_control](#gripper_control)
     - [pose\_groupstate](#pose_groupstate)
@@ -15,10 +17,12 @@
     - [aruco\_detection](#aruco_detection)
     - [color\_detection](#color_detection)
 
-## 起動方法
+## Setup
+
 CRANE+ V2の起動方法は[crane_plus_examplesのREADME](../crane_plus_examples/README.md)を参照してください。
 
-## サンプルプログラムを実行する
+## How to Run Examples
+
 準備ができたらPythonによるサンプルプログラムを実行します。
 例えばグリッパを開閉するサンプルは次のコマンドで実行できます。
 
@@ -28,13 +32,12 @@ ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control'
 
 終了するときは`Ctrl+c`を入力します。
 
-## Gazeboでサンプルプログラムを実行する場合
-
-Gazeboでサンプルプログラムを実行する場合は`use_sim_time`オプションを付けます。
-
-```sh
-ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control' use_sim_time:=true
-```
+> [!NOTE]
+> Gazeboでサンプルプログラムを実行する場合は`use_sim_time`オプションを付けます。
+>
+> ```sh
+> ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control' use_sim_time:=true
+> ```
 
 ## Examples
 
@@ -45,16 +48,17 @@ ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control' 
 - [joint_values](#joint_values)
 - [pick_and_place](#pick_and_place)
 
-実行できるサンプルの一覧は、`examples.launch.py`にオプション`-s`を付けて実行することで表示できます。
-
-```sh
-$ ros2 launch crane_plus_examples_py example.launch.py -s
-Arguments (pass arguments as '<name>:=<value>'):
-
-    'example':
-        Set an example executable name: [gripper_control, pose_groupstate, joint_values, pick_and_place]
-        (default: 'gripper_control')
-```
+> [!NOTE]
+> 実行できるサンプルの一覧は、`examples.launch.py`にオプション`-s`を付けて実行することで表示できます。
+>
+> ```sh
+> $ ros2 launch crane_plus_examples_py example.launch.py -s
+> Arguments (pass arguments as '<name>:=<value>'):
+>
+>     'example':
+>         Set an example executable name: [gripper_control, pose_groupstate, joint_values, pick_and_place]
+>         (default: 'gripper_control')
+> ```
 
 ---
 
@@ -136,16 +140,17 @@ Webカメラ搭載モデルのカメラを使用したサンプルコードで�
 - [aruco\_detection](#aruco_detection)
 - [color\_detection](#color_detection)
 
-実行できるサンプルの一覧は、`camera_example.launch.py`にオプション`-s`を付けて実行することで確認できます。
-
-```sh
-$ ros2 launch crane_plus_examples_py camera_example.launch.py -s
-Arguments (pass arguments as '<name>:=<value>'):
-
-    'example':
-        Set an example executable name: [color_detection]
-        (default: 'color_detection')
-```
+> [!NOTE]
+> 実行できるサンプルの一覧は、`camera_example.launch.py`にオプション`-s`を付けて実行することで確認できます。
+>
+> ```sh
+> $ ros2 launch crane_plus_examples_py camera_example.launch.py -s
+> Arguments (pass arguments as '<name>:=<value>'):
+>
+>     'example':
+>         Set an example executable name: [color_detection]
+>         (default: 'color_detection')
+> ```
 
 ---
 

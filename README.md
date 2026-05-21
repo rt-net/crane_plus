@@ -95,7 +95,10 @@ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
   - CRANE+ V2のモデルデータ（xacro）を定義するパッケージです
 - crane_plus_examples
   - [README](./crane_plus_examples/README.md)
-  - CRANE+ V2のサンプルコード集です
+  - CRANE+ V2のC++サンプルコード集です
+- crane_plus_examples_py
+  - [README](./crane_plus_examples_py/README.md)
+  - CRANE+ V2のPythonサンプルコード集です
 - crane_plus_gazebo
   - [README](./crane_plus_gazebo/README.md)
   - CRANE+ V2のGazeboシミュレーションパッケージです
@@ -105,7 +108,12 @@ ros2 launch crane_plus_examples example.launch.py example:='gripper_control'
 
 ## How to Use Examples
 
-サンプルプログラムは、`crane_plus_examples`パッケージの[README](./crane_plus_description/README.md)参照してください。
+サンプルプログラムは、C++とPythonの両方を用意しています。詳しくは、以下のリンクをご覧ください。
+
+- C++
+  - [crane_plus_examples](./crane_plus_examples/README.md)
+- Python
+  - [crane_plus_examples_py](./crane_plus_examples_py/README.md)
 
 ## License
 
