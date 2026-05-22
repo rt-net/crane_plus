@@ -18,7 +18,6 @@ from crane_plus_examples_py.utils import plan_and_execute
 
 from geometry_msgs.msg import PoseStamped
 
-# moveit python library
 from moveit.core.robot_state import RobotState
 from moveit.planning import (
     MoveItPy,
@@ -35,56 +34,58 @@ from moveit_msgs.msg import (
 import numpy as np
 
 import rclpy
-from rclpy.logging import get_logger
 from rclpy.node import Node
 from scipy.spatial.transform import Rotation
 from shape_msgs.msg import SolidPrimitive
-import tf2_ros
-from tf2_ros import TransformListener, TransformStamped
+from tf2_ros import TransformException, TransformListener, TransformStamped
 from tf2_ros.buffer import Buffer
 
 
 class PickAndPlaceTf(Node):
-    def __init__(self, crane_plus):
-        super().__init__('pick_and_place_tf_node')
-        self.logger = get_logger('pick_and_place_tf')
-        self.tf_past = TransformStamped()
-        self.crane_plus = crane_plus
-        self.crane_plus_arm = crane_plus.get_planning_component('arm_tcp')
-        self.crane_plus_gripper = crane_plus.get_planning_component('gripper')
-        # instantiate a RobotState instance using the current robot model
-        self.robot_model = crane_plus.get_robot_model()
-        self.robot_state = RobotState(self.robot_model)
+    def __init__(self):
+        super().__init__('pick_and_place_tf')
+        self.logger = self.get_logger()
 
-        # planningのパラメータ設定
-        # armのパラメータ設定用
+        # tf
+        self.tf_buffer = Buffer()
+        self.tf_listener = TransformListener(self.tf_buffer, self)
+        self.tf_past = TransformStamped()
+
+        # instantiate MoveItPy instance and get planning component
+        self.crane_plus = MoveItPy(node_name='moveit_py')
+        self.logger.info('MoveItPy instance created')
+
+        # アーム制御用 planning component
+        self.arm = self.crane_plus.get_planning_component('arm_tcp')
+        # グリッパ制御用 planning component
+        self.gripper = self.crane_plus.get_planning_component('gripper')
+
+        # instantiate a RobotState instance using the current robot model
+        self.robot_model = self.crane_plus.get_robot_model()
+
         self.arm_plan_request_params = PlanRequestParameters(
             self.crane_plus,
             'ompl_rrtc',
         )
-        # Set 0.0 ~ 1.0
-        self.arm_plan_request_params.max_velocity_scaling_factor = 1.0
-
-        # Set 0.0 ~ 1.0
-        self.arm_plan_request_params.max_acceleration_scaling_factor = 1.0
-
-        # gripperのパラメータ設定用
         self.gripper_plan_request_params = PlanRequestParameters(
             self.crane_plus,
             'ompl_rrtc',
         )
-        # Set 0.0 ~ 1.0
-        self.gripper_plan_request_params.max_velocity_scaling_factor = 1.0
 
+        # 動作速度の調整
         # Set 0.0 ~ 1.0
+        self.arm_plan_request_params.max_velocity_scaling_factor = 1.0
+        self.arm_plan_request_params.max_acceleration_scaling_factor = 1.0
+
+        self.gripper_plan_request_params.max_velocity_scaling_factor = 1.0
         self.gripper_plan_request_params.max_acceleration_scaling_factor = 1.0
 
         # SRDFに定義されている'home'の姿勢にする
-        self.crane_plus_arm.set_start_state_to_current_state()
-        self.crane_plus_arm.set_goal_state(configuration_name='home')
+        self.arm.set_start_state_to_current_state()
+        self.arm.set_goal_state(configuration_name='home')
         plan_and_execute(
             self.crane_plus,
-            self.crane_plus_arm,
+            self.arm,
             self.logger,
             single_plan_parameters=self.arm_plan_request_params,
         )
@@ -108,27 +109,23 @@ class PickAndPlaceTf(Node):
         jointConstraint.weight = 1.0
         constraints.joint_constraints.append(jointConstraint)
 
-        self.crane_plus_arm.set_path_constraints(constraints)
+        self.arm.set_path_constraints(constraints)
 
         # 待機姿勢
-        self._control_arm(0.0, 0.0, 0.3, 0, 0, 0)
-
-        # tf
-        self.tf_buffer = Buffer()
-        self.tf_listener = TransformListener(self.tf_buffer, self)
+        self._control_arm(0.0, 0.0, 0.3, 0, 0, 0.0)
 
         # Call on_timer function every second
         self.timer = self.create_timer(0.5, self.on_timer)
 
     def on_timer(self):
         # target_0のtf位置姿勢を取得
-        tf_msg = TransformStamped()
         try:
             tf_msg = self.tf_buffer.lookup_transform(
                 'crane_plus_base', 'target_0', rclpy.time.Time()
             )
-        except tf2_ros.LookupException as ex:
-            self.get_logger().info(f'Could not transform base_link to target: {ex}')
+        except TransformException as ex:
+            self.logger.info(f'Could not transform base_link to target: {ex}')
+            return
 
         now_time = self.get_clock().now()
         FILTERING_TIME = rclpy.duration.Duration(seconds=2)
@@ -156,11 +153,11 @@ class PickAndPlaceTf(Node):
             if tf_diff < DISTANCE_THRESHOLD:
                 # 把持対象が3秒以上停止している場合ピッキング動作開始
                 if TF_STOP_TIME > STOP_TIME_THRESHOLD:
-                    self._picking(tf_msg)
+                    self._picking(tf_msg.transform.translation)
             else:
                 self.tf_past = tf_msg
 
-    def _picking(self, tf_msg):
+    def _picking(self, target_position):
         GRIPPER_DEFAULT = 0.0
         GRIPPER_OPEN = math.radians(-30.0)
         GRIPPER_CLOSE = math.radians(10.0)
@@ -169,8 +166,8 @@ class PickAndPlaceTf(Node):
         self._control_gripper(GRIPPER_OPEN)
 
         # ロボット座標系（2D）の原点から見た把持対象物への角度を計算
-        x = tf_msg.transform.translation.x
-        y = tf_msg.transform.translation.y
+        x = target_position.x
+        y = target_position.y
         theta_rad = math.atan2(y, x)
         theta_deg = math.degrees(theta_rad)
 
@@ -209,12 +206,13 @@ class PickAndPlaceTf(Node):
 
     # グリッパ制御
     def _control_gripper(self, angle):
-        self.robot_state.set_joint_group_positions('gripper', [angle])
-        self.crane_plus_gripper.set_start_state_to_current_state()
-        self.crane_plus_gripper.set_goal_state(robot_state=self.robot_state)
+        self.gripper.set_start_state_to_current_state()
+        robot_state = RobotState(self.robot_model)
+        robot_state.set_joint_group_positions('gripper', [angle])
+        self.gripper.set_goal_state(robot_state=robot_state)
         plan_and_execute(
             self.crane_plus,
-            self.crane_plus_gripper,
+            self.gripper,
             self.logger,
             single_plan_parameters=self.gripper_plan_request_params,
         )
@@ -268,11 +266,11 @@ class PickAndPlaceTf(Node):
         goal_constraints.position_constraints.append(position_constraint)
         goal_constraints.orientation_constraints.append(orientation_constraint)
 
-        self.crane_plus_arm.set_start_state_to_current_state()
-        self.crane_plus_arm.set_goal_state(motion_plan_constraints=[goal_constraints])
+        self.arm.set_start_state_to_current_state()
+        self.arm.set_goal_state(motion_plan_constraints=[goal_constraints])
         result = plan_and_execute(
             self.crane_plus,
-            self.crane_plus_arm,
+            self.arm,
             self.logger,
             single_plan_parameters=self.arm_plan_request_params,
         )
@@ -283,17 +281,13 @@ def main(args=None):
     # ros2の初期化
     rclpy.init(args=args)
 
-    # MoveItPy初期化
-    crane_plus = MoveItPy(node_name='moveit_py')
+    pick_and_place_tf_node = PickAndPlaceTf()
 
-    # node生成
-    pick_and_place_tf_node = PickAndPlaceTf(crane_plus)
     rclpy.spin(pick_and_place_tf_node)
 
-    # MoveItPyの終了
-    crane_plus.shutdown()
-
-    # rclpyの終了
+    # Finish with error. Related Issue
+    # https://github.com/moveit/moveit2/issues/2693
+    pick_and_place_tf_node.destroy_node()
     rclpy.shutdown()
 
 
