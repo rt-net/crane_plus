@@ -48,10 +48,15 @@ def main(args=None):
     )
 
     # 動作速度の調整
-    plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
-    plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+    # Set 0.0 ~ 1.0
+    plan_request_params.max_acceleration_scaling_factor = 1.0
+    plan_request_params.max_velocity_scaling_factor = 1.0
 
-    # armの関節のjoint1〜4を順番に45[deg]ずつ動かす
+    # SRDF内に定義されている'vertical'の姿勢にする
+    arm.set_start_state_to_current_state()
+    arm.set_goal_state(configuration_name='vertical')
+    plan_and_execute(crane_plus, arm, logger, single_plan_parameters=plan_request_params)
+
     joint_names = [
         'crane_plus_joint1',
         'crane_plus_joint2',
@@ -60,17 +65,27 @@ def main(args=None):
     ]
     target_joint_value = math.radians(45)
 
-    for joint_name in joint_names:
-        arm.set_start_state_to_current_state()
+    # 現在角度をベースに、目標角度を作成する
+    current_state = arm.get_start_state()
+    joint_values = current_state.get_joint_group_positions('arm_tcp')
 
-        joint_values = {joint_name: target_joint_value}
-        robot_state.joint_positions = joint_values
+    # jointのリストを辞書型の形式に変換する
+    joint_values_dict = dict(zip(joint_names, joint_values))
+
+    # 各関節角度を順番に-45[deg]に動かす
+    for joint_name in joint_names:
+        # 対象のjointに目標値を設定する
+        joint_values_dict[joint_name] = target_joint_value
+        robot_state.joint_positions = joint_values_dict
+
         joint_constraint = construct_joint_constraint(
             robot_state=robot_state,
             joint_model_group=crane_plus.get_robot_model().get_joint_model_group('arm_tcp'),
         )
 
+        arm.set_start_state_to_current_state()
         arm.set_goal_state(motion_plan_constraints=[joint_constraint])
+
         plan_and_execute(crane_plus, arm, logger, single_plan_parameters=plan_request_params)
 
     # SRDF内に定義されている'vertical'の姿勢にする
