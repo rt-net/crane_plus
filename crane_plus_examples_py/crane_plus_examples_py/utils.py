@@ -20,6 +20,7 @@ def plan_and_execute(
     multi_plan_parameters=None,
     sleep_time=0.0,
 ):
+    # plan to goal
     logger.info('Planning trajectory')
     if multi_plan_parameters is not None:
         plan_result = planning_component.plan(multi_plan_parameters=multi_plan_parameters)
@@ -29,14 +30,13 @@ def plan_and_execute(
         plan_result = planning_component.plan()
 
     # execute the plan
-    result = None
     if plan_result:
         logger.info('Executing plan')
         robot_trajectory = plan_result.trajectory
-        result = robot.execute(robot_trajectory, controllers=[])
+        execute_result = robot.execute(robot_trajectory, controllers=[])
     else:
         logger.error('Planning failed')
-        result = False
+        execute_result = False
 
     time.sleep(sleep_time)
-    return result
+    return execute_result

@@ -12,23 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import copy
 import math
 
 from crane_plus_examples_py.utils import plan_and_execute
-from geometry_msgs.msg import PoseStamped
+
+from geometry_msgs.msg import Point, Pose, PoseStamped, Quaternion
+
 from moveit.core.robot_state import RobotState
 from moveit.planning import (
     MoveItPy,
     PlanRequestParameters,
 )
 from moveit_msgs.msg import BoundingVolume, Constraints, OrientationConstraint, PositionConstraint
+
 import rclpy
 from rclpy.logging import get_logger
 from scipy.spatial.transform import Rotation
 from shape_msgs.msg import SolidPrimitive
 
 
-def set_goal_constraints(x, y, z, roll, pitch, yaw):
+def set_goal_constraints(pose):
     # 位置姿勢の許容誤差
     POSITION_TOLERANCE = 0.00001
     ORIENTATION_TOLERANCE = 0.0001
@@ -36,15 +40,7 @@ def set_goal_constraints(x, y, z, roll, pitch, yaw):
     # 目標位置姿勢
     target_pose = PoseStamped()
     target_pose.header.frame_id = 'crane_plus_base'
-    target_pose.pose.position.x = x
-    target_pose.pose.position.y = y
-    target_pose.pose.position.z = z
-    rotation = Rotation.from_euler('xyz', [roll, pitch, yaw], degrees=True)
-    quat = rotation.as_quat()
-    target_pose.pose.orientation.x = quat[0]
-    target_pose.pose.orientation.y = quat[1]
-    target_pose.pose.orientation.z = quat[2]
-    target_pose.pose.orientation.w = quat[3]
+    target_pose.pose = pose
 
     # 目標位置姿勢の制約設定
     goal_constraints = Constraints()
@@ -115,8 +111,28 @@ def main(args=None):
     GRIPPER_DEFAULT = 0.0
     GRIPPER_OPEN = math.radians(-30.0)
     GRIPPER_CLOSE = math.radians(10.0)
-
+    # 物体を持ち上げる高さ
+    LIFTING_HEIGHT = 0.03
+    # 物体の頭上の位置
+    gripper_quat = Rotation.from_euler('xyz', [0.0, 90.0, -90.0], degrees=True).as_quat()
+    gripper_quat_msg = Quaternion(
+        x=gripper_quat[0], y=gripper_quat[1], z=gripper_quat[2], w=gripper_quat[3]
+    )
+    ABOVE_POSE = Pose(position=Point(x=0.0, y=-0.21, z=0.17), orientation=gripper_quat_msg)
+    # 物体を掴む位置
+    gripper_quat = Rotation.from_euler('xyz', [0.0, 180.0, -90.0], degrees=True).as_quat()
+    gripper_quat_msg = Quaternion(
+        x=gripper_quat[0], y=gripper_quat[1], z=gripper_quat[2], w=gripper_quat[3]
+    )
+    GRASP_POSE = Pose(position=Point(x=0.0, y=-0.1, z=0.02), orientation=gripper_quat_msg)
+    PRE_AND_POST_GRASP_POSE = copy.deepcopy(GRASP_POSE)
+    PRE_AND_POST_GRASP_POSE.position.z = LIFTING_HEIGHT
     # 物体を置く位置
+    gripper_quat = Rotation.from_euler('xyz', [0.0, 90.0, 0.0], degrees=True).as_quat()
+    gripper_quat_msg = Quaternion(
+        x=gripper_quat[0], y=gripper_quat[1], z=gripper_quat[2], w=gripper_quat[3]
+    )
+    RELEASE_POSE = Pose(position=Point(x=0.25, y=0.0, z=0.06), orientation=gripper_quat_msg)
 
     # SRDF内に定義されている'vertical'の姿勢にする
     arm.set_start_state_to_current_state()
@@ -164,7 +180,7 @@ def main(args=None):
 
     # 物体の上に腕を伸ばす
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.0, -0.21, 0.17, 0.0, 90.0, -90.0)
+    goal_constraints = set_goal_constraints(ABOVE_POSE)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
@@ -173,7 +189,7 @@ def main(args=None):
         single_plan_parameters=arm_plan_request_params,
     )
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.0, -0.1, 0.05, 0.0, 180.0, -90.0)
+    goal_constraints = set_goal_constraints(PRE_AND_POST_GRASP_POSE)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
@@ -184,7 +200,7 @@ def main(args=None):
 
     # 掴みに行く
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.0, -0.1, 0.02, 0.0, 180.0, -90.0)
+    goal_constraints = set_goal_constraints(GRASP_POSE)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
@@ -207,7 +223,7 @@ def main(args=None):
 
     # 持ち上げる
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.0, -0.1, 0.05, 0.0, 180.0, -90.0)
+    goal_constraints = set_goal_constraints(PRE_AND_POST_GRASP_POSE)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
@@ -228,7 +244,7 @@ def main(args=None):
 
     # 下ろす
     arm.set_start_state_to_current_state()
-    goal_constraints = set_goal_constraints(0.25, 0.0, 0.06, 0.0, 90.0, 0.0)
+    goal_constraints = set_goal_constraints(RELEASE_POSE)
     arm.set_goal_state(motion_plan_constraints=[goal_constraints])
     plan_and_execute(
         crane_plus,
