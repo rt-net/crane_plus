@@ -9,6 +9,7 @@
 
   <author email="mizoguchi@rt-net.jp">Nozomi Mizoguchi</author>
   <author email="kuwagata@rt-net.jp">Atsushi Kuwagata</author>
+  <author email="yusuke.kato@rt-net.jp">Yusuke Kato</author>
 
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
