@@ -80,13 +80,12 @@ private:
 
       // マーカが一つ以上検出された場合、マーカの位置姿勢をtfで配信
       if (n_markers > 0) {
-        for (int i = 0; i < n_markers; i++) {
-          // マーカの回転ベクトルと位置ベクトル
-          std::vector<cv::Vec3d> rvecs, tvecs;
-          // 画像座標系上のマーカ位置を三次元のカメラ座標系に変換
-          cv::aruco::estimatePoseSingleMarkers(
-            corners, MARKER_LENGTH, CAMERA_MATRIX, DIST_COEFFS, rvecs, tvecs);
+        // 画像座標系上のマーカ位置を三次元のカメラ座標系に変換
+        std::vector<cv::Vec3d> rvecs, tvecs;
+        cv::aruco::estimatePoseSingleMarkers(
+          corners, MARKER_LENGTH, CAMERA_MATRIX, DIST_COEFFS, rvecs, tvecs);
 
+        for (int i = 0; i < n_markers; i++) {
           // tfの配信
           geometry_msgs::msg::TransformStamped t;
           t.header = msg->header;
@@ -94,6 +93,7 @@ private:
           t.transform.translation.x = tvecs[i][0];
           t.transform.translation.y = tvecs[i][1];
           t.transform.translation.z = tvecs[i][2];
+          // 回転ベクトルをクォータニオンに変換
           tf2::Quaternion q;
           cv::Mat cv_rotation_matrix;
           cv::Rodrigues(rvecs[i], cv_rotation_matrix);

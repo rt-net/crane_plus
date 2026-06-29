@@ -23,55 +23,40 @@ import rclpy
 from rclpy.logging import get_logger
 
 
+class PoseGroupstateController:
+    def __init__(self):
+        # MoveItPyのインスタンスを生成し、planning componentを取得
+        self.crane_plus = MoveItPy(node_name='pose_groupstate')
+        self.arm = self.crane_plus.get_planning_component('arm_tcp')
+
+        # プランニングパラメータの設定
+        self.plan_request_params = PlanRequestParameters(self.crane_plus, 'ompl_rrtc')
+        self.plan_request_params.max_velocity_scaling_factor = 1.0      # Set 0.0 ~ 1.0
+        self.plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+
+        self.logger = get_logger('pose_groupstate')
+
+    def move_arm_to_named_pose(self, name):
+        # SRDFに定義されている名前付きの姿勢に移動する
+        self.arm.set_start_state_to_current_state()
+        self.arm.set_goal_state(configuration_name=name)
+        plan_and_execute(
+            self.crane_plus,
+            self.arm,
+            self.logger,
+            single_plan_parameters=self.plan_request_params,
+        )
+
+
 def main(args=None):
     rclpy.init(args=args)
-    logger = get_logger('pose_groupstate')
 
-    # instantiate MoveItPy instance and get planning component
-    crane_plus = MoveItPy(node_name='pose_groupstate')
-    logger.info('MoveItPy instance created')
+    controller = PoseGroupstateController()
 
-    # アーム制御用 planning component
-    arm = crane_plus.get_planning_component('arm_tcp')
-
-    plan_request_params = PlanRequestParameters(
-        crane_plus,
-        'ompl_rrtc',
-    )
-
-    # 動作速度の調整
-    plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
-    plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
-
-    # SRDF内に定義されている'home'の姿勢にする
-    arm.set_start_state_to_current_state()
-    arm.set_goal_state(configuration_name='home')
-    plan_and_execute(
-        crane_plus,
-        arm,
-        logger,
-        single_plan_parameters=plan_request_params,
-    )
-
-    # SRDF内に定義されている'vertical'の姿勢にする
-    arm.set_start_state_to_current_state()
-    arm.set_goal_state(configuration_name='vertical')
-    plan_and_execute(
-        crane_plus,
-        arm,
-        logger,
-        single_plan_parameters=plan_request_params,
-    )
-
-    # SRDF内に定義されている'home'の姿勢にする
-    arm.set_start_state_to_current_state()
-    arm.set_goal_state(configuration_name='home')
-    plan_and_execute(
-        crane_plus,
-        arm,
-        logger,
-        single_plan_parameters=plan_request_params,
-    )
+    # SRDFに定義されている名前付き姿勢を順番に実行する
+    controller.move_arm_to_named_pose('home')
+    controller.move_arm_to_named_pose('vertical')
+    controller.move_arm_to_named_pose('home')
 
     # Finish with error. Related Issue
     # https://github.com/moveit/moveit2/issues/2693

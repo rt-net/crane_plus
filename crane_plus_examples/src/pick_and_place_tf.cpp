@@ -35,6 +35,7 @@
 #include "tf2_ros/transform_listener.h"
 #include "tf2_ros/buffer.h"
 #include "std_msgs/msg/string.hpp"
+
 using namespace std::chrono_literals;
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
@@ -46,7 +47,7 @@ public:
     rclcpp::Node::SharedPtr move_group_gripper_node)
   : Node("pick_and_place_tf_node")
   {
-    using namespace std::placeholders;
+    // アームおよびグリッパ制御用のMoveGroupInterfaceの初期化とパラメータ設定
     move_group_arm_ = std::make_shared<MoveGroupInterface>(move_group_arm_node, "arm_tcp");
     move_group_arm_->setMaxVelocityScalingFactor(1.0);
     move_group_arm_->setMaxAccelerationScalingFactor(1.0);
@@ -59,11 +60,11 @@ public:
     move_group_arm_->setGoalPositionTolerance(1e-5);
     move_group_arm_->setGoalOrientationTolerance(1e-4);
 
-    // SRDFに定義されている"home"の姿勢にする
+    // 初期姿勢としてSRDFに定義されている 'home' の位置姿勢に移動
     move_group_arm_->setNamedTarget("home");
     move_group_arm_->move();
 
-    // 可動範囲を制限する
+    // アームの可動範囲制限（Path Constraints）を設定して、関節の動きを制限する
     moveit_msgs::msg::Constraints constraints;
     constraints.name = "arm_constraints";
 
@@ -84,14 +85,16 @@ public:
 
     move_group_arm_->setPathConstraints(constraints);
 
-    // 待機姿勢
-    control_arm(0.0, 0.0, 0.3, 0, 0, 0);
+    // 初期位置としての待機姿勢に移動
+    moveArmToPose(0.0, 0.0, 0.3, 0, 0, 0);
 
+    // TFの受信に必要なBufferとListenerを初期化
     tf_buffer_ =
       std::make_unique<tf2_ros::Buffer>(this->get_clock());
     tf_listener_ =
       std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
+    // 定期的にTFを監視してピッキングをトリガーするためのタイマーを設定（0.5秒周期）
     timer_ = this->create_wall_timer(
       500ms, std::bind(&PickAndPlaceTf::on_timer, this));
   }
@@ -99,7 +102,7 @@ public:
 private:
   void on_timer()
   {
-    // target_0のtf位置姿勢を取得
+    // target_0（把持対象）のTFを取得
     geometry_msgs::msg::TransformStamped tf_msg;
 
     try {
@@ -122,16 +125,18 @@ private:
     const auto TF_ELAPSED_TIME = now.nanoseconds() - tf.stamp_.time_since_epoch().count();
     const auto TF_STOP_TIME = now.nanoseconds() - tf_past_.stamp_.time_since_epoch().count();
 
-    // 現在時刻から2秒以内に受け取ったtfを使用
+    // 一定時間（2秒）以内に更新された有効なTFのみ処理する
     if (TF_ELAPSED_TIME < FILTERING_TIME.count()) {
       double tf_diff = (tf_past_.getOrigin() - tf.getOrigin()).length();
-      // 把持対象の位置が停止していることを判定
+
+      // 前回位置からの移動量が閾値未満（静止状態）であるかを判定
       if (tf_diff < DISTANCE_THRESHOLD) {
-        // 把持対象が3秒以上停止している場合ピッキング動作開始
+        // 一定時間（3秒）以上静止し続けている場合、ピッキング動作を開始
         if (TF_STOP_TIME > STOP_TIME_THRESHOLD.count()) {
           picking(tf.getOrigin());
         }
       } else {
+        // 移動した場合は過去のTF位置情報を更新
         tf_past_ = tf;
       }
     }
@@ -139,56 +144,40 @@ private:
 
   void picking(tf2::Vector3 target_position)
   {
-    const double GRIPPER_DEFAULT = 0.0;
-    const double GRIPPER_OPEN = angles::from_degrees(-30.0);
-    const double GRIPPER_CLOSE = angles::from_degrees(10.0);
+    // 1. 掴み動作の準備とターゲットへの正対
+    setGripperAngle(GRIPPER_OPEN_);
 
-    // 何かを掴んでいた時のためにハンドを開く
-    control_gripper(GRIPPER_OPEN);
-
-    // ロボット座標系（2D）の原点から見た把持対象物への角度を計算
     double x = target_position.x();
     double y = target_position.y();
     double theta_rad = std::atan2(y, x);
     double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
-    // 把持対象物に正対する
-    control_arm(0.0, 0.0, 0.3, 0, 0, theta_deg);
+    moveArmToPose(0.0, 0.0, 0.3, 0, 0, theta_deg);
 
-    // 掴みに行く
-    if (!control_arm(x, y, 0.04, 0, 90, theta_deg)) {
-      // アーム動作に失敗した時はpick_and_placeを中断して待機姿勢に戻る
-      control_arm(0.0, 0.0, 0.3, 0, 0, 0);
+    // 2. ターゲット位置へのアプローチと掴み動作
+    if (!moveArmToPose(x, y, 0.04, 0, 90, theta_deg)) {
+      // アーム動作に失敗した場合は初期姿勢に戻る
+      moveArmToPose(0.0, 0.0, 0.3, 0, 0, 0);
       return;
     }
 
-    // ハンドを閉じる
-    control_gripper(GRIPPER_CLOSE);
+    setGripperAngle(GRIPPER_CLOSE_);
 
-    // 移動する
-    control_arm(0.12, 0.0, 0.17, 0, 90, 0);
+    // 3. 搬送および配置動作
+    moveArmToPose(0.12, 0.0, 0.17, 0, 90, 0);
+    moveArmToPose(0.0, -0.12, 0.17, 0, 90, -90);
+    moveArmToPose(0.0, -0.25, 0.05, 0, 90, -90);
 
-    // 横を向く
-    control_arm(0.0, -0.12, 0.17, 0, 90, -90);
+    setGripperAngle(GRIPPER_OPEN_);
 
-    // 下ろす
-    control_arm(0.0, -0.25, 0.05, 0, 90, -90);
-
-    // ハンドを開く
-    control_gripper(GRIPPER_OPEN);
-
-    // 少しだけハンドを持ち上げる
-    control_arm(0.0, -0.25, 0.10, 0, 90, -90);
-
-    // 待機姿勢に戻る
-    control_arm(0.0, 0.0, 0.3, 0, 0, 0);
-
-    // ハンドを閉じる
-    control_gripper(GRIPPER_DEFAULT);
+    // 4. 待機姿勢への復帰
+    moveArmToPose(0.0, -0.25, 0.10, 0, 90, -90);
+    moveArmToPose(0.0, 0.0, 0.3, 0, 0, 0);
+    setGripperAngle(GRIPPER_DEFAULT_);
   }
 
-  // グリッパ制御
-  void control_gripper(const double angle)
+  // グリッパの開閉角度を設定して動かす
+  void setGripperAngle(const double angle)
   {
     auto joint_values = move_group_gripper_->getCurrentJointValues();
     joint_values[0] = angle;
@@ -196,8 +185,8 @@ private:
     move_group_gripper_->move();
   }
 
-  // アーム制御
-  bool control_arm(
+  // x, y, z[m]とroll, pitch, yaw[deg]で指定した位置姿勢にアームを動かす
+  bool moveArmToPose(
     const double x, const double y, const double z,
     const double roll, const double pitch, const double yaw)
   {
@@ -220,6 +209,11 @@ private:
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
   rclcpp::TimerBase::SharedPtr timer_{nullptr};
   tf2::Stamped<tf2::Transform> tf_past_;
+
+  // グリッパ角度の定数
+  const double GRIPPER_DEFAULT_ = 0.0;
+  const double GRIPPER_OPEN_ = angles::from_degrees(-30.0);
+  const double GRIPPER_CLOSE_ = angles::from_degrees(10.0);
 };
 
 int main(int argc, char ** argv)

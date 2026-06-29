@@ -26,64 +26,47 @@ import rclpy
 from rclpy.logging import get_logger
 
 
+class GripperController:
+    def __init__(self):
+        # MoveItPyのインスタンスを生成し、planning componentを取得
+        self.crane_plus = MoveItPy(node_name='gripper_control')
+        self.gripper = self.crane_plus.get_planning_component('gripper')
+        self.robot_model = self.crane_plus.get_robot_model()
+
+        # プランニングパラメータの設定
+        self.plan_request_params = PlanRequestParameters(self.crane_plus, 'ompl_rrtc')
+        self.plan_request_params.max_velocity_scaling_factor = 1.0      # Set 0.0 ~ 1.0
+        self.plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
+
+        self.logger = get_logger('gripper_control')
+
+    def set_gripper_angle(self, angle):
+        # グリッパの目標角度を設定して動作計画・実行する
+        self.gripper.set_start_state_to_current_state()
+        robot_state = RobotState(self.robot_model)
+        robot_state.set_joint_group_positions('gripper', [angle])
+        self.gripper.set_goal_state(robot_state=robot_state)
+        plan_and_execute(
+            self.crane_plus,
+            self.gripper,
+            self.logger,
+            single_plan_parameters=self.plan_request_params,
+        )
+
+
 def main(args=None):
     rclpy.init(args=args)
-    logger = get_logger('gripper_control')
 
-    # instantiate MoveItPy instance and get planning component
-    crane_plus = MoveItPy(node_name='gripper_control')
-    logger.info('MoveItPy instance created')
+    controller = GripperController()
 
-    # グリッパ制御用 planning component
-    gripper = crane_plus.get_planning_component('gripper')
+    # グリッパを閉じる
+    controller.set_gripper_angle(math.radians(30.0))
 
-    # instantiate a RobotState instance using the current robot model
-    robot_model = crane_plus.get_robot_model()
+    # グリッパを開く
+    controller.set_gripper_angle(math.radians(-30.0))
 
-    plan_request_params = PlanRequestParameters(
-        crane_plus,
-        'ompl_rrtc',
-    )
-
-    # 動作速度の調整
-    plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
-    plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
-
-    # gripperを閉じる
-    gripper.set_start_state_to_current_state()
-    robot_state = RobotState(robot_model)
-    robot_state.set_joint_group_positions('gripper', [math.radians(30.0)])
-    gripper.set_goal_state(robot_state=robot_state)
-    plan_and_execute(
-        crane_plus,
-        gripper,
-        logger,
-        single_plan_parameters=plan_request_params,
-    )
-
-    # gripperを開く
-    gripper.set_start_state_to_current_state()
-    robot_state = RobotState(robot_model)
-    robot_state.set_joint_group_positions('gripper', [math.radians(-30.0)])
-    gripper.set_goal_state(robot_state=robot_state)
-    plan_and_execute(
-        crane_plus,
-        gripper,
-        logger,
-        single_plan_parameters=plan_request_params,
-    )
-
-    # gripperを0度にする
-    gripper.set_start_state_to_current_state()
-    robot_state = RobotState(robot_model)
-    robot_state.set_joint_group_positions('gripper', [math.radians(0.0)])
-    gripper.set_goal_state(robot_state=robot_state)
-    plan_and_execute(
-        crane_plus,
-        gripper,
-        logger,
-        single_plan_parameters=plan_request_params,
-    )
+    # グリッパを0度にする
+    controller.set_gripper_angle(math.radians(0.0))
 
     # Finish with error. Related Issue
     # https://github.com/moveit/moveit2/issues/2693

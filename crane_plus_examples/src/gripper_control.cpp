@@ -17,15 +17,43 @@
 // /run_move_group/src/run_move_group.cpp
 
 #include <cmath>
+#include <thread>
 
 #include "moveit/move_group_interface/move_group_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
-static const rclcpp::Logger LOGGER = rclcpp::get_logger("gripper_control");
+class GripperController : public rclcpp::Node
+{
+public:
+  explicit GripperController(const rclcpp::NodeOptions & node_options)
+  : Node("gripper_control", node_options)
+  {
+  }
 
-double to_radians(const double deg_angle)
+  // MoveGroupInterfaceはshared_from_this()を使うため、コンストラクタ後に呼び出す
+  void initializeMoveGroup()
+  {
+    move_group_gripper_ = std::make_shared<MoveGroupInterface>(shared_from_this(), "gripper");
+    move_group_gripper_->setMaxVelocityScalingFactor(1.0);      // Set 0.0 ~ 1.0
+    move_group_gripper_->setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  }
+
+  // グリッパの開閉角度を設定して動かす
+  void setGripperAngle(const double angle)
+  {
+    auto joint_values = move_group_gripper_->getCurrentJointValues();
+    joint_values[0] = angle;
+    move_group_gripper_->setJointValueTarget(joint_values);
+    move_group_gripper_->move();
+  }
+
+private:
+  std::shared_ptr<MoveGroupInterface> move_group_gripper_;
+};
+
+double toRadians(const double deg_angle)
 {
   return deg_angle * M_PI / 180.0;
 }
@@ -35,30 +63,30 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-  auto move_group_gripper_node = rclcpp::Node::make_shared("move_group_gripper_node", node_options);
-  // For current state monitor
-  rclcpp::executors::SingleThreadedExecutor executor;
-  executor.add_node(move_group_gripper_node);
-  std::thread([&executor]() {executor.spin();}).detach();
 
-  MoveGroupInterface move_group_gripper(move_group_gripper_node, "gripper");
-  move_group_gripper.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
-  move_group_gripper.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  auto gripper_controller = std::make_shared<GripperController>(node_options);
 
-  auto gripper_joint_values = move_group_gripper.getCurrentJointValues();
+  // MoveGroupInterfaceのデッドロックを防ぐため、スピン処理を別スレッドで走らせる
+  std::thread spin_thread([gripper_controller]() {
+      rclcpp::spin(gripper_controller);
+    });
 
-  gripper_joint_values[0] = to_radians(30);
-  move_group_gripper.setJointValueTarget(gripper_joint_values);
-  move_group_gripper.move();
+  gripper_controller->initializeMoveGroup();
 
-  gripper_joint_values[0] = to_radians(-30);
-  move_group_gripper.setJointValueTarget(gripper_joint_values);
-  move_group_gripper.move();
+  // グリッパを閉じる
+  gripper_controller->setGripperAngle(toRadians(30.0));
 
-  gripper_joint_values[0] = to_radians(0);
-  move_group_gripper.setJointValueTarget(gripper_joint_values);
-  move_group_gripper.move();
+  // グリッパを開く
+  gripper_controller->setGripperAngle(toRadians(-30.0));
 
+  // グリッパを0度にする
+  gripper_controller->setGripperAngle(toRadians(0.0));
+
+  // 終了処理: rclcppを終了したのち、バックグラウンドスレッドを安全に回収する
   rclcpp::shutdown();
+  if (spin_thread.joinable()) {
+    spin_thread.join();
+  }
+
   return 0;
 }
