@@ -86,7 +86,7 @@ public:
     move_group_arm_->setPathConstraints(constraints);
 
     // 初期位置としての待機姿勢に移動
-    moveArmToPose(0.0, 0.0, 0.3, 0, 0, 0);
+    moveArmToPose(STANDBY_POSITION_);
 
     // TFの受信に必要なBufferとListenerを初期化
     tf_buffer_ =
@@ -100,6 +100,16 @@ public:
   }
 
 private:
+  // 位置姿勢のパラメータを格納する構造体
+  struct PoseParams {
+    double x;
+    double y;
+    double z;
+    double roll;
+    double pitch;
+    double yaw;
+  };
+
   void on_timer()
   {
     // target_0（把持対象）のTFを取得
@@ -145,44 +155,50 @@ private:
   void picking(tf2::Vector3 target_position)
   {
     // 1. 掴み動作の準備とターゲットへの正対
-    setGripperAngle(GRIPPER_OPEN_);
+    moveGripperAngle(GRIPPER_OPEN_);
 
     double x = target_position.x();
     double y = target_position.y();
     double theta_rad = std::atan2(y, x);
     double theta_deg = theta_rad * 180.0 / 3.1415926535;
 
-    moveArmToPose(0.0, 0.0, 0.3, 0, 0, theta_deg);
+    moveArmToPose(0.0, 0.0, STANDBY_POSITION_.z, 0, 0, theta_deg);
 
     // 2. ターゲット位置へのアプローチと掴み動作
-    if (!moveArmToPose(x, y, 0.04, 0, 90, theta_deg)) {
+    if (!moveArmToPose(x, y, GRASP_HEIGHT_, 0, GRASP_PITCH_, theta_deg)) {
       // アーム動作に失敗した場合は初期姿勢に戻る
-      moveArmToPose(0.0, 0.0, 0.3, 0, 0, 0);
+      moveArmToPose(STANDBY_POSITION_);
       return;
     }
 
-    setGripperAngle(GRIPPER_CLOSE_);
+    moveGripperAngle(GRIPPER_CLOSE_);
 
     // 3. 搬送および配置動作
-    moveArmToPose(0.12, 0.0, 0.17, 0, 90, 0);
-    moveArmToPose(0.0, -0.12, 0.17, 0, 90, -90);
-    moveArmToPose(0.0, -0.25, 0.05, 0, 90, -90);
+    moveArmToPose(TRANSIT_POSE_1_);
+    moveArmToPose(TRANSIT_POSE_2_);
+    moveArmToPose(PLACE_POSE_);
 
-    setGripperAngle(GRIPPER_OPEN_);
+    moveGripperAngle(GRIPPER_OPEN_);
 
     // 4. 待機姿勢への復帰
-    moveArmToPose(0.0, -0.25, 0.10, 0, 90, -90);
-    moveArmToPose(0.0, 0.0, 0.3, 0, 0, 0);
-    setGripperAngle(GRIPPER_DEFAULT_);
+    moveArmToPose(PLACE_RETRACT_POSE_);
+    moveArmToPose(STANDBY_POSITION_);
+    moveGripperAngle(GRIPPER_DEFAULT_);
   }
 
   // グリッパの開閉角度を設定して動かす
-  void setGripperAngle(const double angle)
+  void moveGripperAngle(const double angle)
   {
     auto joint_values = move_group_gripper_->getCurrentJointValues();
     joint_values[0] = angle;
     move_group_gripper_->setJointValueTarget(joint_values);
     move_group_gripper_->move();
+  }
+
+  // 構造体で指定した位置姿勢にアームを動かす
+  bool moveArmToPose(const PoseParams & pose)
+  {
+    return moveArmToPose(pose.x, pose.y, pose.z, pose.roll, pose.pitch, pose.yaw);
   }
 
   // x, y, z[m]とroll, pitch, yaw[deg]で指定した位置姿勢にアームを動かす
@@ -214,6 +230,19 @@ private:
   const double GRIPPER_DEFAULT_ = 0.0;
   const double GRIPPER_OPEN_ = angles::from_degrees(-30.0);
   const double GRIPPER_CLOSE_ = angles::from_degrees(10.0);
+
+  // 待機姿勢の位置姿勢（x, y, z [m], roll, pitch, yaw [deg]）
+  const PoseParams STANDBY_POSITION_ = {0.0, 0.0, 0.3, 0.0, 0.0, 0.0};
+
+  // 把持アプローチ時の高さおよびピッチ角
+  const double GRASP_HEIGHT_ = 0.04;
+  const double GRASP_PITCH_ = 90.0;
+
+  // 搬送時の中間姿勢およびプレース位置姿勢
+  const PoseParams TRANSIT_POSE_1_ = {0.12, 0.0, 0.17, 0.0, 90.0, 0.0};
+  const PoseParams TRANSIT_POSE_2_ = {0.0, -0.12, 0.17, 0.0, 90.0, -90.0};
+  const PoseParams PLACE_POSE_ = {0.0, -0.25, 0.05, 0.0, 90.0, -90.0};
+  const PoseParams PLACE_RETRACT_POSE_ = {0.0, -0.25, 0.10, 0.0, 90.0, -90.0};
 };
 
 int main(int argc, char ** argv)

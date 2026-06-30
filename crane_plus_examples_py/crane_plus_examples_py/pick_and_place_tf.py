@@ -78,6 +78,15 @@ class PickAndPlaceTf(Node):
         self.GRIPPER_OPEN = math.radians(-30.0)
         self.GRIPPER_CLOSE = math.radians(10.0)
 
+        # 待機姿勢の位置姿勢（x, y, z [m], roll, pitch, yaw [deg]）
+        self.STANDBY_POSITION = (0.0, 0.0, 0.3, 0.0, 0.0, 0.0)
+
+        # 搬送時の中間姿勢およびプレース位置姿勢
+        self.TRANSIT_POSE_1 = (0.12, 0.0, 0.17, 0.0, 90.0, 0.0)
+        self.TRANSIT_POSE_2 = (0.0, -0.12, 0.17, 0.0, 90.0, -90.0)
+        self.PLACE_POSE = (0.0, -0.25, 0.05, 0.0, 90.0, -90.0)
+        self.PLACE_RETRACT_POSE = (0.0, -0.25, 0.10, 0.0, 90.0, -90.0)
+
         # 初期姿勢としてSRDFに定義されている 'home' の位置姿勢に移動
         self.arm.set_start_state_to_current_state()
         self.arm.set_goal_state(configuration_name='home')
@@ -111,7 +120,7 @@ class PickAndPlaceTf(Node):
         self.arm.set_path_constraints(constraints)
 
         # 初期位置としての待機姿勢に移動
-        self.move_arm_to_pose(0.0, 0.0, 0.3, 0, 0, 0.0)
+        self.move_arm_to_pose(*self.STANDBY_POSITION)
 
         # 定期的にTFを監視してピッキングをトリガーするためのタイマーを設定（0.5秒周期）
         self.timer = self.create_timer(0.5, self.on_timer)
@@ -158,7 +167,7 @@ class PickAndPlaceTf(Node):
 
     def picking(self, target_position):
         # 1. 掴み動作の準備とターゲットへの正対
-        self.set_gripper_angle(self.GRIPPER_OPEN)
+        self.move_gripper_angle(self.GRIPPER_OPEN)
 
         x = target_position.x
         y = target_position.y
@@ -168,27 +177,26 @@ class PickAndPlaceTf(Node):
         self.move_arm_to_pose(0.0, 0.0, 0.3, 0, 0, theta_deg)
 
         # 2. ターゲット位置へのアプローチと掴み動作
-        if not self.move_arm_to_pose(x, y, 0.04, 0, 90, theta_deg):
+        if not self.move_arm_to_pose(x, y, 0.04, 0, 90.0, theta_deg):
             # アーム動作に失敗した場合は初期姿勢に戻る
-            self.move_arm_to_pose(0.0, 0.0, 0.3, 0, 0, 0)
+            self.move_arm_to_pose(*self.STANDBY_POSITION)
             return
 
-        self.set_gripper_angle(self.GRIPPER_CLOSE)
+        self.move_gripper_angle(self.GRIPPER_CLOSE)
 
         # 3. 搬送および配置動作
-        self.move_arm_to_pose(0.12, 0.0, 0.17, 0, 90, 0)
-        self.move_arm_to_pose(0.0, -0.12, 0.17, 0, 90, -90)
-        self.move_arm_to_pose(0.0, -0.25, 0.05, 0, 90, -90)
+        self.move_arm_to_pose(*self.TRANSIT_POSE_1)
+        self.move_arm_to_pose(*self.TRANSIT_POSE_2)
+        self.move_arm_to_pose(*self.PLACE_POSE)
 
-        self.set_gripper_angle(self.GRIPPER_OPEN)
+        self.move_gripper_angle(self.GRIPPER_OPEN)
 
         # 4. 待機姿勢への復帰
-        self.move_arm_to_pose(0.0, -0.25, 0.10, 0, 90, -90)
-        self.move_arm_to_pose(0.0, 0.0, 0.3, 0, 0, 0)
-        self.set_gripper_angle(self.GRIPPER_DEFAULT)
+        self.move_arm_to_pose(*self.PLACE_RETRACT_POSE)
+        self.move_arm_to_pose(*self.STANDBY_POSITION)
+        self.move_gripper_angle(self.GRIPPER_DEFAULT)
 
-    def set_gripper_angle(self, angle):
-        # グリッパの目標関節角度を設定して動作計画・実行する
+    def move_gripper_angle(self, angle):
         self.gripper.set_start_state_to_current_state()
         robot_state = RobotState(self.robot_model)
         robot_state.set_joint_group_positions('gripper', [angle])
@@ -205,7 +213,6 @@ class PickAndPlaceTf(Node):
         POSITION_TOLERANCE = 0.00001
         ORIENTATION_TOLERANCE = 0.0001
 
-        # 目標のPoseStampedオブジェクトを生成
         target_pose = PoseStamped()
         target_pose.header.frame_id = 'crane_plus_base'
         target_pose.pose.position.x = x
@@ -218,11 +225,9 @@ class PickAndPlaceTf(Node):
         target_pose.pose.orientation.z = quat[2]
         target_pose.pose.orientation.w = quat[3]
 
-        # 目標位置・姿勢の制約（Constraints）を設定
         goal_constraints = Constraints()
         goal_constraints.name = 'tolerance_goal'
 
-        # 位置制約を設定
         position_constraint = PositionConstraint()
         position_constraint.header.frame_id = 'crane_plus_base'
         position_constraint.link_name = 'crane_plus_link_tcp'
@@ -235,7 +240,6 @@ class PickAndPlaceTf(Node):
         position_constraint.constraint_region = tolerance_region
         position_constraint.weight = 1.0
 
-        # 姿勢制約を設定
         orientation_constraint = OrientationConstraint()
         orientation_constraint.header.frame_id = 'crane_plus_base'
         orientation_constraint.link_name = 'crane_plus_link_tcp'
@@ -251,7 +255,6 @@ class PickAndPlaceTf(Node):
         self.arm.set_start_state_to_current_state()
         self.arm.set_goal_state(motion_plan_constraints=[goal_constraints])
 
-        # 計画および実行
         return plan_and_execute(
             self.crane_plus,
             self.arm,
