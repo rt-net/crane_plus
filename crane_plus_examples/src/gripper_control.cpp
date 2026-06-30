@@ -41,7 +41,7 @@ public:
   }
 
   // グリッパの開閉角度を設定して動かす
-  void setGripperAngle(const double angle)
+  void moveGripperAngle(const double angle)
   {
     auto joint_values = move_group_gripper_->getCurrentJointValues();
     joint_values[0] = angle;
@@ -74,13 +74,13 @@ int main(int argc, char ** argv)
   gripper_controller->initializeMoveGroup();
 
   // グリッパを閉じる
-  gripper_controller->setGripperAngle(toRadians(30.0));
+  gripper_controller->moveGripperAngle(toRadians(30.0));
 
   // グリッパを開く
-  gripper_controller->setGripperAngle(toRadians(-30.0));
+  gripper_controller->moveGripperAngle(toRadians(-30.0));
 
   // グリッパを0度にする
-  gripper_controller->setGripperAngle(toRadians(0.0));
+  gripper_controller->moveGripperAngle(toRadians(0.0));
 
   // 終了処理: rclcppを終了したのち、バックグラウンドスレッドを安全に回収する
   rclcpp::shutdown();

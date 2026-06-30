@@ -40,8 +40,7 @@ class GripperController:
 
         self.logger = get_logger('gripper_control')
 
-    def set_gripper_angle(self, angle):
-        # グリッパの目標角度を設定して動作計画・実行する
+    def move_gripper_angle(self, angle):
         self.gripper.set_start_state_to_current_state()
         robot_state = RobotState(self.robot_model)
         robot_state.set_joint_group_positions('gripper', [angle])
@@ -60,13 +59,13 @@ def main(args=None):
     controller = GripperController()
 
     # グリッパを閉じる
-    controller.set_gripper_angle(math.radians(30.0))
+    controller.move_gripper_angle(math.radians(30.0))
 
     # グリッパを開く
-    controller.set_gripper_angle(math.radians(-30.0))
+    controller.move_gripper_angle(math.radians(-30.0))
 
     # グリッパを0度にする
-    controller.set_gripper_angle(math.radians(0.0))
+    controller.move_gripper_angle(math.radians(0.0))
 
     # Finish with error. Related Issue
     # https://github.com/moveit/moveit2/issues/2693
