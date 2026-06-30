@@ -16,47 +16,42 @@
 // https://github.com/ros-planning/moveit2/blob/main/moveit_demo_nodes
 // /run_move_group/src/run_move_group.cpp
 
-#include <cmath>
 #include <thread>
 #include <vector>
 
+#include "angles/angles.h"
 #include "moveit/move_group_interface/move_group_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
-class JointValuesController : public rclcpp::Node
+class JointValues
 {
 public:
-  explicit JointValuesController(const rclcpp::NodeOptions & node_options)
-  : Node("joint_values", node_options)
+  // ノードを受け取り、アームのMoveGroupInterfaceを初期化する
+  explicit JointValues(rclcpp::Node::SharedPtr node)
   {
-  }
-
-  // MoveGroupInterfaceはshared_from_this()を使うため、コンストラクタ後に呼び出す
-  void initializeMoveGroup()
-  {
-    move_group_arm_ = std::make_shared<MoveGroupInterface>(shared_from_this(), "arm_tcp");
-    move_group_arm_->setMaxVelocityScalingFactor(1.0);      // Set 0.0 ~ 1.0
+    move_group_arm_ = std::make_shared<MoveGroupInterface>(node, "arm_tcp");
+    move_group_arm_->setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
     move_group_arm_->setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
   }
 
-  // SRDFに定義されている名前付きの姿勢に移動する
-  void moveArmToNamedPose(const std::string & name)
+  // SRDFに定義された姿勢名でアームを動かす
+  void move_arm_to_named_pose(const std::string & name)
   {
     move_group_arm_->setNamedTarget(name);
     move_group_arm_->move();
   }
 
-  // 指定した関節角度にアームを動かす
-  void moveArmToJointValues(const std::vector<double> & joint_values)
+  // 各ジョイント角度[rad]を指定してアームを動かす
+  void move_arm_joint_values(const std::vector<double> & joint_values)
   {
     move_group_arm_->setJointValueTarget(joint_values);
     move_group_arm_->move();
   }
 
-  // 現在の関節角度を取得する
-  std::vector<double> getCurrentJointValues()
+  // アームの現在のジョイント角度を取得する
+  std::vector<double> get_current_arm_joint_values()
   {
     return move_group_arm_->getCurrentJointValues();
   }
@@ -65,45 +60,34 @@ private:
   std::shared_ptr<MoveGroupInterface> move_group_arm_;
 };
 
-double toRadians(const double deg_angle)
-{
-  return deg_angle * M_PI / 180.0;
-}
-
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-
-  auto arm_controller = std::make_shared<JointValuesController>(node_options);
+  auto node = rclcpp::Node::make_shared("joint_values", node_options);
 
   // MoveGroupInterfaceのデッドロックを防ぐため、スピン処理を別スレッドで走らせる
-  std::thread spin_thread([arm_controller]() {
-      rclcpp::spin(arm_controller);
-    });
+  std::thread spin_thread([node]() {rclcpp::spin(node);});
 
-  arm_controller->initializeMoveGroup();
+  JointValues controller(node);
 
   // verticalの姿勢から開始
-  arm_controller->moveArmToNamedPose("vertical");
+  controller.move_arm_to_named_pose("vertical");
 
   // 各関節を順番に45度に動かす
-  auto joint_values = arm_controller->getCurrentJointValues();
-  const double TARGET_ANGLE = toRadians(45.0);
+  const double TARGET_ANGLE = angles::from_degrees(45.0);
+  auto joint_values = controller.get_current_arm_joint_values();
   for (size_t i = 0; i < joint_values.size(); i++) {
     joint_values[i] = TARGET_ANGLE;
-    arm_controller->moveArmToJointValues(joint_values);
+    controller.move_arm_joint_values(joint_values);
   }
 
   // verticalの姿勢に戻る
-  arm_controller->moveArmToNamedPose("vertical");
+  controller.move_arm_to_named_pose("vertical");
 
   // 終了処理: rclcppを終了したのち、バックグラウンドスレッドを安全に回収する
   rclcpp::shutdown();
-  if (spin_thread.joinable()) {
-    spin_thread.join();
-  }
-
+  spin_thread.join();
   return 0;
 }

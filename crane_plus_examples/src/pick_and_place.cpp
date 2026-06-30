@@ -16,69 +16,70 @@
 // https://github.com/ros-planning/moveit2/blob/main/moveit_demo_nodes
 // /run_move_group/src/run_move_group.cpp
 
-#include <cmath>
 #include <thread>
 
+#include "angles/angles.h"
 #include "geometry_msgs/msg/pose.hpp"
-#include "geometry_msgs/msg/quaternion.hpp"
 #include "moveit/move_group_interface/move_group_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
-class PickAndPlaceController : public rclcpp::Node
+class PickAndPlace
 {
 public:
-  explicit PickAndPlaceController(const rclcpp::NodeOptions & node_options)
-  : Node("pick_and_place", node_options)
-  {
-    // グリッパの開閉角
-    GRIPPER_DEFAULT = 0.0;
-    GRIPPER_OPEN = toRadians(-30.0);
-    GRIPPER_CLOSE = toRadians(10.0);
+  // グリッパの開閉角度
+  inline static const double GRIPPER_DEFAULT = 0.0;
+  inline static const double GRIPPER_OPEN = angles::from_degrees(-30.0);
+  inline static const double GRIPPER_CLOSE = angles::from_degrees(10.0);
 
-    // 物体の頭上の位置
-    ABOVE_POSE = makePose(0.0, -0.21, 0.17, 0.0, 90.0, -90.0);
-    // 物体を掴む直前・直後の位置（持ち上げた高さ）
-    PRE_AND_POST_GRASP_POSE = makePose(0.0, -0.1, 0.05, 0.0, 180.0, -90.0);
-    // 物体を掴む位置
-    GRASP_POSE = makePose(0.0, -0.1, 0.02, 0.0, 180.0, -90.0);
-    // 物体を置く位置
-    RELEASE_POSE = makePose(0.25, 0.0, 0.06, 0.0, 90.0, 0.0);
-  }
-
-  // MoveGroupInterfaceはshared_from_this()を使うため、コンストラクタ後に呼び出す
-  void initializeMoveGroup()
+  // ノードを受け取り、アーム・グリッパのMoveGroupInterfaceを初期化する
+  explicit PickAndPlace(rclcpp::Node::SharedPtr node)
   {
-    move_group_arm_ = std::make_shared<MoveGroupInterface>(shared_from_this(), "arm_tcp");
-    move_group_arm_->setMaxVelocityScalingFactor(1.0);      // Set 0.0 ~ 1.0
+    move_group_arm_ = std::make_shared<MoveGroupInterface>(node, "arm_tcp");
+    move_group_arm_->setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
     move_group_arm_->setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
     // IKの成功率を向上させるため、目標位置姿勢の許容範囲を小さく設定
     move_group_arm_->setGoalPositionTolerance(1e-5);
     move_group_arm_->setGoalOrientationTolerance(1e-4);
 
-    move_group_gripper_ = std::make_shared<MoveGroupInterface>(shared_from_this(), "gripper");
-    move_group_gripper_->setMaxVelocityScalingFactor(1.0);      // Set 0.0 ~ 1.0
+    move_group_gripper_ = std::make_shared<MoveGroupInterface>(node, "gripper");
+    move_group_gripper_->setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
     move_group_gripper_->setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
   }
 
-  // SRDFに定義されている名前付きの姿勢に移動する
-  void moveArmToNamedPose(const std::string & name)
+  // SRDFに定義された姿勢名でアームを動かす
+  void move_arm_to_named_pose(const std::string & name)
   {
     move_group_arm_->setNamedTarget(name);
     move_group_arm_->move();
   }
 
-  // 指定した位置姿勢にアームを動かす
-  void moveArmToPose(const geometry_msgs::msg::Pose & pose)
+  // アームを目標位置・姿勢（Pose）に動かす
+  void move_arm_to_pose(const geometry_msgs::msg::Pose & pose)
   {
     move_group_arm_->setPoseTarget(pose);
     move_group_arm_->move();
   }
 
-  // グリッパの開閉角度を設定して動かす
-  void moveGripperAngle(const double angle)
+  // アームを目標位置（x, y, z [m]）・姿勢（roll, pitch, yaw [deg]）に動かす
+  void control_arm(
+    const double x, const double y, const double z,
+    const double roll, const double pitch, const double yaw)
+  {
+    geometry_msgs::msg::Pose target_pose;
+    tf2::Quaternion q;
+    target_pose.position.x = x;
+    target_pose.position.y = y;
+    target_pose.position.z = z;
+    q.setRPY(angles::from_degrees(roll), angles::from_degrees(pitch), angles::from_degrees(yaw));
+    target_pose.orientation = tf2::toMsg(q);
+    move_arm_to_pose(target_pose);
+  }
+
+  // グリッパを角度[rad]を指定して開閉する
+  void move_gripper_angle(const double angle)
   {
     auto joint_values = move_group_gripper_->getCurrentJointValues();
     joint_values[0] = angle;
@@ -86,38 +87,7 @@ public:
     move_group_gripper_->move();
   }
 
-  // 目標位置姿勢の定数
-  geometry_msgs::msg::Pose ABOVE_POSE;
-  geometry_msgs::msg::Pose PRE_AND_POST_GRASP_POSE;
-  geometry_msgs::msg::Pose GRASP_POSE;
-  geometry_msgs::msg::Pose RELEASE_POSE;
-
-  // グリッパ角度の定数
-  double GRIPPER_DEFAULT;
-  double GRIPPER_OPEN;
-  double GRIPPER_CLOSE;
-
 private:
-  // x, y, z[m]とroll, pitch, yaw[deg]からPoseを生成する
-  static geometry_msgs::msg::Pose makePose(
-    const double x, const double y, const double z,
-    const double roll, const double pitch, const double yaw)
-  {
-    geometry_msgs::msg::Pose pose;
-    pose.position.x = x;
-    pose.position.y = y;
-    pose.position.z = z;
-    tf2::Quaternion q;
-    q.setRPY(toRadians(roll), toRadians(pitch), toRadians(yaw));
-    pose.orientation = tf2::toMsg(q);
-    return pose;
-  }
-
-  static double toRadians(const double deg_angle)
-  {
-    return deg_angle * M_PI / 180.0;
-  }
-
   std::shared_ptr<MoveGroupInterface> move_group_arm_;
   std::shared_ptr<MoveGroupInterface> move_group_gripper_;
 };
@@ -127,48 +97,76 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-
-  auto controller = std::make_shared<PickAndPlaceController>(node_options);
+  auto node = rclcpp::Node::make_shared("pick_and_place", node_options);
 
   // MoveGroupInterfaceのデッドロックを防ぐため、スピン処理を別スレッドで走らせる
-  std::thread spin_thread([controller]() {
-      rclcpp::spin(controller);
-    });
+  std::thread spin_thread([node]() {rclcpp::spin(node);});
 
-  controller->initializeMoveGroup();
+  PickAndPlace controller(node);
+
+  // 物体上方のアプローチ位置のXYZ[m]とRPY[deg]
+  const double APPROACH_X = 0.0;
+  const double APPROACH_Y = -0.21;
+  const double APPROACH_Z = 0.17;
+  const double APPROACH_ROLL = 0.0;
+  const double APPROACH_PITCH = 90.0;
+  const double APPROACH_YAW = -90.0;
+
+  // アプローチ・退避時の高さ
+  const double LIFTING_HEIGHT = 0.05;
+
+  // 掴む位置（ピック位置）のXYZ[m]とRPY[deg]
+  const double PICK_X = 0.0;
+  const double PICK_Y = -0.1;
+  const double PICK_Z = 0.02;
+  const double PICK_ROLL = 0.0;
+  const double PICK_PITCH = 180.0;
+  const double PICK_YAW = -90.0;
+
+  // 置く位置（プレース位置）のXYZ[m]とRPY[deg]
+  const double PLACE_X = 0.25;
+  const double PLACE_Y = 0.0;
+  const double PLACE_Z = 0.06;
+  const double PLACE_ROLL = 0.0;
+  const double PLACE_PITCH = 90.0;
+  const double PLACE_YAW = 0.0;
 
   // 初期姿勢
-  controller->moveArmToNamedPose("vertical");
-  controller->moveGripperAngle(controller->GRIPPER_DEFAULT);
+  controller.move_arm_to_named_pose("vertical");
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_DEFAULT);
 
   // ピック準備
-  controller->moveArmToNamedPose("home");
-  controller->moveGripperAngle(controller->GRIPPER_OPEN);
-  controller->moveArmToPose(controller->ABOVE_POSE);
-  controller->moveArmToPose(controller->PRE_AND_POST_GRASP_POSE);
+  controller.move_arm_to_named_pose("home");
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_OPEN);
+  // 物体上方へ移動
+  controller.control_arm(APPROACH_X, APPROACH_Y, APPROACH_Z, APPROACH_ROLL, APPROACH_PITCH,
+    APPROACH_YAW);
+  // 物体直上まで降りる
+  controller.control_arm(PICK_X, PICK_Y, LIFTING_HEIGHT, PICK_ROLL, PICK_PITCH, PICK_YAW);
 
   // ピック動作
-  controller->moveArmToPose(controller->GRASP_POSE);
-  controller->moveGripperAngle(controller->GRIPPER_CLOSE);
-  controller->moveArmToPose(controller->PRE_AND_POST_GRASP_POSE);
-
-  // プレース準備
-  controller->moveArmToNamedPose("home");
+  // 掴む位置まで降りる
+  controller.control_arm(PICK_X, PICK_Y, PICK_Z, PICK_ROLL, PICK_PITCH, PICK_YAW);
+  // 掴む
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_CLOSE);
+  // 持ち上げる
+  controller.control_arm(PICK_X, PICK_Y, LIFTING_HEIGHT, PICK_ROLL, PICK_PITCH, PICK_YAW);
 
   // プレース動作
-  controller->moveArmToPose(controller->RELEASE_POSE);
-  controller->moveGripperAngle(controller->GRIPPER_OPEN);
+  // homeを経由してプレース位置へ移動
+  controller.move_arm_to_named_pose("home");
+  // 置く位置まで降ろす
+  controller.control_arm(PLACE_X, PLACE_Y, PLACE_Z, PLACE_ROLL, PLACE_PITCH, PLACE_YAW);
+  // 離す
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_OPEN);
 
   // 終了動作
-  controller->moveArmToNamedPose("home");
-  controller->moveArmToNamedPose("vertical");
-  controller->moveGripperAngle(controller->GRIPPER_DEFAULT);
+  controller.move_arm_to_named_pose("home");
+  controller.move_arm_to_named_pose("vertical");
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_DEFAULT);
 
   // 終了処理: rclcppを終了したのち、バックグラウンドスレッドを安全に回収する
   rclcpp::shutdown();
-  if (spin_thread.joinable()) {
-    spin_thread.join();
-  }
-
+  spin_thread.join();
   return 0;
 }

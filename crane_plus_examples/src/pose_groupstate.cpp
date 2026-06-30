@@ -23,24 +23,19 @@
 
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
-class PoseGroupstateController : public rclcpp::Node
+class PoseGroupstate
 {
 public:
-  explicit PoseGroupstateController(const rclcpp::NodeOptions & node_options)
-  : Node("pose_groupstate", node_options)
+  // ノードを受け取り、アームのMoveGroupInterfaceを初期化する
+  explicit PoseGroupstate(rclcpp::Node::SharedPtr node)
   {
-  }
-
-  // MoveGroupInterfaceはshared_from_this()を使うため、コンストラクタ後に呼び出す
-  void initializeMoveGroup()
-  {
-    move_group_arm_ = std::make_shared<MoveGroupInterface>(shared_from_this(), "arm_tcp");
-    move_group_arm_->setMaxVelocityScalingFactor(1.0);      // Set 0.0 ~ 1.0
+    move_group_arm_ = std::make_shared<MoveGroupInterface>(node, "arm_tcp");
+    move_group_arm_->setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
     move_group_arm_->setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
   }
 
-  // SRDFに定義されている名前付きの姿勢に移動する
-  void moveArmToNamedPose(const std::string & name)
+  // SRDFに定義された姿勢名でアームを動かす
+  void move_arm_to_named_pose(const std::string & name)
   {
     move_group_arm_->setNamedTarget(name);
     move_group_arm_->move();
@@ -55,26 +50,20 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-
-  auto arm_controller = std::make_shared<PoseGroupstateController>(node_options);
+  auto node = rclcpp::Node::make_shared("pose_groupstate", node_options);
 
   // MoveGroupInterfaceのデッドロックを防ぐため、スピン処理を別スレッドで走らせる
-  std::thread spin_thread([arm_controller]() {
-      rclcpp::spin(arm_controller);
-    });
+  std::thread spin_thread([node]() {rclcpp::spin(node);});
 
-  arm_controller->initializeMoveGroup();
+  PoseGroupstate controller(node);
 
   // SRDFに定義されている名前付き姿勢を順番に実行する
-  arm_controller->moveArmToNamedPose("home");
-  arm_controller->moveArmToNamedPose("vertical");
-  arm_controller->moveArmToNamedPose("home");
+  controller.move_arm_to_named_pose("home");
+  controller.move_arm_to_named_pose("vertical");
+  controller.move_arm_to_named_pose("home");
 
   // 終了処理: rclcppを終了したのち、バックグラウンドスレッドを安全に回収する
   rclcpp::shutdown();
-  if (spin_thread.joinable()) {
-    spin_thread.join();
-  }
-
+  spin_thread.join();
   return 0;
 }

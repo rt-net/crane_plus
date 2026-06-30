@@ -27,7 +27,7 @@ import rclpy
 from rclpy.logging import get_logger
 
 
-class JointValuesController:
+class JointValues:
     def __init__(self):
         # MoveItPyのインスタンスを生成し、planning componentを取得
         self.crane_plus = MoveItPy(node_name='joint_values')
@@ -35,9 +35,9 @@ class JointValuesController:
         self.robot_model = self.crane_plus.get_robot_model()
         self.robot_state = RobotState(self.robot_model)
 
-        # プランニングパラメータの設定
+        # プランニングの設定（動作プランナーと速度・加速度スケール）
         self.plan_request_params = PlanRequestParameters(self.crane_plus, 'ompl_rrtc')
-        self.plan_request_params.max_velocity_scaling_factor = 1.0      # Set 0.0 ~ 1.0
+        self.plan_request_params.max_velocity_scaling_factor = 1.0  # Set 0.0 ~ 1.0
         self.plan_request_params.max_acceleration_scaling_factor = 1.0  # Set 0.0 ~ 1.0
 
         self.logger = get_logger('joint_values')
@@ -51,7 +51,7 @@ class JointValuesController:
             single_plan_parameters=self.plan_request_params,
         )
 
-    def move_arm_to_joint_values(self, joint_values_dict):
+    def move_arm_joint_values(self, joint_values_dict):
         # 関節角度の辞書を指定してアームを動かす
         self.robot_state.joint_positions = joint_values_dict
         joint_constraint = construct_joint_constraint(
@@ -65,7 +65,7 @@ class JointValuesController:
             single_plan_parameters=self.plan_request_params,
         )
 
-    def get_current_joint_values(self, joint_names):
+    def get_current_arm_joint_values(self, joint_names):
         # 現在の関節角度を名前付き辞書で取得する
         self.arm.set_start_state_to_current_state()
         current_state = self.arm.get_start_state()
@@ -76,7 +76,7 @@ class JointValuesController:
 def main(args=None):
     rclpy.init(args=args)
 
-    controller = JointValuesController()
+    controller = JointValues()
 
     joint_names = [
         'crane_plus_joint1',
@@ -90,10 +90,10 @@ def main(args=None):
     controller.move_arm_to_named_pose('vertical')
 
     # 各関節を順番に45度に動かす
-    joint_values_dict = controller.get_current_joint_values(joint_names)
+    joint_values_dict = controller.get_current_arm_joint_values(joint_names)
     for joint_name in joint_names:
         joint_values_dict[joint_name] = target_joint_value
-        controller.move_arm_to_joint_values(joint_values_dict)
+        controller.move_arm_joint_values(joint_values_dict)
 
     # verticalの姿勢に戻る
     controller.move_arm_to_named_pose('vertical')
