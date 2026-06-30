@@ -78,7 +78,7 @@ public:
   }
 
   // グリッパの開閉角度を設定して動かす
-  void setGripperAngle(const double angle)
+  void moveGripperAngle(const double angle)
   {
     auto joint_values = move_group_gripper_->getCurrentJointValues();
     joint_values[0] = angle;
@@ -139,17 +139,17 @@ int main(int argc, char ** argv)
 
   // 初期姿勢
   controller->moveArmToNamedPose("vertical");
-  controller->setGripperAngle(controller->GRIPPER_DEFAULT);
+  controller->moveGripperAngle(controller->GRIPPER_DEFAULT);
 
   // ピック準備
   controller->moveArmToNamedPose("home");
-  controller->setGripperAngle(controller->GRIPPER_OPEN);
+  controller->moveGripperAngle(controller->GRIPPER_OPEN);
   controller->moveArmToPose(controller->ABOVE_POSE);
   controller->moveArmToPose(controller->PRE_AND_POST_GRASP_POSE);
 
   // ピック動作
   controller->moveArmToPose(controller->GRASP_POSE);
-  controller->setGripperAngle(controller->GRIPPER_CLOSE);
+  controller->moveGripperAngle(controller->GRIPPER_CLOSE);
   controller->moveArmToPose(controller->PRE_AND_POST_GRASP_POSE);
 
   // プレース準備
@@ -157,12 +157,12 @@ int main(int argc, char ** argv)
 
   // プレース動作
   controller->moveArmToPose(controller->RELEASE_POSE);
-  controller->setGripperAngle(controller->GRIPPER_OPEN);
+  controller->moveGripperAngle(controller->GRIPPER_OPEN);
 
   // 終了動作
   controller->moveArmToNamedPose("home");
   controller->moveArmToNamedPose("vertical");
-  controller->setGripperAngle(controller->GRIPPER_DEFAULT);
+  controller->moveGripperAngle(controller->GRIPPER_DEFAULT);
 
   // 終了処理: rclcppを終了したのち、バックグラウンドスレッドを安全に回収する
   rclcpp::shutdown();

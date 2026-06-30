@@ -132,8 +132,7 @@ class PickAndPlaceController:
             single_plan_parameters=self.arm_plan_params,
         )
 
-    def set_gripper_angle(self, angle):
-        # グリッパの目標角度を設定して動作計画・実行する
+    def move_gripper_angle(self, angle):
         self.gripper.set_start_state_to_current_state()
         robot_state = RobotState(self.robot_model)
         robot_state.set_joint_group_positions('gripper', [angle])
@@ -151,17 +150,17 @@ def main(args=None):
 
     # 初期姿勢
     controller.move_arm_to_named_pose('vertical')
-    controller.set_gripper_angle(controller.GRIPPER_DEFAULT)
+    controller.move_gripper_angle(controller.GRIPPER_DEFAULT)
 
     # ピック準備
     controller.move_arm_to_named_pose('home')
-    controller.set_gripper_angle(controller.GRIPPER_OPEN)
+    controller.move_gripper_angle(controller.GRIPPER_OPEN)
     controller.move_arm_to_pose(controller.ABOVE_POSE)
     controller.move_arm_to_pose(controller.PRE_AND_POST_GRASP_POSE)
 
     # ピック動作
     controller.move_arm_to_pose(controller.GRASP_POSE)
-    controller.set_gripper_angle(controller.GRIPPER_CLOSE)
+    controller.move_gripper_angle(controller.GRIPPER_CLOSE)
     controller.move_arm_to_pose(controller.PRE_AND_POST_GRASP_POSE)
 
     # プレース準備
@@ -169,12 +168,12 @@ def main(args=None):
 
     # プレース動作
     controller.move_arm_to_pose(controller.RELEASE_POSE)
-    controller.set_gripper_angle(controller.GRIPPER_OPEN)
+    controller.move_gripper_angle(controller.GRIPPER_OPEN)
 
     # 終了動作
     controller.move_arm_to_named_pose('home')
     controller.move_arm_to_named_pose('vertical')
-    controller.set_gripper_angle(controller.GRIPPER_DEFAULT)
+    controller.move_gripper_angle(controller.GRIPPER_DEFAULT)
 
     # Finish with error. Related Issue
     # https://github.com/moveit/moveit2/issues/2693
