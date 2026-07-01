@@ -13,17 +13,20 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>angles</depend>
   <depend>crane_plus_control</depend>
   <depend>crane_plus_description</depend>
   <depend>crane_plus_moveit_config</depend>
   <depend>cv_bridge</depend>
   <depend>geometry_msgs</depend>
+  <depend>image_geometry</depend>
+  <depend>image_transport</depend>
   <depend>libopencv-dev</depend>
+  <depend>message_filters</depend>
   <depend>moveit_ros_planning_interface</depend>
   <depend>rclcpp</depend>
   <depend>tf2_geometry_msgs</depend>
   <depend>usb_cam</depend>
-  <depend>image_geometry</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
