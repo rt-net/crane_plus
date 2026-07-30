@@ -17,12 +17,15 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(angles REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(image_geometry REQUIRED)
+find_package(image_transport REQUIRED)
+find_package(message_filters REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
-find_package(image_geometry REQUIRED)
 
 # Build and install node executables
 set(executable_list
@@ -37,13 +40,16 @@ set(executable_list
 foreach(loop_var IN LISTS executable_list)
   add_executable(${loop_var} src/${loop_var}.cpp)
   ament_target_dependencies(${loop_var}
+    angles
     cv_bridge
     geometry_msgs
+    image_geometry
+    image_transport
+    message_filters
     moveit_ros_planning_interface
     OpenCV
     rclcpp
     tf2_geometry_msgs
-    image_geometry
   )
 
   install(TARGETS

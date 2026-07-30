@@ -16,124 +16,157 @@
 // https://github.com/ros-planning/moveit2/blob/main/moveit_demo_nodes
 // /run_move_group/src/run_move_group.cpp
 
-#include <cmath>
+#include <thread>
 
+#include "angles/angles.h"
 #include "geometry_msgs/msg/pose.hpp"
-#include "geometry_msgs/msg/quaternion.hpp"
 #include "moveit/move_group_interface/move_group_interface.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 using MoveGroupInterface = moveit::planning_interface::MoveGroupInterface;
 
-static const rclcpp::Logger LOGGER = rclcpp::get_logger("pick_and_place");
-
-double to_radians(const double deg_angle)
+class PickAndPlace
 {
-  return deg_angle * M_PI / 180.0;
-}
+public:
+  // グリッパの開閉角度
+  inline static const double GRIPPER_DEFAULT = 0.0;
+  inline static const double GRIPPER_OPEN = angles::from_degrees(-30.0);
+  inline static const double GRIPPER_CLOSE = angles::from_degrees(10.0);
+
+  // ノードを受け取り、アーム・グリッパのMoveGroupInterfaceを初期化する
+  explicit PickAndPlace(rclcpp::Node::SharedPtr node)
+  {
+    move_group_arm_ = std::make_shared<MoveGroupInterface>(node, "arm_tcp");
+    move_group_arm_->setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
+    move_group_arm_->setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
+    // IKの成功率を向上させるため、目標位置姿勢の許容範囲を小さく設定
+    move_group_arm_->setGoalPositionTolerance(1e-5);
+    move_group_arm_->setGoalOrientationTolerance(1e-4);
+
+    move_group_gripper_ = std::make_shared<MoveGroupInterface>(node, "gripper");
+    move_group_gripper_->setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
+    move_group_gripper_->setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  }
+
+  // SRDFに定義された姿勢名でアームを動かす
+  void move_arm_to_named_pose(const std::string & name)
+  {
+    move_group_arm_->setNamedTarget(name);
+    move_group_arm_->move();
+  }
+
+  // アームを目標位置・姿勢（Pose）に動かす
+  void move_arm_to_pose(const geometry_msgs::msg::Pose & pose)
+  {
+    move_group_arm_->setPoseTarget(pose);
+    move_group_arm_->move();
+  }
+
+  // アームを目標位置（x, y, z [m]）・姿勢（roll, pitch, yaw [deg]）に動かす
+  void control_arm(
+    const double x, const double y, const double z,
+    const double roll, const double pitch, const double yaw)
+  {
+    geometry_msgs::msg::Pose target_pose;
+    tf2::Quaternion q;
+    target_pose.position.x = x;
+    target_pose.position.y = y;
+    target_pose.position.z = z;
+    q.setRPY(angles::from_degrees(roll), angles::from_degrees(pitch), angles::from_degrees(yaw));
+    target_pose.orientation = tf2::toMsg(q);
+    move_arm_to_pose(target_pose);
+  }
+
+  // グリッパを角度[rad]を指定して開閉する
+  void move_gripper_angle(const double angle)
+  {
+    auto joint_values = move_group_gripper_->getCurrentJointValues();
+    joint_values[0] = angle;
+    move_group_gripper_->setJointValueTarget(joint_values);
+    move_group_gripper_->move();
+  }
+
+private:
+  std::shared_ptr<MoveGroupInterface> move_group_arm_;
+  std::shared_ptr<MoveGroupInterface> move_group_gripper_;
+};
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
-  auto move_group_arm_node = rclcpp::Node::make_shared("move_group_arm_node", node_options);
-  auto move_group_gripper_node = rclcpp::Node::make_shared("move_group_gripper_node", node_options);
-  // For current state monitor
-  rclcpp::executors::SingleThreadedExecutor executor;
-  executor.add_node(move_group_arm_node);
-  executor.add_node(move_group_gripper_node);
-  std::thread([&executor]() {executor.spin();}).detach();
+  auto node = rclcpp::Node::make_shared("pick_and_place", node_options);
 
-  MoveGroupInterface move_group_arm(move_group_arm_node, "arm_tcp");
-  move_group_arm.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
-  move_group_arm.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
+  // MoveGroupInterfaceのデッドロックを防ぐため、スピン処理を別スレッドで走らせる
+  std::thread spin_thread([node]() {rclcpp::spin(node);});
 
-  MoveGroupInterface move_group_gripper(move_group_gripper_node, "gripper");
-  move_group_gripper.setMaxVelocityScalingFactor(1.0);  // Set 0.0 ~ 1.0
-  move_group_gripper.setMaxAccelerationScalingFactor(1.0);  // Set 0.0 ~ 1.0
-  auto gripper_joint_values = move_group_gripper.getCurrentJointValues();
-  double GRIPPER_DEFAULT = 0.0;
-  double GRIPPER_OPEN = to_radians(-30);
-  double GRIPPER_CLOSE = to_radians(10);
+  PickAndPlace controller(node);
 
-  // Set goal tolerances to improve IK success rate
-  move_group_arm.setGoalPositionTolerance(1e-5);
-  move_group_arm.setGoalOrientationTolerance(1e-4);
+  // 物体上方のアプローチ位置のXYZ[m]とRPY[deg]
+  const double APPROACH_X = 0.0;
+  const double APPROACH_Y = -0.21;
+  const double APPROACH_Z = 0.17;
+  const double APPROACH_ROLL = 0.0;
+  const double APPROACH_PITCH = 90.0;
+  const double APPROACH_YAW = -90.0;
 
-  move_group_arm.setNamedTarget("vertical");
-  move_group_arm.move();
+  // アプローチ・退避時の高さ
+  const double LIFTING_HEIGHT = 0.05;
 
-  gripper_joint_values[0] = GRIPPER_DEFAULT;
-  move_group_gripper.setJointValueTarget(gripper_joint_values);
-  move_group_gripper.move();
+  // 掴む位置（ピック位置）のXYZ[m]とRPY[deg]
+  const double PICK_X = 0.0;
+  const double PICK_Y = -0.1;
+  const double PICK_Z = 0.02;
+  const double PICK_ROLL = 0.0;
+  const double PICK_PITCH = 180.0;
+  const double PICK_YAW = -90.0;
 
-  // ----- Picking Preparation -----
-  move_group_arm.setNamedTarget("home");
-  move_group_arm.move();
+  // 置く位置（プレース位置）のXYZ[m]とRPY[deg]
+  const double PLACE_X = 0.25;
+  const double PLACE_Y = 0.0;
+  const double PLACE_Z = 0.06;
+  const double PLACE_ROLL = 0.0;
+  const double PLACE_PITCH = 90.0;
+  const double PLACE_YAW = 0.0;
 
-  gripper_joint_values[0] = GRIPPER_OPEN;
-  move_group_gripper.setJointValueTarget(gripper_joint_values);
-  move_group_gripper.move();
+  // 初期姿勢
+  controller.move_arm_to_named_pose("vertical");
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_DEFAULT);
 
-  geometry_msgs::msg::Pose target_pose;
-  tf2::Quaternion q;
-  target_pose.position.x = 0.0;
-  target_pose.position.y = -0.21;
-  target_pose.position.z = 0.17;
-  q.setRPY(to_radians(0), to_radians(90), to_radians(-90));
-  target_pose.orientation = tf2::toMsg(q);
-  move_group_arm.setPoseTarget(target_pose);
-  move_group_arm.move();
+  // ピック準備
+  controller.move_arm_to_named_pose("home");
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_OPEN);
+  // 物体上方へ移動
+  controller.control_arm(APPROACH_X, APPROACH_Y, APPROACH_Z, APPROACH_ROLL, APPROACH_PITCH,
+    APPROACH_YAW);
+  // 物体直上まで降りる
+  controller.control_arm(PICK_X, PICK_Y, LIFTING_HEIGHT, PICK_ROLL, PICK_PITCH, PICK_YAW);
 
-  target_pose.position.y = -0.1;
-  target_pose.position.z = 0.05;
-  q.setRPY(to_radians(0), to_radians(180), to_radians(-90));
-  target_pose.orientation = tf2::toMsg(q);
-  move_group_arm.setPoseTarget(target_pose);
-  move_group_arm.move();
+  // ピック動作
+  // 掴む位置まで降りる
+  controller.control_arm(PICK_X, PICK_Y, PICK_Z, PICK_ROLL, PICK_PITCH, PICK_YAW);
+  // 掴む
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_CLOSE);
+  // 持ち上げる
+  controller.control_arm(PICK_X, PICK_Y, LIFTING_HEIGHT, PICK_ROLL, PICK_PITCH, PICK_YAW);
 
-  target_pose.position.z = 0.02;
-  move_group_arm.setPoseTarget(target_pose);
-  move_group_arm.move();
+  // プレース動作
+  // homeを経由してプレース位置へ移動
+  controller.move_arm_to_named_pose("home");
+  // 置く位置まで降ろす
+  controller.control_arm(PLACE_X, PLACE_Y, PLACE_Z, PLACE_ROLL, PLACE_PITCH, PLACE_YAW);
+  // 離す
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_OPEN);
 
-  // Grasp
-  gripper_joint_values[0] = GRIPPER_CLOSE;
-  move_group_gripper.setJointValueTarget(gripper_joint_values);
-  move_group_gripper.move();
+  // 終了動作
+  controller.move_arm_to_named_pose("home");
+  controller.move_arm_to_named_pose("vertical");
+  controller.move_gripper_angle(PickAndPlace::GRIPPER_DEFAULT);
 
-  target_pose.position.z = 0.05;
-  move_group_arm.setPoseTarget(target_pose);
-  move_group_arm.move();
-
-  // ----- Placing Preparation -----
-  move_group_arm.setNamedTarget("home");
-  move_group_arm.move();
-
-  target_pose.position.x = 0.25;
-  target_pose.position.y = 0.0;
-  target_pose.position.z = 0.06;
-  q.setRPY(to_radians(0), to_radians(90), to_radians(0));
-  target_pose.orientation = tf2::toMsg(q);
-  move_group_arm.setPoseTarget(target_pose);
-  move_group_arm.move();
-
-  // Release
-  gripper_joint_values[0] = GRIPPER_OPEN;
-  move_group_gripper.setJointValueTarget(gripper_joint_values);
-  move_group_gripper.move();
-
-  // Return to home and vertical pose
-  move_group_arm.setNamedTarget("home");
-  move_group_arm.move();
-  move_group_arm.setNamedTarget("vertical");
-  move_group_arm.move();
-
-  gripper_joint_values[0] = GRIPPER_DEFAULT;
-  move_group_gripper.setJointValueTarget(gripper_joint_values);
-  move_group_gripper.move();
-
+  // 終了処理: rclcppを終了したのち、バックグラウンドスレッドを安全に回収する
   rclcpp::shutdown();
+  spin_thread.join();
   return 0;
 }

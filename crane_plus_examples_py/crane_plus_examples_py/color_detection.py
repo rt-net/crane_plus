@@ -16,6 +16,7 @@ import cv2
 from cv_bridge import CvBridge
 from geometry_msgs.msg import TransformStamped
 from image_geometry import PinholeCameraModel
+import message_filters
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import CameraInfo, Image
@@ -25,22 +26,16 @@ from tf2_ros import TransformBroadcaster
 class ImageSubscriber(Node):
     def __init__(self):
         super().__init__('color_detection')
-        self.image_subscription = self.create_subscription(
-            Image, 'image_raw', self.image_callback, 10
-        )
-        self.camera_info_subscription = self.create_subscription(
-            CameraInfo, 'camera_info', self.camera_info_callback, 10
-        )
+        self.color_sub = message_filters.Subscriber(self, Image, 'image_raw')
+        self.info_sub = message_filters.Subscriber(self, CameraInfo, 'camera_info')
+        self.sync = message_filters.TimeSynchronizer([self.color_sub, self.info_sub], 10)
+        self.sync.registerCallback(self.camera_callback)
+
         self.image_thresholded_publisher = self.create_publisher(Image, 'image_thresholded', 10)
         self.tf_broadcaster = TransformBroadcaster(self)
-        self.camera_info = None
         self.bridge = CvBridge()
 
-    def image_callback(self, msg):
-        # カメラのパラメータを取得してから処理を行う
-        if not self.camera_info:
-            return
-
+    def camera_callback(self, img_msg, info_msg):
         # 赤い物体を検出するようにHSVの範囲を設定
         # 周囲の明るさ等の動作環境に合わせて調整
         LOW_H_1 = 0
@@ -52,10 +47,10 @@ class ImageSubscriber(Node):
         LOW_V = 100
         HIGH_V = 255
 
-        # ウェブカメラの画像を受け取る
-        cv_img = self.bridge.imgmsg_to_cv2(msg, desired_encoding=msg.encoding)
+        # カメラ画像を受け取る
+        cv_img = self.bridge.imgmsg_to_cv2(img_msg, desired_encoding=img_msg.encoding)
 
-        # 画像をRGBからHSVに変換（取得したカメラ画像にフォーマットを合わせる）
+        # 画像をRGBからHSVに変換
         cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2HSV)
 
         # 画像の二値化
@@ -78,48 +73,47 @@ class ImageSubscriber(Node):
         d_m10 = moment['m10']
         d_area = moment['m00']
 
-        # 検出した領域のピクセル数が10000より大きい場合
-        if d_area > 10000:
-            # カメラモデル作成
-            camera_model = PinholeCameraModel()
-
-            # カメラのパラメータを設定
-            camera_model.fromCameraInfo(self.camera_info)
-
-            # 画像座標系における把持対象物の位置（2D）
-            pixel_x = d_m10 / d_area
-            pixel_y = d_m01 / d_area
-            point = (pixel_x, pixel_y)
-
-            # 補正後の画像座標系における把持対象物の位置を取得（2D）
-            rect_point = camera_model.rectifyPoint(point)
-
-            # カメラ座標系から見た把持対象物の方向（Ray）を取得する
-            ray = camera_model.projectPixelTo3dRay(rect_point)
-
-            # カメラの高さを0.46[m]として把持対象物の位置を計算
-            CAMERA_HEIGHT = 0.46
-            object_position = [
-                ray[0] * CAMERA_HEIGHT,
-                ray[1] * CAMERA_HEIGHT,
-                ray[2] * CAMERA_HEIGHT,
-            ]
-
-            # 把持対象物の位置をTFに配信
-            t = TransformStamped()
-            t.header = msg.header
-            t.child_frame_id = 'target_0'
-            t.transform.translation.x = object_position[0]
-            t.transform.translation.y = object_position[1]
-            t.transform.translation.z = object_position[2]
-            self.tf_broadcaster.sendTransform(t)
-
         # 閾値による二値化画像を配信
         img_thresholded_msg = self.bridge.cv2_to_imgmsg(img_thresholded, encoding='mono8')
         self.image_thresholded_publisher.publish(img_thresholded_msg)
 
-    def camera_info_callback(self, msg):
-        self.camera_info = msg
+        # 検出した領域のピクセル数が10000より大きい場合に把持位置を配信
+        if d_area <= 10000:
+            return
+
+        # カメラモデル作成
+        camera_model = PinholeCameraModel()
+
+        # カメラのパラメータを設定
+        camera_model.fromCameraInfo(info_msg)
+
+        # 画像座標系における把持対象物の位置（2D）
+        pixel_x = d_m10 / d_area
+        pixel_y = d_m01 / d_area
+        point = (pixel_x, pixel_y)
+
+        # 補正後の画像座標系における把持対象物の位置を取得（2D）
+        rect_point = camera_model.rectifyPoint(point)
+
+        # カメラ座標系から見た把持対象物の方向（Ray）を取得する
+        ray = camera_model.projectPixelTo3dRay(rect_point)
+
+        # カメラの高さを0.46[m]として把持対象物の位置を計算
+        CAMERA_HEIGHT = 0.46
+        object_position = [
+            ray[0] * CAMERA_HEIGHT,
+            ray[1] * CAMERA_HEIGHT,
+            ray[2] * CAMERA_HEIGHT,
+        ]
+
+        # 把持対象物の位置をTFに配信
+        t = TransformStamped()
+        t.header = img_msg.header
+        t.child_frame_id = 'target_0'
+        t.transform.translation.x = object_position[0]
+        t.transform.translation.y = object_position[1]
+        t.transform.translation.z = object_position[2]
+        self.tf_broadcaster.sendTransform(t)
 
 
 def main(args=None):
