@@ -30,7 +30,10 @@ from launch_ros.actions import SetParameter
 
 def generate_launch_description():
     declare_use_camera = DeclareLaunchArgument(
-        'use_camera', default_value='false', description='Use camera.'
+        'use_camera',
+        default_value='false',
+        choices=['true', 'false'],
+        description='Use camera.',
     )
 
     declare_rviz_config = DeclareLaunchArgument(

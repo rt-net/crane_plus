@@ -25,6 +25,7 @@ def generate_launch_description():
     declare_use_camera = DeclareLaunchArgument(
         'use_camera',
         default_value='false',
+        choices=['true', 'false'],
         description='Set true to attach the camera model.',
     )
 

@@ -30,7 +30,10 @@ def generate_launch_description():
     )
 
     declare_use_camera = DeclareLaunchArgument(
-        'use_camera', default_value='false', description='Use camera.'
+        'use_camera',
+        default_value='false',
+        choices=['true', 'false'],
+        description='Use camera.',
     )
 
     declare_video_device = DeclareLaunchArgument(
@@ -42,6 +45,7 @@ def generate_launch_description():
     declare_use_mock_components = DeclareLaunchArgument(
         'use_mock_components',
         default_value='false',
+        choices=['true', 'false'],
         description='Use mock_components or not.',
     )
 
