@@ -1,22 +1,24 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="crane_plus_ros2_control_settings">
+  <xacro:macro name="crane_plus_ros2_control_settings"
+    params="use_mock_components port_name baudrate timeout_seconds
+            read_velocities read_loads read_voltages read_temperatures">
 
     <ros2_control name="crane_plus" type="system">
       <hardware>
-        <xacro:if value="${USE_MOCK_COMPONENTS}">
+        <xacro:if value="${use_mock_components}">
           <plugin>mock_components/GenericSystem</plugin>
         </xacro:if>
-        <xacro:unless value="${USE_MOCK_COMPONENTS}">
+        <xacro:unless value="${use_mock_components}">
           <plugin>crane_plus_hardware/CranePlusHardware</plugin>
-          <param name="port_name">${PORT_NAME}</param>
-          <param name="baudrate">${BAUDRATE}</param>
-          <param name="timeout_seconds">${TIMEOUT_SECONDS}</param>
-          <param name="read_velocities">${READ_VELOCITIES}</param>
-          <param name="read_loads">${READ_LOADS}</param>
-          <param name="read_voltages">${READ_VOLTAGES}</param>
-          <param name="read_temperatures">${READ_TEMPERATURES}</param>
+          <param name="port_name">${port_name}</param>
+          <param name="baudrate">${baudrate}</param>
+          <param name="timeout_seconds">${timeout_seconds}</param>
+          <param name="read_velocities">${read_velocities}</param>
+          <param name="read_loads">${read_loads}</param>
+          <param name="read_voltages">${read_voltages}</param>
+          <param name="read_temperatures">${read_temperatures}</param>
         </xacro:unless>
       </hardware>
 
