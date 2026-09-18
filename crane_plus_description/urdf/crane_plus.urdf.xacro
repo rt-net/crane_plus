@@ -41,22 +41,6 @@
     <color rgba="0.8 0.8 0.8 1.0" />
   </material>
 
-  <xacro:property name="NAME_LINK_BASE" value="crane_plus_base"/>
-  <xacro:property name="NAME_LINK_1" value="crane_plus_link1"/>
-  <xacro:property name="NAME_LINK_2" value="crane_plus_link2"/>
-  <xacro:property name="NAME_LINK_3" value="crane_plus_link3"/>
-  <xacro:property name="NAME_LINK_4" value="crane_plus_link4"/>
-  <xacro:property name="NAME_LINK_HAND" value="crane_plus_link_hand"/>
-  <xacro:property name="NAME_LINK_TCP" value="crane_plus_link_tcp"/>
-
-  <xacro:property name="NAME_JOINT_BASE" value="crane_plus_joint_base"/>
-  <xacro:property name="NAME_JOINT_1" value="crane_plus_joint1"/>
-  <xacro:property name="NAME_JOINT_2" value="crane_plus_joint2"/>
-  <xacro:property name="NAME_JOINT_3" value="crane_plus_joint3"/>
-  <xacro:property name="NAME_JOINT_4" value="crane_plus_joint4"/>
-  <xacro:property name="NAME_JOINT_HAND" value="crane_plus_joint_hand"/>
-  <xacro:property name="NAME_JOINT_TCP" value="crane_plus_joint_tcp"/>
-
   <xacro:property name="SERVO_HOME" value="${radians(150.0)}"/>
   <xacro:property name="JOINT_EFFORT_LIMIT" value="1.5"/>
   <xacro:property name="JOINT_VELOCITY_LIMIT" value="2.0"/>
@@ -96,8 +80,8 @@
   <xacro:if value="$(arg use_camera)">
     <xacro:include filename="$(find crane_plus_description)/urdf/camera.xacro" />
     <xacro:include filename="$(find crane_plus_description)/urdf/camera_stand.xacro" />
-    <xacro:sensor_camera parent="${NAME_LINK_BASE}" />
-    <xacro:camera_stand parent="${NAME_LINK_BASE}" />
+    <xacro:sensor_camera parent="crane_plus_base" />
+    <xacro:camera_stand parent="crane_plus_base" />
   </xacro:if>
 
 </robot>
