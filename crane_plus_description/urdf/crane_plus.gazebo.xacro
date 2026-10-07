@@ -19,51 +19,51 @@
     </visual>
   </xacro:macro>
 
-  <xacro:macro name="gazebo_robot_settings">
+  <xacro:macro name="gazebo_robot_settings" params="use_camera gz_control_config_package gz_control_config_file_path">
 
     <gazebo>
       <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>$(find ${GZ_CONTROL_CONFIG_PACKAGE})/${GZ_CONTROL_CONFIG_FILE_PATH}</parameters>
+      <parameters>$(find ${gz_control_config_package})/${gz_control_config_file_path}</parameters>
       </plugin>
     </gazebo>
 
-    <gazebo reference="${NAME_LINK_BASE}">
+    <gazebo reference="crane_plus_base">
       <mu1>0.2</mu1>
       <mu2>0.2</mu2>
       <xacro:material_gazebo_black/>
     </gazebo>
 
-    <gazebo reference="${NAME_LINK_1}">
+    <gazebo reference="crane_plus_link1">
       <mu1>0.2</mu1>
       <mu2>0.2</mu2>
       <xacro:material_gazebo_white/>
     </gazebo>
 
-    <gazebo reference="${NAME_LINK_2}">
+    <gazebo reference="crane_plus_link2">
       <mu1>0.2</mu1>
       <mu2>0.2</mu2>
       <xacro:material_gazebo_black/>
     </gazebo>
 
-    <gazebo reference="${NAME_LINK_3}">
+    <gazebo reference="crane_plus_link3">
       <mu1>0.2</mu1>
       <mu2>0.2</mu2>
       <xacro:material_gazebo_white/>
     </gazebo>
 
-    <gazebo reference="${NAME_LINK_4}">
+    <gazebo reference="crane_plus_link4">
       <mu1>0.2</mu1>
       <mu2>0.2</mu2>
       <xacro:material_gazebo_black/>
     </gazebo>
 
-    <gazebo reference="${NAME_LINK_HAND}">
+    <gazebo reference="crane_plus_link_hand">
       <mu1>0.2</mu1>
       <mu2>0.2</mu2>
       <xacro:material_gazebo_white/>
     </gazebo>
 
-    <xacro:if value="${USE_CAMERA}">
+    <xacro:if value="${use_camera}">
       <gazebo>
           <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
             <render_engine>ogre2</render_engine>

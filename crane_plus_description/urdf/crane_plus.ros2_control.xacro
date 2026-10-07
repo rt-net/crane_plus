@@ -1,26 +1,28 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="crane_plus_ros2_control_settings">
+  <xacro:macro name="crane_plus_ros2_control_settings"
+    params="use_mock_components port_name baudrate timeout_seconds
+            read_velocities read_loads read_voltages read_temperatures">
 
     <ros2_control name="crane_plus" type="system">
       <hardware>
-        <xacro:if value="${USE_MOCK_COMPONENTS}">
+        <xacro:if value="${use_mock_components}">
           <plugin>mock_components/GenericSystem</plugin>
         </xacro:if>
-        <xacro:unless value="${USE_MOCK_COMPONENTS}">
+        <xacro:unless value="${use_mock_components}">
           <plugin>crane_plus_hardware/CranePlusHardware</plugin>
-          <param name="port_name">${PORT_NAME}</param>
-          <param name="baudrate">${BAUDRATE}</param>
-          <param name="timeout_seconds">${TIMEOUT_SECONDS}</param>
-          <param name="read_velocities">${READ_VELOCITIES}</param>
-          <param name="read_loads">${READ_LOADS}</param>
-          <param name="read_voltages">${READ_VOLTAGES}</param>
-          <param name="read_temperatures">${READ_TEMPERATURES}</param>
+          <param name="port_name">${port_name}</param>
+          <param name="baudrate">${baudrate}</param>
+          <param name="timeout_seconds">${timeout_seconds}</param>
+          <param name="read_velocities">${read_velocities}</param>
+          <param name="read_loads">${read_loads}</param>
+          <param name="read_voltages">${read_voltages}</param>
+          <param name="read_temperatures">${read_temperatures}</param>
         </xacro:unless>
       </hardware>
 
-      <joint name="${NAME_JOINT_1}">
+      <joint name="crane_plus_joint1">
         <command_interface name="position">
           <param name="min">${JOINT_1_LOWER_LIMIT}</param>
           <param name="max">${JOINT_1_UPPER_LIMIT}</param>
@@ -33,7 +35,7 @@
         <param name="dxl_id">1</param>
       </joint>
 
-      <joint name="${NAME_JOINT_2}">
+      <joint name="crane_plus_joint2">
         <command_interface name="position">
           <param name="min">${JOINT_2_LOWER_LIMIT}</param>
           <param name="max">${JOINT_2_UPPER_LIMIT}</param>
@@ -46,7 +48,7 @@
         <param name="dxl_id">2</param>
       </joint>
 
-      <joint name="${NAME_JOINT_3}">
+      <joint name="crane_plus_joint3">
         <command_interface name="position">
           <param name="min">${JOINT_3_LOWER_LIMIT}</param>
           <param name="max">${JOINT_3_UPPER_LIMIT}</param>
@@ -59,7 +61,7 @@
         <param name="dxl_id">3</param>
       </joint>
 
-      <joint name="${NAME_JOINT_4}">
+      <joint name="crane_plus_joint4">
         <command_interface name="position">
           <param name="min">${JOINT_4_LOWER_LIMIT}</param>
           <param name="max">${JOINT_4_UPPER_LIMIT}</param>
@@ -72,7 +74,7 @@
         <param name="dxl_id">4</param>
       </joint>
 
-      <joint name="${NAME_JOINT_HAND}">
+      <joint name="crane_plus_joint_hand">
         <command_interface name="position">
           <param name="min">${JOINT_HAND_LOWER_LIMIT}</param>
           <param name="max">${JOINT_HAND_UPPER_LIMIT}</param>

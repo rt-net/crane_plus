@@ -4,13 +4,13 @@
 
   <xacro:macro name="crane_plus" params="parent *origin">
 
-    <joint name="${NAME_JOINT_BASE}" type="fixed">
+    <joint name="crane_plus_joint_base" type="fixed">
       <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
-      <child link="${NAME_LINK_BASE}"/>
+      <child link="crane_plus_base"/>
     </joint>
 
-    <link name="${NAME_LINK_BASE}">
+    <link name="crane_plus_base">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
@@ -34,7 +34,7 @@
       </inertial>
     </link>
 
-    <joint name="${NAME_JOINT_1}" type="revolute">
+    <joint name="crane_plus_joint1" type="revolute">
       <origin xyz="0 0 0.0454" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit
@@ -43,12 +43,12 @@
         lower="${JOINT_1_LOWER_LIMIT}"
         upper="${JOINT_1_UPPER_LIMIT}"
         />
-      <parent link="${NAME_LINK_BASE}"/>
-      <child link="${NAME_LINK_1}"/>
+      <parent link="crane_plus_base"/>
+      <child link="crane_plus_link1"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${NAME_LINK_1}">
+    <link name="crane_plus_link1">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
@@ -72,7 +72,7 @@
       </inertial>
     </link>
 
-    <joint name="${NAME_JOINT_2}" type="revolute">
+    <joint name="crane_plus_joint2" type="revolute">
       <origin xyz="0 0 0.026" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <limit
@@ -81,12 +81,12 @@
         lower="${JOINT_2_LOWER_LIMIT}"
         upper="${JOINT_2_UPPER_LIMIT}"
         />
-      <parent link="${NAME_LINK_1}"/>
-      <child link="${NAME_LINK_2}"/>
+      <parent link="crane_plus_link1"/>
+      <child link="crane_plus_link2"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${NAME_LINK_2}">
+    <link name="crane_plus_link2">
       <visual>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
@@ -110,7 +110,7 @@
       </inertial>
     </link>
 
-    <joint name="${NAME_JOINT_3}" type="revolute">
+    <joint name="crane_plus_joint3" type="revolute">
       <origin xyz="0 0 0.083" rpy="0 0 0"/>
       <axis xyz="0 -1 0"/>
       <limit
@@ -119,12 +119,12 @@
         lower="${JOINT_3_LOWER_LIMIT}"
         upper="${JOINT_3_UPPER_LIMIT}"
         />
-      <parent link="${NAME_LINK_2}"/>
-      <child link="${NAME_LINK_3}"/>
+      <parent link="crane_plus_link2"/>
+      <child link="crane_plus_link3"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${NAME_LINK_3}">
+    <link name="crane_plus_link3">
       <visual>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
@@ -148,7 +148,7 @@
       </inertial>
     </link>
 
-    <joint name="${NAME_JOINT_4}" type="revolute">
+    <joint name="crane_plus_joint4" type="revolute">
       <origin xyz="0 0 0.0935" rpy="0 0 0"/>
       <axis xyz="0 -1 0"/>
       <limit
@@ -157,12 +157,12 @@
         lower="${JOINT_4_LOWER_LIMIT}"
         upper="${JOINT_4_UPPER_LIMIT}"
         />
-      <parent link="${NAME_LINK_3}"/>
-      <child link="${NAME_LINK_4}"/>
+      <parent link="crane_plus_link3"/>
+      <child link="crane_plus_link4"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${NAME_LINK_4}">
+    <link name="crane_plus_link4">
       <visual>
         <origin xyz="0 0 0" rpy="${radians(90)} 0 0"/>
         <geometry>
@@ -186,7 +186,7 @@
       </inertial>
     </link>
 
-    <joint name="${NAME_JOINT_HAND}" type="revolute">
+    <joint name="crane_plus_joint_hand" type="revolute">
       <origin xyz="0 -0.0145 0.045" rpy="0 0 0"/>
       <axis xyz="-1 0 0"/>
       <limit
@@ -195,12 +195,12 @@
         lower="${JOINT_HAND_LOWER_LIMIT}"
         upper="${JOINT_HAND_UPPER_LIMIT}"
         />
-      <parent link="${NAME_LINK_4}"/>
-      <child link="${NAME_LINK_HAND}"/>
+      <parent link="crane_plus_link4"/>
+      <child link="crane_plus_link_hand"/>
       <dynamics damping="1.0e-6" friction="2.0e-1"/>
     </joint>
 
-    <link name="${NAME_LINK_HAND}">
+    <link name="crane_plus_link_hand">
       <visual>
         <origin xyz="0 0 0" rpy="0 ${radians(-90)} 0"/>
         <geometry>
@@ -224,13 +224,13 @@
       </inertial>
     </link>
 
-    <joint name="${NAME_JOINT_TCP}" type="fixed">
+    <joint name="crane_plus_joint_tcp" type="fixed">
       <origin xyz="0 0 0.121" rpy="0 0 0"/>
-      <parent link="${NAME_LINK_4}"/>
-      <child link="${NAME_LINK_TCP}"/>
+      <parent link="crane_plus_link4"/>
+      <child link="crane_plus_link_tcp"/>
     </joint>
 
-    <link name="${NAME_LINK_TCP}"/>
+    <link name="crane_plus_link_tcp"/>
 
   </xacro:macro>
 </robot>

@@ -8,7 +8,7 @@
         <plugin>gz_ros2_control/GazeboSimSystem</plugin>
       </hardware>
 
-      <joint name="${NAME_JOINT_1}">
+      <joint name="crane_plus_joint1">
         <command_interface name="position">
           <param name="min">${JOINT_1_LOWER_LIMIT}</param>
           <param name="max">${JOINT_1_UPPER_LIMIT}</param>
@@ -18,7 +18,7 @@
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${NAME_JOINT_2}">
+      <joint name="crane_plus_joint2">
         <command_interface name="position">
           <param name="min">${JOINT_2_LOWER_LIMIT}</param>
           <param name="max">${JOINT_2_UPPER_LIMIT}</param>
@@ -28,7 +28,7 @@
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${NAME_JOINT_3}">
+      <joint name="crane_plus_joint3">
         <command_interface name="position">
           <param name="min">${JOINT_3_LOWER_LIMIT}</param>
           <param name="max">${JOINT_3_UPPER_LIMIT}</param>
@@ -38,7 +38,7 @@
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${NAME_JOINT_4}">
+      <joint name="crane_plus_joint4">
         <command_interface name="position">
           <param name="min">${JOINT_4_LOWER_LIMIT}</param>
           <param name="max">${JOINT_4_UPPER_LIMIT}</param>
@@ -48,7 +48,7 @@
         <state_interface name="effort"/>
       </joint>
 
-      <joint name="${NAME_JOINT_HAND}">
+      <joint name="crane_plus_joint_hand">
         <command_interface name="position">
           <param name="min">${JOINT_HAND_LOWER_LIMIT}</param>
           <param name="max">${JOINT_HAND_UPPER_LIMIT}</param>
