@@ -1,4 +1,0 @@
-- git:
-    uri: https://github.com/ros-controls/gz_ros2_control.git
-    local-name: gz_ros2_control
-    version: rolling
