@@ -232,7 +232,7 @@ ros2 launch crane_plus_examples example.launch.py example:='pick_and_place'
 
 Webカメラ搭載モデルのカメラを使用したサンプルコードです。
 
-[「Webカメラ搭載モデルを使用する場合」](#Webカメラ搭載モデルを使用する場合)の手順に従い、`demo.launch.py`を実行している状態で各サンプルを実行します。
+[Using CRANE+ V2](#using-crane-v2)の「Webカメラ搭載モデルを使用する場合」の手順に従い、`demo.launch.py`を実行している状態で各サンプルを実行します。
 
 - [aruco\_detection](#aruco_detection)
 - [color\_detection](#color_detection)
@@ -245,7 +245,7 @@ Webカメラ搭載モデルのカメラを使用したサンプルコードで�
 > Arguments (pass arguments as '<name>:=<value>'):
 > 
 >     'example':
->         Set an example executable name: [color_detection]
+>         Set an example executable name: [aruco_detection, color_detection]
 >         (default: 'color_detection')
 > ```
 
@@ -279,7 +279,7 @@ ros2 launch crane_plus_examples camera_example.launch.py example:='aruco_detecti
 
 特定の色の物体を検出して掴むコード例です。
 
-- デフォルトでは青い物体の位置をtfのフレームとして配信します。
+- デフォルトでは赤い物体の位置をtfのフレームとして配信します。
 - tfの`frame_id`は`target_0`です。
 - 色の検出には[OpenCV](https://docs.opencv.org/4.x/db/d8e/tutorial_threshold.html)を使用しています。
 

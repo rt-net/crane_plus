@@ -18,11 +18,10 @@
   - `moveit_simple_controller_manager`のパラメータを設定しています
   - 設定内容は`crane_plus_control`のコントローラ名やコントローラタイプに依存します
 - crane_plus.srdf
-  - move_groupとして`arm`、`gripper`を設定しています
-  - `arm`のgourp_stateとして`home`、`vertical`を設定しています
+  - move_groupとして`arm`、`arm_tcp`、`gripper`を設定しています
+  - `arm`、`arm_tcp`のgroup_stateとして`home`、`vertical`を設定しています
 - kinematics.yaml
-  - `arm`のkinematics_solverを設定しています
-  - デフォルトの`KDLKinematicsPlugin`では軌道計画に失敗するため、`LMAKinematicsPlugin`を使用しています
+  - `arm`、`arm_tcp`のkinematics_solverに`KDLKinematicsPlugin`を設定しています
 - ompl_planning.yaml
   - Open Motion Planning Libraryのパラメータを設定しています
   - [ros-planning/moveit\_resources/panda\_moveit\_config](https://github.com/ros-planning/moveit_resources/tree/master/panda_moveit_config)のパラメータを流用しています
