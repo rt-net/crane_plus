@@ -49,7 +49,7 @@ ros2 launch crane_plus_examples_py example.launch.py example:='gripper_control'
 - [pick_and_place](#pick_and_place)
 
 > [!NOTE]
-> 実行できるサンプルの一覧は、`examples.launch.py`にオプション`-s`を付けて実行することで表示できます。
+> 実行できるサンプルの一覧は、`example.launch.py`にオプション`-s`を付けて実行することで表示できます。
 >
 > ```sh
 > $ ros2 launch crane_plus_examples_py example.launch.py -s
@@ -133,7 +133,7 @@ ros2 launch crane_plus_examples_py example.launch.py example:='pick_and_place'
 
 Webカメラ搭載モデルのカメラを使用したサンプルコードです。
 
-[crane_plus_examplesのREADME](../crane_plus_examples/README.md)に記載されている「Webカメラ搭載モデルを使用する場合」の手順に従って`demo.launch`を実行している状態で各サンプルを実行できます。
+[crane_plus_examplesのREADME](../crane_plus_examples/README.md)に記載されている「Webカメラ搭載モデルを使用する場合」の手順に従って`demo.launch.py`を実行している状態で各サンプルを実行できます。
 
 - [aruco\_detection](#aruco_detection)
 - [color\_detection](#color_detection)
@@ -146,7 +146,7 @@ Webカメラ搭載モデルのカメラを使用したサンプルコードで�
 > Arguments (pass arguments as '<name>:=<value>'):
 >
 >     'example':
->         Set an example executable name: [color_detection]
+>         Set an example executable name: [aruco_detection, color_detection]
 >         (default: 'color_detection')
 > ```
 
@@ -155,7 +155,7 @@ Webカメラ搭載モデルのカメラを使用したサンプルコードで�
 ### aruco_detection
 
 モノに取り付けたArUcoマーカをカメラで検出し、マーカ位置に合わせて掴むコード例です。
-マーカは[aruco_markers.pdf](./aruco_markers.pdf)をA4紙に印刷して、一辺50mmの立方体に取り付けて使用します。
+マーカは[aruco_markers.pdf](../crane_plus_examples/aruco_markers.pdf)をA4紙に印刷して、一辺50mmの立方体に取り付けて使用します。
 
 検出されたマーカの位置姿勢はtfのフレームとして配信されます。
 tfの`frame_id`はマーカIDごとに異なりID0のマーカの`frame_id`は`target_0`になります。
